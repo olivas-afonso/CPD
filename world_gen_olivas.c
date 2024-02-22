@@ -329,7 +329,7 @@ int main(int argc, char *argv[]) {
     number_of_cells = atoi (argv[2]);
     density = atof (argv[3]);
     seed = atoi (argv[4]);
-    //printf("%d %f %d \n \n", number_of_cells, density, seed);
+    printf("%d %d %f %d \n \n", number_of_gens ,number_of_cells, density, seed);
     grid_even = gen_initial_grid(number_of_cells, density, seed);
     count_gen0(number_of_cells, grid_even);
     //printf("1: %d current_gen: %d\n", count_species[0], gen_number);
@@ -343,8 +343,9 @@ int main(int argc, char *argv[]) {
         
         if(gen_number %2 == 1) // write to odd
         {
-        /*
+        
             rules(number_of_cells, grid_odd, grid_even);
+            /*
             printf("GENERATION %d\n", gen_number);
             for(int aux_x4=0; aux_x4<4; aux_x4++)
             {

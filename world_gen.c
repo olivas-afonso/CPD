@@ -80,7 +80,21 @@ char ***gen_initial_grid(int N, float density, int input_seed)
         for (y = 0; y < N; y++)
             for (z = 0; z < N; z++)
                 if(r4_uni() < density)
+                {
                     grid_even[x][y][z] = (int)(r4_uni() * N_SPECIES) + 1; // preenchimento initial do grid_even dependendo da seed
+                    if(grid_even[x][y][z] !=0)
+                        count_species[grid_even[x][y][z]-1]++;
+                }
+
+    for(x=0; x < 9; x++)
+        {
+            if(count_species[x] > max_count[x])
+            {
+                max_count[x] = count_species[x];
+                max_gen[x]=0;
+            }
+        }              
+
 
     return grid_even;
 
@@ -323,7 +337,7 @@ int main(int argc, char *argv[]) {
     seed = atoi (argv[4]);
 
     grid_even = gen_initial_grid(number_of_cells, density, seed);
-    count_gen0(number_of_cells, grid_even);
+    //count_gen0(number_of_cells, grid_even);
 
     for(gen_number=1; gen_number<=number_of_gens; gen_number++)
     {
@@ -380,11 +394,11 @@ int main(int argc, char *argv[]) {
             }
         }
     }
-    
+    printf("ANTES FREE\n");
 
     for(auxi=0; auxi < 9; auxi++)
     {
-        printf("%ld %ld %ld \n", auxi+1, max_count[auxi], max_gen[auxi]);
+        printf("%d %ld %ld \n", auxi+1, max_count[auxi], max_gen[auxi]);
     }
 
     liberarMatriz(number_of_cells);
