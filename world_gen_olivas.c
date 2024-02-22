@@ -32,6 +32,8 @@ float r4_uni()
     return 0.5 + 0.2328306e-09 * (seed_in + (int) seed);
 }
 
+
+
 char ***gen_initial_grid(long long N, float density, int input_seed)
 {
     int x, y, z;
@@ -88,6 +90,29 @@ char ***gen_initial_grid(long long N, float density, int input_seed)
     return grid_even;
 
 }
+
+void liberarMatriz(int N) {
+    int i, j;
+
+    // Libera a memória da terceira dimensão
+    for (i = 0; i < N; i++) {
+        for (j = 0; j < N; j++) {
+            free(grid_even[i][j]);
+            free(grid_odd[i][j]);
+        }
+    }
+
+    // Libera a memória da segunda dimensão
+    for (i = 0; i < N; i++) {
+        free(grid_even[i]);
+        free(grid_odd[i]);
+    }
+
+    // Libera a memória da primeira dimensão
+    free(grid_even);
+    free(grid_odd);
+}
+
 
 void count_gen0(long long N, char *** grid) // search linha
 {
@@ -345,7 +370,7 @@ int main(int argc, char *argv[]) {
             {
                 for(aux_y4=0; aux_y4<4; aux_y4++)
                 {
-                    for(aux_z4=0; aux_z4<4; aux_z4++)
+                    for(aux_z4=0; aux_z4<4  ; aux_z4++)
                     {
                         printf("%d ", grid_even[aux_x4][aux_y4][aux_z4]);
                     }
@@ -375,6 +400,8 @@ int main(int argc, char *argv[]) {
      
         printf("%ld %ld %ld \n", auxi+1, max_count[auxi], max_gen[auxi]);
     }
+
+    liberarMatriz(number_of_cells);
 
     return 0;
 }
