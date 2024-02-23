@@ -246,6 +246,8 @@ void rules(int N, char ***grid_new, char ***grid_old)
                 }
             }
         }
+        
+        //fflush(stdout);
     }
 }
 
@@ -297,6 +299,7 @@ int main(int argc, char *argv[]) {
         
         if(gen_number %2 == 1) // write to odd
         {
+            printf("GENERATION %d\n", gen_number);
             rules(number_of_cells, grid_odd, grid_even);
             /*printf("GENERATION %d\n", gen_number);
             for(int aux_x4=0; aux_x4<4; aux_x4++)

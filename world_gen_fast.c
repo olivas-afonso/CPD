@@ -10,7 +10,7 @@ unsigned int seed;
 long count_species[9]={0,0,0,0,0,0,0,0,0};
 
 long max_count[9]={0,0,0,0,0,0,0,0,0};
-long max_gen[9];
+int max_gen[9];
 
 
 void init_r4uni(int input_seed)
@@ -176,7 +176,6 @@ int life_rule (int N, char *** grid, long aux_x, long aux_y, long aux_z){
 void rules(int N, char ***grid_new, char ***grid_old)
 {
     long aux_x, aux_y, aux_z;
-    long long cont_rule=0;
 
     for(aux_x=0; aux_x< N; aux_x ++)
     {
@@ -241,7 +240,7 @@ int main(int argc, char *argv[]) {
 
     for(gen_number=1; gen_number<=number_of_gens; gen_number++)
     {
-        printf ("Gen:%d\n", gen_number);
+        //printf ("Gen:%d\n", gen_number);
         for(auxi=0; auxi < 9; auxi++)
         {
             count_species[auxi]=0;
@@ -268,7 +267,7 @@ int main(int argc, char *argv[]) {
     
     for(auxi=0; auxi < 9; auxi++)
     {
-        printf("%ld %ld %ld \n", auxi+1, max_count[auxi], max_gen[auxi]);
+        printf("%d %ld %d \n", auxi+1, max_count[auxi], max_gen[auxi]);
     }
 
     liberarMatriz(number_of_cells);

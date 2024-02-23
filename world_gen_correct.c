@@ -290,6 +290,7 @@ int main(int argc, char *argv[]) {
 
     for(gen_number=1; gen_number<=number_of_gens; gen_number++)
     {
+        printf("GENERATION %d\n", gen_number);
         for(auxi=0; auxi < 9; auxi++)
         {
             count_species[auxi]=0;
