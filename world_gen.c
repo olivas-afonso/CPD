@@ -99,6 +99,7 @@ char ***gen_initial_grid(int N, float density, int input_seed)
     return grid_even;
 
 }
+// ola
 
 void count_gen0(int N, char *** grid) // search linha
 {
