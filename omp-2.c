@@ -37,14 +37,21 @@ int main(int argc, char *argv[]) {
   }
 
   /* 2. ITERATIONS LOOP */
-  for(iter = 0; iter < NUMITER; iter++) {
+  #pragma omp paralel private (i, iter)
+  {
 
-    /* 2.1. PROCESS ELEMENTS */
-    for(i = 0; i < TOTALSIZE-1; i++) {
-      V[i] = f(V[i], V[i+1]);
+    for(iter = 0; iter < NUMITER; iter++) {
+
+      /* 2.1. PROCESS ELEMENTS */
+      #pragma omp for
+      
+        for(i = 0; i < TOTALSIZE-1; i++) {
+          V[i] = f(V[i], V[i+1]);
+        }
+      
+      
+      /* 2.2. END ITERATIONS LOOP */
     }
-    
-    /* 2.2. END ITERATIONS LOOP */
   }
 
   /* 3. OUTPUT FINAL VALUES */
