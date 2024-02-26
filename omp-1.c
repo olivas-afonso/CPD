@@ -22,8 +22,8 @@ int main(int argc, char *argv[]) {
       /* get id of thread */
       tid = omp_get_thread_num();
 
-/* divide loop iterations evenly by threads */
-#pragma omp for nowait
+/* divide loop iterations evenly by threads */  
+#pragma omp for 
       for(i = 0; i < NUMITER; i++)
 	  printf("Thread: %d\titer=%d\n", tid, i);  fflush(stdout);
 
