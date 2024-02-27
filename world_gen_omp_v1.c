@@ -212,24 +212,23 @@ void rules(int N, char ***grid_new, char ***grid_old)
     }
 }
 
-void liberarMatriz(int N) {
+void freeMatrix(int N) {
     int i, j;
 
-    // Libera a memória da terceira dimensão
+    #pragma omp parallel for
     for (i = 0; i < N; i++) {
         for (j = 0; j < N; j++) {
             free(grid_even[i][j]);
             free(grid_odd[i][j]);
         }
     }
-
-    // Libera a memória da segunda dimensão
+    
+    #pragma omp parallel for
     for (i = 0; i < N; i++) {
         free(grid_even[i]);
         free(grid_odd[i]);
     }
 
-    // Libera a memória da primeira dimensão
     free(grid_even);
     free(grid_odd);
 }
@@ -282,7 +281,7 @@ int main(int argc, char *argv[]) {
         printf("%d %ld %d \n", auxi+1, max_count[auxi], max_gen[auxi]);
     }
 
-    liberarMatriz(number_of_cells);
+    freeMatrix  (number_of_cells);
 
     return 0;
 }

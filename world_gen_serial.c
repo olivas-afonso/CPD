@@ -263,7 +263,7 @@ int main(int argc, char *argv[]) {
         printf("%d %ld %d \n", auxi, max_count[auxi], max_gen[auxi]);
     }
 
-    freeMatriz(number_of_cells);
+    freeMatrix(number_of_cells);
 
     return 0;
 }
