@@ -215,19 +215,24 @@ void rules(int N, char ***grid_new, char ***grid_old)
 void freeMatrix(int N) {
     int i, j;
 
-    #pragma omp parallel for
-    for (i = 0; i < N; i++) {
+    //#pragma omp parallel private (i,j)
+    //{   
+       //#pragma omp for
+       for (i = 0; i < N; i++) {
         for (j = 0; j < N; j++) {
             free(grid_even[i][j]);
             free(grid_odd[i][j]);
         }
-    }
-    
-    #pragma omp parallel for
-    for (i = 0; i < N; i++) {
         free(grid_even[i]);
         free(grid_odd[i]);
-    }
+     } 
+    //}
+    /*for (i = 0; i < N; i++) {
+        for (j = 0; j < N; j++) {
+            free(grid_even[i][j]);
+            free(grid_odd[i][j]);
+        }
+    }*/
 
     free(grid_even);
     free(grid_odd);
