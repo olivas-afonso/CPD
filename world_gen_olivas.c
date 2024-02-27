@@ -54,6 +54,8 @@ char ***gen_initial_grid(long long N, float density, int input_seed)
             printf("Failed to allocate matrix\n");
             exit(1);
         }
+
+        for (z=0)
         for (y = 1; y < N; y++)
             grid_even[x][y] = grid_even[x][0] + y * N;
     }
@@ -96,10 +98,8 @@ void liberarMatriz(int N) {
 
     // Libera a memória da terceira dimensão
     for (i = 0; i < N; i++) {
-        for (j = 0; j < N; j++) {
-            free(grid_even[i][j]);
-            free(grid_odd[i][j]);
-        }
+            free(grid_even[i][0]);
+            free(grid_odd[i][0]);
     }
 
     // Libera a memória da segunda dimensão

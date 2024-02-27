@@ -7,7 +7,7 @@
 char *** grid_even;
 char *** grid_odd;
 unsigned int seed;
-long count_species[9]={0,0,0,0,0,0,0,0,0};
+long count_species[10]={0,0,0,0,0,0,0,0,0,0};
 
 long max_count[9]={0,0,0,0,0,0,0,0,0};
 int max_gen[9];
@@ -75,13 +75,12 @@ char ***gen_initial_grid(int N, float density, int input_seed)
                 if(r4_uni() < density)
                     {
                         grid_even[x][y][z] = (int)(r4_uni() * N_SPECIES) + 1; // preenchimento initial do grid_even dependendo da seed
-                        if(grid_even[x][y][z] !=0)
-                            count_species[grid_even[x][y][z]-1]++;
+                        count_species[grid_even[x][y][z]]++;
                     }
         }     
     }
 
-    for(x=0; x < 9; x++)
+    for(x=1; x < 10; x++)
     {
         if(count_species[x] > max_count[x])
         {
@@ -111,7 +110,7 @@ int death_rule(int N, char *** grid, long aux_x, long aux_y, long aux_z)
             for(search_z=(aux_z-1+N)%N, z=0; z< 3;z++, search_z++)
             {
                 if (grid [search_x % N][search_y % N][search_z % N] != 0){       
-                    ++cont_rule;
+                    ++cont_rule;                
                     cont_species_death[grid[search_x % N][search_y% N][search_z% N]-1]++;
                 }
                 
@@ -192,18 +191,15 @@ void rules(int N, char ***grid_new, char ***grid_old)
                     grid_new[aux_x][aux_y][aux_z]= life_rule(N, grid_old, aux_x, aux_y, aux_z);     
                 }
 
-                if (grid_new[aux_x][aux_y][aux_z] != 0){
-                    count_species[grid_new[aux_x][aux_y][aux_z]-1]++;
-                }
+                count_species[grid_new[aux_x][aux_y][aux_z]]++;
             }
         }
     }
 }
 
-void liberarMatriz(int N) {
+void freeMatrix(int N) {
     int i, j;
 
-    // Libera a memória da terceira dimensão
     for (i = 0; i < N; i++) {
         for (j = 0; j < N; j++) {
             free(grid_even[i][j]);
@@ -211,13 +207,11 @@ void liberarMatriz(int N) {
         }
     }
 
-    // Libera a memória da segunda dimensão
     for (i = 0; i < N; i++) {
         free(grid_even[i]);
         free(grid_odd[i]);
     }
 
-    // Libera a memória da primeira dimensão
     free(grid_even);
     free(grid_odd);
 }
@@ -240,8 +234,7 @@ int main(int argc, char *argv[]) {
 
     for(gen_number=1; gen_number<=number_of_gens; gen_number++)
     {
-        //printf ("Gen:%d\n", gen_number);
-        for(auxi=0; auxi < 9; auxi++)
+        for(auxi=0; auxi < 10; auxi++)
         {
             count_species[auxi]=0;
         }
@@ -255,7 +248,7 @@ int main(int argc, char *argv[]) {
             rules(number_of_cells, grid_even, grid_odd);
         }      
         
-        for(auxi=0; auxi < 9; auxi++)
+        for(auxi=1; auxi < 10; auxi++)
         {
             if(count_species[auxi] > max_count[auxi])
             {
@@ -265,12 +258,12 @@ int main(int argc, char *argv[]) {
         }
     }
     
-    for(auxi=0; auxi < 9; auxi++)
+    for(auxi=1; auxi < 10; auxi++)
     {
-        printf("%d %ld %d \n", auxi+1, max_count[auxi], max_gen[auxi]);
+        printf("%d %ld %d \n", auxi, max_count[auxi], max_gen[auxi]);
     }
 
-    liberarMatriz(number_of_cells);
+    freeMatriz(number_of_cells);
 
     return 0;
 }

@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include<omp.h>
+#include <omp.h>
 
 #define N_SPECIES 9
 
@@ -181,16 +181,11 @@ void rules(int N, char ***grid_new, char ***grid_old)
 #pragma omp parallel private (aux_x, aux_y, aux_z)
             {
     
-    #pragma omp for
+    #pragma omp for nowait
     for(aux_x=0; aux_x< N; aux_x ++)
-    {
-        
-
-            
+    {       
         for(aux_y=0; aux_y<N; aux_y++)
         {
-            
-           
             for(aux_z=0; aux_z<N; aux_z++)
             {
                 if(grid_old[aux_x][aux_y][aux_z]==0) // morto 

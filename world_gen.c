@@ -71,6 +71,13 @@ char ***gen_initial_grid(int N, float density, int input_seed)
         for (y = 1; y < N; y++){
             grid_even[x][y] = grid_even[x][0] + y * N;
             grid_odd[x][y] = grid_odd[x][0] + y * N;
+            for (z = 0; z < N; z++)
+                if(r4_uni() < density)
+                {
+                    grid_even[x][y][z] = (int)(r4_uni() * N_SPECIES) + 1; // preenchimento initial do grid_even dependendo da seed
+                    if(grid_even[x][y][z] !=0)
+                        count_species[grid_even[x][y][z]-1]++;
+                }
         }
             
     }
