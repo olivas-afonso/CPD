@@ -77,8 +77,8 @@ char ***gen_initial_grid(int N, float density, int input_seed)
                         grid_even[x][y][z] = (int)(r4_uni() * N_SPECIES) + 1; // preenchimento initial do grid_even dependendo da seed
                         count_species[grid_even[x][y][z]]++;
                     }
-        }     
-    }
+        }
+    } 
 
     for(x=1; x < 10; x++)
     {
@@ -146,7 +146,7 @@ int life_rule (int N, char *** grid, long aux_x, long aux_y, long aux_z){
     long aux_search_y, aux_search_z;
     int cont_rule=-1;
     int x,y,z;
-   
+    
     for(search_x= (aux_x-1+N)%N, x=0; x < 3; x++, search_x++) 
     {
         for(search_y=(aux_y-1+N)%N, y=0; y < 3; y++, search_y++)
@@ -175,22 +175,26 @@ void rules(int N, char ***grid_new, char ***grid_old)
 {
     long aux_x, aux_y, aux_z;
 
-    for(aux_x=0; aux_x< N; aux_x ++)
+    #pragma omp parallel private (aux_y, aux_z)
     {
-        for(aux_y=0; aux_y<N; aux_y++)
+        #pragma omp for reduction(+:count_species)
+        for(aux_x=0; aux_x< N; aux_x ++)
         {
-            for(aux_z=0; aux_z<N; aux_z++)
+            for(aux_y=0; aux_y<N; aux_y++)
             {
-                if(grid_old[aux_x][aux_y][aux_z]==0) // morto 
-                { 
-                    grid_new[aux_x][aux_y][aux_z]= death_rule(N, grid_old, aux_x, aux_y, aux_z);
-                }
-                else
-                {  
-                    grid_new[aux_x][aux_y][aux_z]= life_rule(N, grid_old, aux_x, aux_y, aux_z);     
-                }
+                for(aux_z=0; aux_z<N; aux_z++)
+                {
+                    if(grid_old[aux_x][aux_y][aux_z]==0) // morto 
+                    { 
+                        grid_new[aux_x][aux_y][aux_z]= death_rule(N, grid_old, aux_x, aux_y, aux_z);
+                    }
+                    else
+                    {  
+                        grid_new[aux_x][aux_y][aux_z]= life_rule(N, grid_old, aux_x, aux_y, aux_z);     
+                    }
 
-                count_species[grid_new[aux_x][aux_y][aux_z]]++;
+                    count_species[grid_new[aux_x][aux_y][aux_z]]++;
+                }
             }
         }
     }
@@ -199,14 +203,19 @@ void rules(int N, char ***grid_new, char ***grid_old)
 void freeMatrix(int N) {
     int i, j;
 
-    for (i = 0; i < N; i++) {
-        for (j = 0; j < N; j++) {
-            free(grid_even[i][j]);
-            free(grid_odd[i][j]);
+    #pragma omp parallel private (j)
+    {
+        #pragma omp for
+        for (i = 0; i < N; i++) {
+            for (j = 0; j < N; j++) {
+                free(grid_even[i][j]);
+                free(grid_odd[i][j]);
+            }
+            free(grid_even[i]);
+            free(grid_odd[i]);
         }
-        free(grid_even[i]);
-        free(grid_odd[i]);
     }
+   
 
     free(grid_even);
     free(grid_odd);
