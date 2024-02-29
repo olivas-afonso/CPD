@@ -177,7 +177,7 @@ void rules(int N, char ***grid_new, char ***grid_old)
 
     #pragma omp parallel private (aux_y, aux_z)
     {
-        #pragma omp for reduction(+:count_species)
+        #pragma omp for reduction(+:count_species) schedule (dynamic)
         for(aux_x=0; aux_x< N; aux_x ++)
         {
             for(aux_y=0; aux_y<N; aux_y++)
@@ -203,19 +203,15 @@ void rules(int N, char ***grid_new, char ***grid_old)
 void freeMatrix(int N) {
     int i, j;
 
-    #pragma omp parallel private (j)
-    {
-        #pragma omp for
-        for (i = 0; i < N; i++) {
-            for (j = 0; j < N; j++) {
-                free(grid_even[i][j]);
-                free(grid_odd[i][j]);
-            }
-            free(grid_even[i]);
-            free(grid_odd[i]);
+    for (i = 0; i < N; i++) {
+        for (j = 0; j < N; j++) {
+            free(grid_even[i][j]);
+            free(grid_odd[i][j]);
         }
+        free(grid_even[i]);
+        free(grid_odd[i]);
     }
-   
+
 
     free(grid_even);
     free(grid_odd);
