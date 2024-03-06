@@ -29,12 +29,18 @@ float r4_uni()
     return 0.5 + 0.2328306e-09 * (seed_in + (int) seed);
 }
 
+/************************************************************************************************
+* Nome: gen_initial_grid
+* funcao: gera as duas matrizes, a inicial e a auxiliar; ao longo das geracoes as celulas iram
+*passar de uma para a outra.
+************************************************************************************************/
 char ***gen_initial_grid(int N, float density, int input_seed)
 {
     int x, y, z;
     
     init_r4uni(input_seed);
     
+    //alocacao da memeoria dinamica, alocando primeiro um apontador triplo o que corresponde a uma dimensao do cubo
     grid_even = (char ***) malloc(N * sizeof(char **));
     if(grid_even == NULL) {
         printf("Failed to allocate matrix1\n");
@@ -47,6 +53,7 @@ char ***gen_initial_grid(int N, float density, int input_seed)
         exit(1);
     }
 
+    //aloca a dimensao x atraves de um apontador de um apontador
     for(x = 0; x < N; x++) {
         grid_even[x] = (char **) malloc(N * sizeof(char *));
         if(grid_even[x] == NULL) {
@@ -60,6 +67,7 @@ char ***gen_initial_grid(int N, float density, int input_seed)
             exit(1);
         }
 
+        // aloca o eixo final, ataves de um apontador de arrays
         for (y = 0; y < N; y++){
             grid_even[x][y] = (char*) calloc(N, sizeof(char));
             if(grid_even[x][y] == NULL) {
@@ -80,12 +88,13 @@ char ***gen_initial_grid(int N, float density, int input_seed)
         }     
     }
 
+    //conta as especies da geracao 0
     for(x=1; x < 10; x++)
     {
-        if(count_species[x] > max_count[x])
+        if(count_species[x] > max_count[x-1])
         {
-            max_count[x] = count_species[x];
-            max_gen[x]=0;
+            max_count[x-1] = count_species[x];
+            max_gen[x-1]=0;
         }
     } 
                     
@@ -93,6 +102,11 @@ char ***gen_initial_grid(int N, float density, int input_seed)
     return grid_even;
 }
 
+/************************************************************************************************
+* Nome:death_rule
+* funcao: verifica os vizinhos no caso da celula ter estado morta na geracao anterior
+*
+************************************************************************************************/
 int death_rule(int N, char *** grid, long aux_x, long aux_y, long aux_z)
 {
 
@@ -102,7 +116,8 @@ int death_rule(int N, char *** grid, long aux_x, long aux_y, long aux_z)
     int cont_rule=0;
     int max=0, max_pos=0, i;
     int x,y,z;
-    
+
+    // corre vizinhos e em caso de extremo verifica o extremo oposto   
     for(search_x= (aux_x-1+N)%N, x=0; x < 3; x++, search_x++) 
     {
         for(search_y=(aux_y-1+N)%N, y=0; y < 3; y++, search_y++)
@@ -113,7 +128,8 @@ int death_rule(int N, char *** grid, long aux_x, long aux_y, long aux_z)
                     ++cont_rule;                
                     cont_species_death[grid[search_x % N][search_y% N][search_z% N]-1]++;
                 }
-                
+
+                // (OTIMIZACAO) se já tem os vizinhos suficientes, permanece morta
                 if (cont_rule >10){
                     return 0;
                 }               
@@ -121,7 +137,8 @@ int death_rule(int N, char *** grid, long aux_x, long aux_y, long aux_z)
         }
     } 
     
-     if ( cont_rule >= 7 && cont_rule <= 10 )
+    //Verifica qual a especie em que vai reviver, caso tenha entre 7 e 10 vizinhos vivos
+    if ( cont_rule >= 7 && cont_rule <= 10 )
     {
         max=cont_species_death[0];
         
@@ -134,29 +151,35 @@ int death_rule(int N, char *** grid, long aux_x, long aux_y, long aux_z)
                 max_pos=i;         
             }      
         }
-
         return max_pos+1;
-    }
+    }//celula mantem-se morta 
     else return 0; 
 }
 
-
+/************************************************************************************************
+* Nome:life_rule
+* funcao: verifica os vizinhos no caso da celula ter estado viva na geracao anterior
+*
+************************************************************************************************/
 int life_rule (int N, char *** grid, long aux_x, long aux_y, long aux_z){
     long search_x, search_y, search_z;
     long aux_search_y, aux_search_z;
     int cont_rule=-1;
     int x,y,z;
    
+   	// corre vizinhos e em caso de extremo verifica o extremo oposto
     for(search_x= (aux_x-1+N)%N, x=0; x < 3; x++, search_x++) 
     {
         for(search_y=(aux_y-1+N)%N, y=0; y < 3; y++, search_y++)
         {
             for(search_z=(aux_z-1+N)%N, z=0; z< 3;z++, search_z++)
-            {
+            {   
+                //verifica se o vizinho está vivo
                 if (grid [search_x % N][search_y % N][search_z % N] != 0){       
                     ++cont_rule;
                 }
 
+                // (OTIMIZACAO) se já tem vizinhos demasiados vizinhos morre
                 if (cont_rule >13){
                     return 0;
                 }               
@@ -164,17 +187,26 @@ int life_rule (int N, char *** grid, long aux_x, long aux_y, long aux_z){
         }
     } 
 
+	//se nao tiver celulas suficientes a celula morre
     if (cont_rule<=4){
         return 0;
-    }else{  
+    }else{ 
+        //celula mantem-se viva 
         return grid[aux_x][aux_y][aux_z];
     }
 }
 
+
+/************************************************************************************************
+* Nome:rules
+* funcao: corre as funcoes relativas às regras dependendo do valor que a celula tem
+*
+************************************************************************************************/
 void rules(int N, char ***grid_new, char ***grid_old)
 {
     long aux_x, aux_y, aux_z;
 
+    // corre todas as celulas da grid
     for(aux_x=0; aux_x< N; aux_x ++)
     {
         for(aux_y=0; aux_y<N; aux_y++)
@@ -189,45 +221,61 @@ void rules(int N, char ***grid_new, char ***grid_old)
                 {  
                     grid_new[aux_x][aux_y][aux_z]= life_rule(N, grid_old, aux_x, aux_y, aux_z);     
                 }
-
+                //incrementa o numero de especies
                 count_species[grid_new[aux_x][aux_y][aux_z]]++;
             }
         }
     }
 }
 
+/************************************************************************************************
+* Nome:free matrix
+* funcao: liberta a memoria das grids
+*
+************************************************************************************************/
 void freeMatrix(int N) {
     int i, j;
 
     for (i = 0; i < N; i++) {
+        // Libera a memória da terceira dimensão
         for (j = 0; j < N; j++) {
             free(grid_even[i][j]);
             free(grid_odd[i][j]);
         }
+        // Libera a memória da segunda dimensão
         free(grid_even[i]);
         free(grid_odd[i]);
     }
 
+    // Libera a memória da primeira dimensão
     free(grid_even);
     free(grid_odd);
 }
 
+/************************************************************************************************
+* Nome:main
+* funcao: corre as funcoes pela ordem de execução correta
+*
+************************************************************************************************/
 int main(int argc, char *argv[]) {
-    int auxi;
+    int auxi;       // contador do numero de especies por geração
     int gen_number=0;
 
     int aux_x4, aux_y4, aux_z4; 
 
     int number_of_gens,  number_of_cells;
     float density;
-    
+
+	// retira os argumentos do terminal e colaca em variaveis 
     number_of_gens = atoi (argv[1]);
     number_of_cells = atoi (argv[2]);
     density = atof (argv[3]);
     seed = atoi (argv[4]);
 
+	//cria a grid aleatoria atraves dos inputs (funcao fornecida)
     grid_even = gen_initial_grid(number_of_cells, density, seed);
 
+    //corre as gerações 
     for(gen_number=1; gen_number<=number_of_gens; gen_number++)
     {
         for(auxi=0; auxi < 10; auxi++)
@@ -246,17 +294,17 @@ int main(int argc, char *argv[]) {
         
         for(auxi=1; auxi < 10; auxi++)
         {
-            if(count_species[auxi] > max_count[auxi])
+            if(count_species[auxi] > max_count[auxi-1])
             {
-                max_count[auxi] = count_species[auxi];
-                max_gen[auxi]=gen_number;
+                max_count[auxi-1] = count_species[auxi];
+                max_gen[auxi-1]=gen_number;
             }
         }
     }
     
     for(auxi=1; auxi < 10; auxi++)
     {
-        printf("%d %ld %d \n", auxi, max_count[auxi], max_gen[auxi]);
+        printf("%d %ld %d \n", auxi, max_count[auxi-1], max_gen[auxi-1]);
     }
 
     freeMatrix(number_of_cells);
