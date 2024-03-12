@@ -178,6 +178,7 @@ void rules(int N, char ***grid_new, char ***grid_old)
     #pragma omp parallel private (aux_y, aux_z)
     {
         #pragma omp for reduction(+:count_species) schedule (dynamic)
+        
         for(aux_x=0; aux_x< N; aux_x ++)
         {
             for(aux_y=0; aux_y<N; aux_y++)
