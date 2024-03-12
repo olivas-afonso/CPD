@@ -1,3 +1,5 @@
+METER TEMPOS DE EXECUCAO NO STDERR
+
 Things to do for MPI
 
 grid initial tem de ser criada em todos os processos, mas cada processo apenas guarda a parte que vai utilizar ( n faco a mais pequena ideia como?)
