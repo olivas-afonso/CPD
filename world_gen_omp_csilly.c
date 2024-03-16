@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <omp.h>
 
 #define N_SPECIES 9
 
@@ -9,8 +10,8 @@ char *** grid_odd;
 unsigned int seed;
 long count_species[10]={0,0,0,0,0,0,0,0,0,0};
 
-long max_count[9]={0,0,0,0,0,0,0,0,0};
-int max_gen[9];
+long max_count[10]={0,0,0,0,0,0,0,0,0,0};
+int max_gen[10];
 
 
 void init_r4uni(int input_seed)
@@ -219,6 +220,7 @@ void freeMatrix(int N) {
 }
 
 int main(int argc, char *argv[]) {
+    double exec_time;
     int auxi;
     int gen_number=0;
 
@@ -233,6 +235,7 @@ int main(int argc, char *argv[]) {
     seed = atoi (argv[4]);
 
     grid_even = gen_initial_grid(number_of_cells, density, seed);
+    exec_time = -omp_get_wtime();
 
     for(gen_number=1; gen_number<=number_of_gens; gen_number++)
     {
@@ -259,6 +262,8 @@ int main(int argc, char *argv[]) {
             }
         }
     }
+    exec_time += omp_get_wtime();
+    fprintf(stderr, "%.1fs\n", exec_time);
     
     for(auxi=1; auxi < 10; auxi++)
     {
@@ -266,6 +271,7 @@ int main(int argc, char *argv[]) {
     }
 
     freeMatrix(number_of_cells);
+
 
     return 0;
 }
