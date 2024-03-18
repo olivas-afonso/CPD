@@ -30,11 +30,22 @@ void reconstructMatrix(int *flatMatrix, Matrix3D *matrix) {
     }
 }
 
+void printMatrix(Matrix3D *matrix, int rank) {
+    for (int i = 0; i < X_DIM; i++) {
+        for (int j = 0; j < Y_DIM; j++) {
+            for (int k = 0; k < Z_DIM; k++) {
+                printf("Process %d: matrix[%d][%d][%d] = %d\n", rank, i, j, k, matrix->data[i][j][k]);
+            }
+        }
+    }
+    printf("\n");
+}
+
 int main(int argc, char **argv) {
     int rank, size;
     int sendcounts[X_DIM], displs[X_DIM];
     int flatMatrix[X_DIM * Y_DIM * Z_DIM];
-    Matrix3D received_matrix;
+    Matrix3D matrix, received_matrix;
 
     MPI_Init(&argc, &argv);
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
@@ -46,7 +57,6 @@ int main(int argc, char **argv) {
 
     // Prepare data to scatter
     if (rank == 0) {
-        Matrix3D matrix;
         // Initialize the matrix
         for (int i = 0; i < X_DIM; i++) {
             for (int j = 0; j < Y_DIM; j++) {
@@ -55,6 +65,10 @@ int main(int argc, char **argv) {
                 }
             }
         }
+
+        // Print the initial matrix
+        printf("Initial matrix (rank 0):\n");
+        printMatrix(&matrix, rank);
 
         // Flatten the matrix
         flattenMatrix(&matrix, flatMatrix);
@@ -72,16 +86,9 @@ int main(int argc, char **argv) {
     // Reconstruct the matrix
     reconstructMatrix(flatMatrix, &received_matrix);
 
-    // Each process prints the received data
-    if (rank == 0) {
-        for (int i = 0; i < X_DIM; i++) {
-            for (int j = 0; j < Y_DIM; j++) {
-                for (int k = 0; k < Z_DIM; k++) {
-                    printf("Process %d: received matrix[%d][%d][%d] = %d\n", rank, i, j, k, received_matrix.data[i][j][k]);
-                }
-            }
-        }
-    }
+    // Print the received matrix for each process
+    printf("Received matrix (rank %d):\n", rank);
+    printMatrix(&received_matrix, rank);
 
     MPI_Type_free(&matrix3d_type);
     MPI_Finalize();
