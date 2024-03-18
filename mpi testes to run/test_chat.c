@@ -53,7 +53,7 @@ int main(int argc, char **argv) {
         }
     }
 
-    // Print out the initial grid
+    // Print out the initial grid (only by process 0)
     if (rank == 0) {
         printf("Initial Grid:\n");
         for (int k = 0; k < NZ; k++) {
@@ -67,6 +67,9 @@ int main(int argc, char **argv) {
             printf("\n");
         }
     }
+
+    // Wait for process 0 to finish printing initial grid
+    MPI_Barrier(MPI_COMM_WORLD);
 
     // Print out the layer of the grid for each process
     printf("Rank %d: Layer %d-%d\n", rank, start_layer, end_layer);
