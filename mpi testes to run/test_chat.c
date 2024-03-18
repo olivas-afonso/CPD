@@ -48,7 +48,7 @@ int main(int argc, char **argv) {
     for (int i = 0; i < NX; i++) {
         for (int j = 0; j < NY; j++) {
             for (int k = start_layer; k < end_layer; k++) {
-                layer[i][j][k] = rank + 1; // Example value
+                layer[i][j][k] = k + 1; // Fill with the number of the layer
             }
         }
     }
@@ -60,7 +60,7 @@ int main(int argc, char **argv) {
             printf("Layer %d:\n", k);
             for (int i = 0; i < NX; i++) {
                 for (int j = 0; j < NY; j++) {
-                    printf("%2d ", (i * NY * NZ + j * NZ + k) + 1);
+                    printf("%2d ", k + 1);
                 }
                 printf("\n");
             }
