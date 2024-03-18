@@ -33,7 +33,7 @@ int main(int argc, char **argv) {
     MPI_Dims_create(size, 3, dims);
     
     printf("DIMS %d %d %d:\n", dims[0], dims[1], dims[2]);
-    MPI_Cart_create(MPI_COMM_WORLD, 3, dims, periods, 0, &cart_comm);
+    MPI_Cart_create(MPI_COMM_WORLD, 3, dims, periods, 1, &cart_comm);
     MPI_Cart_coords(cart_comm, rank, 3, coords);
 
     // Each process gets responsibility for a layer of the grid
