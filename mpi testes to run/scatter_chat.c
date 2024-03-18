@@ -80,8 +80,14 @@ int main(int argc, char **argv) {
         }
     }
 
+    // Ensure all processes reach this point before proceeding
+    MPI_Barrier(MPI_COMM_WORLD);
+
     // Scatter the matrix to all processes
     MPI_Scatterv(flatMatrix, sendcounts, displs, MPI_INT, flatMatrix, X_DIM * Y_DIM * Z_DIM, MPI_INT, 0, MPI_COMM_WORLD);
+
+    // Ensure all processes receive their data before proceeding
+    MPI_Barrier(MPI_COMM_WORLD);
 
     // Reconstruct the matrix
     reconstructMatrix(flatMatrix, &received_matrix);
