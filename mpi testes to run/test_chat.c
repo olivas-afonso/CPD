@@ -6,6 +6,19 @@
 #define NY 8
 #define NZ 6
 
+void printLayer(int layer[NX][NY][NZ], int start_layer, int end_layer) {
+    for (int k = start_layer; k < end_layer; k++) {
+        printf("Layer %d: \n", k);
+        for (int i = 0; i < NX; i++) {
+            for (int j = 0; j < NY; j++) {
+                printf("%2d ", layer[i][j][k]);
+            }
+            printf("\n");
+        }
+        printf("\n");
+    }
+}
+
 int main(int argc, char **argv) {
     int rank, size;
     int dims[3] = {0, 0, 0};
@@ -40,19 +53,24 @@ int main(int argc, char **argv) {
         }
     }
 
-    // Print out the layer of the grid for each process
-    printf("Rank %d: Layer %d-%d\n", rank, start_layer, end_layer);
-
-    for (int k = start_layer; k < end_layer; k++) {
-        printf("Layer %d, Row %d: ", k, rank);
-        for (int i = 0; i < NX; i++) {
-            for (int j = 0; j < NY; j++) {
-                printf("%2d ", layer[i][j][k]);
+    // Print out the initial grid
+    if (rank == 0) {
+        printf("Initial Grid:\n");
+        for (int k = 0; k < NZ; k++) {
+            printf("Layer %d:\n", k);
+            for (int i = 0; i < NX; i++) {
+                for (int j = 0; j < NY; j++) {
+                    printf("%2d ", (i * NY * NZ + j * NZ + k) + 1);
+                }
+                printf("\n");
             }
             printf("\n");
         }
-        printf("\n");
     }
+
+    // Print out the layer of the grid for each process
+    printf("Rank %d: Layer %d-%d\n", rank, start_layer, end_layer);
+    printLayer(layer, start_layer, end_layer);
 
     MPI_Comm_free(&cart_comm);
     MPI_Finalize();
