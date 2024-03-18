@@ -10,10 +10,31 @@ typedef struct {
     int data[X_DIM][Y_DIM][Z_DIM];
 } Matrix3D;
 
+void flattenMatrix(Matrix3D *matrix, int *flatMatrix) {
+    for (int i = 0; i < X_DIM; i++) {
+        for (int j = 0; j < Y_DIM; j++) {
+            for (int k = 0; k < Z_DIM; k++) {
+                flatMatrix[i * Y_DIM * Z_DIM + j * Z_DIM + k] = matrix->data[i][j][k];
+            }
+        }
+    }
+}
+
+void reconstructMatrix(int *flatMatrix, Matrix3D *matrix) {
+    for (int i = 0; i < X_DIM; i++) {
+        for (int j = 0; j < Y_DIM; j++) {
+            for (int k = 0; k < Z_DIM; k++) {
+                matrix->data[i][j][k] = flatMatrix[i * Y_DIM * Z_DIM + j * Z_DIM + k];
+            }
+        }
+    }
+}
+
 int main(int argc, char **argv) {
     int rank, size;
-    int sendcounts, displs;
-    Matrix3D matrix, received_matrix;
+    int sendcounts[X_DIM], displs[X_DIM];
+    int flatMatrix[X_DIM * Y_DIM * Z_DIM];
+    Matrix3D received_matrix;
 
     MPI_Init(&argc, &argv);
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
@@ -25,6 +46,7 @@ int main(int argc, char **argv) {
 
     // Prepare data to scatter
     if (rank == 0) {
+        Matrix3D matrix;
         // Initialize the matrix
         for (int i = 0; i < X_DIM; i++) {
             for (int j = 0; j < Y_DIM; j++) {
@@ -34,19 +56,29 @@ int main(int argc, char **argv) {
             }
         }
 
+        // Flatten the matrix
+        flattenMatrix(&matrix, flatMatrix);
+
         // Prepare sendcounts and displs for scatterv
-        sendcounts = X_DIM * Y_DIM * Z_DIM;
-        displs = 0;
+        for (int i = 0; i < X_DIM; i++) {
+            sendcounts[i] = Y_DIM * Z_DIM;
+            displs[i] = i * Y_DIM * Z_DIM;
+        }
     }
 
     // Scatter the matrix to all processes
-    MPI_Scatterv(&matrix, &sendcounts, &displs, matrix3d_type, &received_matrix, 1, matrix3d_type, 0, MPI_COMM_WORLD);
+    MPI_Scatterv(flatMatrix, sendcounts, displs, MPI_INT, flatMatrix, X_DIM * Y_DIM * Z_DIM, MPI_INT, 0, MPI_COMM_WORLD);
+
+    // Reconstruct the matrix
+    reconstructMatrix(flatMatrix, &received_matrix);
 
     // Each process prints the received data
-    for (int x = 0; x < X_DIM; x++) {
-        for (int y = 0; y < Y_DIM; y++) {
-            for (int z = 0; z < Z_DIM; z++) {
-                printf("Process %d: received matrix[%d][%d][%d] = %d\n", rank, x, y, z, received_matrix.data[x][y][z]);
+    if (rank == 0) {
+        for (int i = 0; i < X_DIM; i++) {
+            for (int j = 0; j < Y_DIM; j++) {
+                for (int k = 0; k < Z_DIM; k++) {
+                    printf("Process %d: received matrix[%d][%d][%d] = %d\n", rank, i, j, k, received_matrix.data[i][j][k]);
+                }
             }
         }
     }
