@@ -59,9 +59,6 @@ int main(int argc, char **argv) {
     printf("Rank %d: Layer %d-%d\n", rank, start_layer, end_layer - 1);
     for (int k = start_layer; k < end_layer; k++) {
         printLayer(layer, k);
-        if (k != end_layer - 1) {
-            printf("\n"); // Print new line unless it's the last layer
-        }
     }
 
     MPI_Comm_free(&cart_comm);
