@@ -14,7 +14,7 @@ int main(int argc, char *argv[])
     // Get total number of MPI processes
     int size;
     MPI_Comm_size(MPI_COMM_WORLD, &size);
-    if (size != 4)
+    if (size != 6)
     {
         printf("This application is meant to be run with 12 processes.\n");
         MPI_Abort(MPI_COMM_WORLD, EXIT_FAILURE);
@@ -35,13 +35,13 @@ int main(int argc, char *argv[])
         printf("(%d, %d, %d).\n", dimsA[0], dimsA[1], dimsA[2]);
 
         // Restrict 6 processes in the first dimension
-        int dimsB[3] = {6, 0, 0};
+        int dimsB[3] = {2, 0, 0};
         printf("\t- Restrictions (%d, %d, %d) give decomposition ", dimsB[0], dimsB[1], dimsB[2]);
         MPI_Dims_create(size, 3, dimsB);
         printf("(%d, %d, %d).\n", dimsB[0], dimsB[1], dimsB[2]);
 
         // Restrict 4 processes in the second dimension and 1 in the third one
-        int dimsC[3] = {0, 4, 1};
+        int dimsC[3] = {0, 2, 1};
         printf("\t- Restrictions (%d, %d, %d) give decomposition ", dimsC[0], dimsC[1], dimsC[2]);
         MPI_Dims_create(size, 3, dimsC);
         printf("(%d, %d, %d).\n", dimsC[0], dimsC[1], dimsC[2]);
