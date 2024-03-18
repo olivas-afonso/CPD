@@ -6,17 +6,15 @@
 #define NY 4
 #define NZ 4
 
-void printLayer(int layer[NX][NY][NZ], int start_layer, int end_layer) {
-    for (int k = start_layer; k < end_layer; k++) {
-        printf("Layer %d: \n", k);
-        for (int i = 0; i < NX; i++) {
-            for (int j = 0; j < NY; j++) {
-                printf("%2d ", layer[i][j][k]);
-            }
-            printf("\n");
+void printLayer(int layer[NX][NY][NZ], int layer_num) {
+    printf("Layer %d: \n", layer_num);
+    for (int i = 0; i < NX; i++) {
+        for (int j = 0; j < NY; j++) {
+            printf("%2d ", layer[i][j][layer_num]);
         }
         printf("\n");
     }
+    printf("\n");
 }
 
 int main(int argc, char **argv) {
@@ -25,7 +23,6 @@ int main(int argc, char **argv) {
     int periods[3] = {0, 0, 0};
     int coords[3];
     MPI_Comm cart_comm;
-    int remain_dims[3] = {1, 1, 0}; // Do not wrap around in the Z dimension
 
     MPI_Init(&argc, &argv);
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
@@ -47,33 +44,15 @@ int main(int argc, char **argv) {
     // Fill out the layer of the grid with example values
     for (int i = 0; i < NX; i++) {
         for (int j = 0; j < NY; j++) {
-            for (int k = start_layer; k < end_layer; k++) {
+            for (int k = 0; k < NZ; k++) {
                 layer[i][j][k] = k + 1; // Fill with the number of the layer
             }
         }
     }
 
-    // Print out the initial grid (only by process 0)
-    if (rank == 0) {
-        printf("Initial Grid:\n");
-        for (int k = 0; k < NZ; k++) {
-            printf("Layer %d:\n", k);
-            for (int i = 0; i < NX; i++) {
-                for (int j = 0; j < NY; j++) {
-                    printf("%2d ", k + 1);
-                }
-                printf("\n");
-            }
-            printf("\n");
-        }
-    }
-
-    // Wait for process 0 to finish printing initial grid
-    MPI_Barrier(MPI_COMM_WORLD);
-
     // Print out the layer of the grid for each process
     printf("Rank %d: Layer %d-%d\n", rank, start_layer, end_layer);
-    printLayer(layer, start_layer, end_layer);
+    printLayer(layer, start_layer);
 
     MPI_Comm_free(&cart_comm);
     MPI_Finalize();
