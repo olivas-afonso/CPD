@@ -20,7 +20,7 @@ void printLayer(int layer[NX][NY][NZ], int layer_num, int rank) {
 int main(int argc, char **argv) {
     int rank, size;
     int dims[3] = {0, 0, 0};
-    int periods[3] = {0, 0, 0};
+    int periods[3] = {1, 1, 1};
     int coords[3];
     MPI_Comm cart_comm;
     MPI_Status status;
@@ -31,6 +31,7 @@ int main(int argc, char **argv) {
 
     // Create 3D Cartesian communicator
     MPI_Dims_create(size, 3, dims);
+    printf("DIMS %d %d %d:\n", dims[0], dims[1], dims[2]);
     MPI_Cart_create(MPI_COMM_WORLD, 3, dims, periods, 0, &cart_comm);
     MPI_Cart_coords(cart_comm, rank, 3, coords);
 
