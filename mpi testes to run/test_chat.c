@@ -23,30 +23,35 @@ int main(int argc, char **argv) {
     MPI_Cart_create(MPI_COMM_WORLD, 3, dims, periods, 0, &cart_comm);
     MPI_Cart_coords(cart_comm, rank, 3, coords);
 
-    // Each process gets responsibility for one layer
-    int local_size_z = NZ / dims[2];
-    int start_z = coords[2] * local_size_z;
-    int end_z = (coords[2] + 1) * local_size_z;
+    // Each process gets responsibility for a layer of the grid
+    int layers_per_process = NZ / dims[2];
+    int start_layer = coords[2] * layers_per_process;
+    int end_layer = (coords[2] + 1) * layers_per_process;
 
-    // Fill out the grid with example values
-    int grid[NX][NY][NZ];
+    // Create a 3D array to hold the layer of the grid for each process
+    int layer[NX][NY][NZ];
+    
+    // Fill out the layer of the grid with example values
     for (int i = 0; i < NX; i++) {
         for (int j = 0; j < NY; j++) {
-            for (int k = 0; k < NZ; k++) {
-                grid[i][j][k] = (i * NY * NZ + j * NZ + k) + 1; // Unique values for each cell
+            for (int k = start_layer; k < end_layer; k++) {
+                layer[i][j][k] = rank + 1; // Example value
             }
         }
     }
 
-    // Print out the filled grid
-    printf("Rank %d: Z: %d-%d\n", rank, start_z, end_z);
+    // Print out the layer of the grid for each process
+    printf("Rank %d: Layer %d-%d\n", rank, start_layer, end_layer);
 
-    for (int i = 0; i < NX; i++) {
-        for (int j = 0; j < NY; j++) {
-            for (int k = start_z; k < end_z; k++) {
-                printf("Rank %d received value %d at [%d][%d][%d]\n", rank, grid[i][j][k], i, j, k);
+    for (int k = start_layer; k < end_layer; k++) {
+        printf("Layer %d, Row %d: ", k, rank);
+        for (int i = 0; i < NX; i++) {
+            for (int j = 0; j < NY; j++) {
+                printf("%2d ", layer[i][j][k]);
             }
+            printf("\n");
         }
+        printf("\n");
     }
 
     MPI_Comm_free(&cart_comm);
