@@ -9,6 +9,8 @@
 #define Y_DIM 3
 #define Z_DIM 3
 
+#define N_SPECIES 9
+
 
 char *** grid_even;
 char *** grid_odd;
@@ -83,7 +85,6 @@ char ***gen_initial_grid(int N, float density, int input_seed)
                     {
 						// preenchimento initial do grid_even dependendo da seed
                         grid_even[x][y][z] = (int)(r4_uni() * N_SPECIES) + 1; // preenchimento initial do grid_even dependendo da seed
-                        count_species[grid_even[x][y][z]]++;
                     }
         }     
     }
@@ -110,6 +111,7 @@ int main(int argc, char *argv[])
     int rank, size;
     int sendcounts, displs;
     MPI_Comm comm;
+    Matrix3D matrix, received_matrix;
     
     int dim[2], period[2], reorder;
     int coord[2], id;
@@ -126,7 +128,7 @@ int main(int argc, char *argv[])
     seed = atoi (argv[4]);
 
     grid_even = gen_initial_grid(number_of_cells, density, seed);
-
+    /*
     char send_stuff[NUM_LINES][NUM_COL][number_of_cells];
 
     int i, j, k;
@@ -137,6 +139,7 @@ int main(int argc, char *argv[])
             }
         }
     }
+    */
 
     /*
     MPI_Type_vector(NUM_LINES, NUM_COL, 4, MPI_CHAR, &blocktype2);
@@ -170,7 +173,7 @@ int main(int argc, char *argv[])
             }
         }
     }
-    
+
     MPI_Type_free(&matrix3d_type);
     MPI_Finalize();
 
