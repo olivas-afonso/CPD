@@ -35,7 +35,13 @@ int main(int argc, char **argv) {
 
     // Each process gets responsibility for a layer of the grid
     int layers_per_process = NZ / dims[2];
-    int layer_num = coords[2]; // Assign different layers to each process
+    int start_layer = coords[2] * layers_per_process;
+    int end_layer = start_layer + layers_per_process;
+    
+    // Adjust the layers per process for remainder
+    if (coords[2] == dims[2] - 1) {
+        end_layer = NZ;
+    }
 
     // Create a 3D array to hold the layer of the grid for each process
     int layer[NX][NY][NZ];
@@ -50,8 +56,10 @@ int main(int argc, char **argv) {
     }
 
     // Print out the layer of the grid for each process
-    printf("Rank %d: Layer %d\n", rank, layer_num);
-    printLayer(layer, layer_num);
+    printf("Rank %d: Layer %d-%d\n", rank, start_layer, end_layer - 1);
+    for (int k = start_layer; k < end_layer; k++) {
+        printLayer(layer, k);
+    }
 
     MPI_Comm_free(&cart_comm);
     MPI_Finalize();
