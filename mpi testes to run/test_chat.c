@@ -6,8 +6,8 @@
 #define NY 4
 #define NZ 4
 
-void printLayer(int layer[NX][NY][NZ], int layer_num) {
-    printf("Layer %d: \n", layer_num);
+void printLayer(int layer[NX][NY][NZ], int layer_num, int rank) {
+    printf("Rank %d: Layer %d\n", rank, layer_num);
     for (int i = 0; i < NX; i++) {
         for (int j = 0; j < NY; j++) {
             printf("%2d ", layer[i][j][layer_num]);
@@ -51,24 +51,32 @@ int main(int argc, char **argv) {
         }
     }
 
-    // Print out the initial grid (only by process 0)
+    // Synchronize the output
+    MPI_Barrier(MPI_COMM_WORLD);
+
+    // Only let process 0 print the initial grid
     if (rank == 0) {
         printf("Initial Grid:\n");
         for (int k = 0; k < NZ; k++) {
-            printLayer(layer, k);
+            printLayer(layer, k, rank);
         }
     }
 
-    // Wait for process 0 to finish printing initial grid
+    // Synchronize the output
     MPI_Barrier(MPI_COMM_WORLD);
 
-    // Print out the layer of the grid for each process
-    printf("Rank %d: Layer %d-%d\n", rank, start_layer, end_layer - 1);
-    for (int k = start_layer; k < end_layer; k++) {
-        printLayer(layer, k);
-        if (k != end_layer - 1) {
-            printf("\n"); // Print new line unless it's the last layer
+    // Print out the layer of the grid for each process one at a time
+    for (int i = 0; i < size; i++) {
+        if (rank == i) {
+            printf("Rank %d is printing...\n", rank);
+            for (int k = start_layer; k < end_layer; k++) {
+                printLayer(layer, k, rank);
+                if (k != end_layer - 1) {
+                    printf("\n"); // Print new line unless it's the last layer
+                }
+            }
         }
+        MPI_Barrier(MPI_COMM_WORLD);
     }
 
     MPI_Comm_free(&cart_comm);
