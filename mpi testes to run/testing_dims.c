@@ -14,7 +14,7 @@ int main(int argc, char *argv[])
     // Get total number of MPI processes
     int size;
     MPI_Comm_size(MPI_COMM_WORLD, &size);
-    if (size != 5)
+    if (size != 4)
     {
         printf("This application is meant to be run with 12 processes.\n");
         MPI_Abort(MPI_COMM_WORLD, EXIT_FAILURE);
