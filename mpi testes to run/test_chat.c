@@ -35,14 +35,10 @@ int main(int argc, char **argv) {
 
     // Each process gets responsibility for a layer of the grid
     int layers_per_process = NZ / dims[2];
-    int start_layer = coords[2] * layers_per_process;
-    int end_layer = start_layer + layers_per_process;
+    int remainder = NZ % dims[2]; // Check for any remaining layers
+    int start_layer = coords[2] * layers_per_process + (coords[2] < remainder ? coords[2] : remainder);
+    int end_layer = start_layer + layers_per_process + (coords[2] < remainder ? 1 : 0);
     
-    // Adjust the layers per process for remainder
-    if (coords[2] == dims[2] - 1) {
-        end_layer = NZ;
-    }
-
     // Create a 3D array to hold the layer of the grid for each process
     int layer[NX][NY][NZ];
     
