@@ -2,9 +2,9 @@
 #include <stdlib.h>
 #include <mpi.h>
 
-#define NX 4
-#define NY 4
-#define NZ 4
+#define NX 6
+#define NY 6
+#define NZ 6
 
 void printLayer(int layer[NX][NY][NZ], int layer_num, int rank) {
     printf("Rank %d: Layer %d\n", rank, layer_num);
