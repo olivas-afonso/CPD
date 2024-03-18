@@ -28,9 +28,10 @@ int main(int argc, char **argv) {
     MPI_Init(&argc, &argv);
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
     MPI_Comm_size(MPI_COMM_WORLD, &size);
-
+    printf("SIZE: %d\n", size);
     // Create 3D Cartesian communicator
     MPI_Dims_create(size, 3, dims);
+    
     printf("DIMS %d %d %d:\n", dims[0], dims[1], dims[2]);
     MPI_Cart_create(MPI_COMM_WORLD, 3, dims, periods, 0, &cart_comm);
     MPI_Cart_coords(cart_comm, rank, 3, coords);
