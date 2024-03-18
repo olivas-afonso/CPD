@@ -23,6 +23,7 @@ int main(int argc, char **argv) {
     int periods[3] = {0, 0, 0};
     int coords[3];
     MPI_Comm cart_comm;
+    MPI_Status status;
 
     MPI_Init(&argc, &argv);
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
@@ -70,7 +71,9 @@ int main(int argc, char **argv) {
         if (rank == i) {
             printf("Rank %d is printing...\n", rank);
             for (int k = start_layer; k < end_layer; k++) {
-                printLayer(layer, k, rank);
+                MPI_Barrier(MPI_COMM_WORLD); // Synchronize before receiving
+                MPI_Bcast(&layer, NX * NY * NZ, MPI_INT, i, MPI_COMM_WORLD); // Broadcast the layer
+                printLayer(layer, k, rank); // Print the received layer
                 if (k != end_layer - 1) {
                     printf("\n"); // Print new line unless it's the last layer
                 }
