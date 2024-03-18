@@ -33,8 +33,9 @@ int main(int argc, char **argv) {
     MPI_Cart_create(MPI_COMM_WORLD, 3, dims, periods, 0, &cart_comm);
     MPI_Cart_coords(cart_comm, rank, 3, coords);
 
-    // Determine layer number for this process
-    int layer_num = coords[2];
+    // Each process gets responsibility for a layer of the grid
+    int layers_per_process = NZ / dims[2];
+    int layer_num = coords[2]; // Assign different layers to each process
 
     // Create a 3D array to hold the layer of the grid for each process
     int layer[NX][NY][NZ];
@@ -43,7 +44,7 @@ int main(int argc, char **argv) {
     for (int i = 0; i < NX; i++) {
         for (int j = 0; j < NY; j++) {
             for (int k = 0; k < NZ; k++) {
-                layer[i][j][k] = layer_num + 1; // Fill with the layer number
+                layer[i][j][k] = k + 1; // Fill with the number of the layer
             }
         }
     }
