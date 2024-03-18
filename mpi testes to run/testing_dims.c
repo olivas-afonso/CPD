@@ -35,7 +35,7 @@ int main(int argc, char *argv[])
         printf("(%d, %d, %d).\n", dimsA[0], dimsA[1], dimsA[2]);
 
         // Restrict 6 processes in the first dimension
-        int dimsB[3] = {2, 0, 0};
+        int dimsB[3] = {1, 0, 0};
         printf("\t- Restrictions (%d, %d, %d) give decomposition ", dimsB[0], dimsB[1], dimsB[2]);
         MPI_Dims_create(size, 3, dimsB);
         printf("(%d, %d, %d).\n", dimsB[0], dimsB[1], dimsB[2]);
