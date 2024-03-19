@@ -4,14 +4,17 @@
 
 #define WIDTH 12
 #define HEIGHT 12
-#define DEPTH 6
+#define DEPTH 12
+
+int valor = 0;
 
 // Function to initialize the 3D matrix
 void initializeMatrix(int matrix[WIDTH][HEIGHT][DEPTH]) {
     for (int x = 0; x < WIDTH; ++x) {
         for (int y = 0; y < HEIGHT; ++y) {
             for (int z = 0; z < DEPTH; ++z) {
-                matrix[x][y][z] = x + y + z; // Example initialization
+                matrix[x][y][z] = valor; // Example initialization
+                ++valor;
             }
         }
     }
