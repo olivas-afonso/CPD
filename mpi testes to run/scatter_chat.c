@@ -44,8 +44,8 @@ void printMatrix(Matrix3D *matrix, int rank) {
 int main(int argc, char **argv) {
     int rank, size;
     int sendcounts[X_DIM], displs[X_DIM];
-    int flatMatrix[X_DIM * Y_DIM * Z_DIM];
-    int recvBuffer[Y_DIM * Z_DIM]; // Separate receive buffer for each process
+    int flatMatrix[X_DIM * Y_DIM * Z_DIM]={0};
+    int recvBuffer[Y_DIM * Z_DIM]={0}; // Separate receive buffer for each process
     Matrix3D matrix, received_matrix;
 
     MPI_Init(&argc, &argv);
