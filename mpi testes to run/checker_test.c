@@ -47,19 +47,18 @@ int main(int argc, char *argv[]) {
         }
     }
 
-    // Gather subgrids from all processes to process 0
-    char ***gathered_subgrids = NULL;
-    if (rank == 0) {
-        gathered_subgrids = (char ***)malloc(N_X * sizeof(char **));
-        for (int i = 0; i < N_X; i++) {
-            gathered_subgrids[i] = (char **)malloc(N_Y * sizeof(char *));
-            for (int j = 0; j < N_Y; j++) {
-                gathered_subgrids[i][j] = (char *)malloc(N_Z * sizeof(char));
-            }
+    // Allocate memory for gathered_subgrids for all processes
+    char ***gathered_subgrids = (char ***)malloc(N_X * sizeof(char **));
+    for (int i = 0; i < N_X; i++) {
+        gathered_subgrids[i] = (char **)malloc(N_Y * sizeof(char *));
+        for (int j = 0; j < N_Y; j++) {
+            gathered_subgrids[i][j] = (char *)malloc(N_Z * sizeof(char));
         }
     }
 
-    MPI_Gather(&(subgrid[0][0][0]), subgrid_size_x * subgrid_size_y * subgrid_size_z, MPI_CHAR, &(gathered_subgrids[0][0][0]), subgrid_size_x * subgrid_size_y * subgrid_size_z, MPI_CHAR, 0, MPI_COMM_WORLD);
+    // Gather subgrids from all processes to process 0
+    MPI_Gather(&(subgrid[0][0][0]), subgrid_size_x * subgrid_size_y * subgrid_size_z, MPI_CHAR, 
+               &(gathered_subgrids[0][0][0]), subgrid_size_x * subgrid_size_y * subgrid_size_z, MPI_CHAR, 0, MPI_COMM_WORLD);
 
     // Process 0 prints the gathered subgrid
     if (rank == 0) {
@@ -76,15 +75,13 @@ int main(int argc, char *argv[]) {
     }
     free(subgrid);
 
-    if (rank == 0) {
-        for (int i = 0; i < N_X; i++) {
-            for (int j = 0; j < N_Y; j++) {
-                free(gathered_subgrids[i][j]);
-            }
-            free(gathered_subgrids[i]);
+    for (int i = 0; i < N_X; i++) {
+        for (int j = 0; j < N_Y; j++) {
+            free(gathered_subgrids[i][j]);
         }
-        free(gathered_subgrids);
+        free(gathered_subgrids[i]);
     }
+    free(gathered_subgrids);
 
     MPI_Finalize();
     return 0;
