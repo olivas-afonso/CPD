@@ -505,20 +505,23 @@ int main(int argc, char *argv[]) {
   for (int i = 0; i < size; i++) {
         if (rank == i) {
             printf("Rank %d is runing...\n", rank);
-            for (int k = start_layer; k < end_layer; k++) {
-                MPI_Barrier(MPI_COMM_WORLD); // Synchronize before receiving
-                MPI_Bcast(&layer, NX * NY * NZ, MPI_INT, i, MPI_COMM_WORLD); // Broadcast the layer
+            
+			MPI_Barrier(MPI_COMM_WORLD); // Synchronize before receiving
+			MPI_Bcast(&layer, NX * NY * NZ, MPI_INT, i, MPI_COMM_WORLD); // Broadcast the layer
+			
+			printf("Rank e Layer %d\n", rank);
+			
+			min = 16*rank;
+			max = min + 15;
+			
+			grid_odd =  gen_initial_grid(number_of_cells, density, seed);
+			//grid_odd = gen_initial_bloco(max, min, number_of_cells, density, seed);
+			
+			
+			/*for (int k = start_layer; k < end_layer; k++) {
                 
-				printf("Rank e Layer %d\n", rank);
 				
-				min = 16*rank;
-				max = min + 15;
-				
-				grid_odd =  gen_initial_grid(number_of_cells, density, seed);
-				//grid_odd = gen_initial_bloco(max, min, number_of_cells, density, seed);
-				
-				
-            }
+            }*/
         }
         MPI_Barrier(MPI_COMM_WORLD);
     }
