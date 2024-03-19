@@ -45,7 +45,6 @@ int min, max;
 char ***gen_initial_grid(int N, float density, int input_seed)
 {
     int x, y, z;
-    
     init_r4uni(input_seed);
     
 //alocacao da memeoria dinamica, alocando primeiro um apontador triplo o que corresponde a uma dimensao do cubo  ~
@@ -87,12 +86,6 @@ char ***gen_initial_grid(int N, float density, int input_seed)
                 exit(1);
             }
             for (z = 0; z < N; z++)
-                if(r4_uni() < density)
-                    {
-						// preenchimento initial do grid_even dependendo da seed
-                        grid_even[x][y][z] = (int)(r4_uni() * N_SPECIES) + 1; // preenchimento initial do grid_even dependendo da seed
-                        count_species[grid_even[x][y][z]]++;
-                    }
         }     
     }
 
@@ -109,6 +102,7 @@ char ***gen_initial_grid(int N, float density, int input_seed)
 
     return grid_even;
 }
+
 /************************************************************************************************
 * Nome: gen_initial_grid
 * funcao: gera as duas matrizes, a inicial e a auxiliar; ao longo das geracoes as celulas iram
@@ -183,7 +177,8 @@ char ***gen_initial_bloco(int max, int min, int N, float density, int input_seed
         }
     } 
     
-   return grid_even;
+	return grid_even;
+	
 		
 }
 
