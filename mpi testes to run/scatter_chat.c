@@ -79,6 +79,18 @@ int main(int argc, char **argv) {
             sendcounts[i] = Y_DIM * Z_DIM;
             displs[i] = i * Y_DIM * Z_DIM;
         }
+        
+        // Print sendcounts and displs for debugging
+        printf("Send counts (rank 0): ");
+        for (int i = 0; i < X_DIM; i++) {
+            printf("%d ", sendcounts[i]);
+        }
+        printf("\n");
+        printf("Displacements (rank 0): ");
+        for (int i = 0; i < X_DIM; i++) {
+            printf("%d ", displs[i]);
+        }
+        printf("\n");
     }
 
     // Ensure all processes reach this point before proceeding
@@ -86,6 +98,13 @@ int main(int argc, char **argv) {
 
     // Scatter the matrix to all processes
     MPI_Scatterv(flatMatrix, sendcounts, displs, MPI_INT, recvBuffer, Y_DIM * Z_DIM, MPI_INT, 0, MPI_COMM_WORLD);
+
+    // Print received data for debugging
+    printf("Received data (rank %d): ", rank);
+    for (int i = 0; i < Y_DIM * Z_DIM; i++) {
+        printf("%d ", recvBuffer[i]);
+    }
+    printf("\n");
 
     // Ensure all processes receive their data before proceeding
     MPI_Barrier(MPI_COMM_WORLD);
