@@ -49,7 +49,7 @@ int main(int argc, char *argv[]) {
             }
         }
     }
-    printf("SUBGRID: %d\n" subgrid[0][0][0]);
+    printf("SUBGRID: %d\n", subgrid[0][0][0]);
     // Allocate memory for gathered_subgrids for all processes
     char ***gathered_subgrids = (char ***)malloc(N_X * sizeof(char **));
     for (int i = 0; i < N_X; i++) {
