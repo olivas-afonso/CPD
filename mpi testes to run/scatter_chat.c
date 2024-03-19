@@ -61,7 +61,7 @@ int main(int argc, char **argv) {
         for (int i = 0; i < X_DIM; i++) {
             for (int j = 0; j < Y_DIM; j++) {
                 for (int k = 0; k < Z_DIM; k++) {
-                    matrix.data[i][j][k] = i + j + k;
+                    matrix.data[i][j][k] = (i * 100) + (j * 10) + k;
                 }
             }
         }
