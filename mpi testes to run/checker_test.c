@@ -10,7 +10,7 @@ void printSubgrid(char ***subgrid, int subgrid_size_x, int subgrid_size_y, int s
     for (int i = 0; i < subgrid_size_x; i++) {
         for (int j = 0; j < subgrid_size_y; j++) {
             for (int k = 0; k < subgrid_size_z; k++) {
-                printf("%c ", subgrid[i][j][k]);
+                printf("%d ", subgrid[i][j][k]);
             }
             printf("\n");
         }
