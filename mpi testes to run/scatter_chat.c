@@ -119,6 +119,7 @@ int main(int argc, char *argv[]) {
     int rank, size;
     int sendcounts[X_DIM], displs[X_DIM];
     //char flatMatrix[X_DIM * Y_DIM * Z_DIM];
+    matrix.data = gen_initial_grid(number_of_cells, density, seed);
     
     char * flatMatrix = (char *) malloc((X_DIM*Y_DIM*Z_DIM) * sizeof(char));
         if(flatMatrix == NULL) {
