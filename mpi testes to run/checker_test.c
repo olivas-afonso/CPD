@@ -36,7 +36,7 @@ int main(int argc, char *argv[]) {
         for (int i = 0; i < subgrid_size_x; i++) {
             subgrid[i] = (char **)malloc(subgrid_size_y * sizeof(char *));
             for (int j = 0; j < subgrid_size_y; j++) {
-                subgrid[i][j] = (char *)malloc(subgrid_size_z * sizeof(char));
+                subgrid[i][j] = (char *)calloc(subgrid_size_z, sizeof(char));
             }
         }
 
@@ -55,7 +55,7 @@ int main(int argc, char *argv[]) {
     for (int i = 0; i < N_X; i++) {
         gathered_subgrids[i] = (char **)malloc(N_Y * sizeof(char *));
         for (int j = 0; j < N_Y; j++) {
-            gathered_subgrids[i][j] = (char *)malloc(N_Z * sizeof(char));
+            gathered_subgrids[i][j] = (char *)calloc(N_Z, sizeof(char));
         }
     }
 
