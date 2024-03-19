@@ -361,10 +361,10 @@ int main(int argc, char *argv[]) {
     if (rank == 0) {
         printf("Initial Grid:\n");
         for (int k = 0; k < NZ; k++) {
-			printf("Rank %d: Layer %d\n", rank, layer_num);
+			printf("Rank %d: Layer %d\n", rank, rank);
 				for (int i = 0; i < NX; i++) {
 					for (int j = 0; j < NY; j++) {
-						printf("%2d ", layer[i][j][layer_num]);
+						printf("%2d ", layer[i][j][rank]);
 					}
 					printf("\n");
 				}
@@ -384,10 +384,10 @@ int main(int argc, char *argv[]) {
                 MPI_Barrier(MPI_COMM_WORLD); // Synchronize before receiving
                 MPI_Bcast(&layer, NX * NY * NZ, MPI_INT, i, MPI_COMM_WORLD); // Broadcast the layer
                 
-				printf("Rank %d: Layer %d\n", rank, layer_num);
+				printf("Rank %d: Layer %d\n", rank, rank);
 				for (int i = 0; i < NX; i++) {
 					for (int j = 0; j < NY; j++) {
-						printf("%2d ", layer[i][j][layer_num]);
+						printf("%2d ", layer[i][j][rank]);
 					}
 					printf("\n");
 				}
