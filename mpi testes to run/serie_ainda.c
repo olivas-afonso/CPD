@@ -351,6 +351,16 @@ int main(int argc, char *argv[]) {
         }
     
 	}
+	
+	printf("GRID\n")
+	for(int merda_z= 0; merda_x < NX; merda_z++){
+		for(int merda_y = 0; merda_y < NX; merda_y++){
+			for(int merda_x = 0; merda_x < NX; merda_x++){
+				printf("%d\n", grid[aux_z][aux_y][aux_x])
+			}			
+		}
+	}
+	
    // exec_time += omp_get_wtime();
     //fprintf(stderr, "%.1fs\n", exec_time);
     
