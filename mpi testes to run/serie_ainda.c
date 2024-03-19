@@ -376,7 +376,7 @@ int main(int argc, char *argv[]) {
 			printf("Rank %d: Layer %d\n", rank, rank);
 				for (int i = 0; i < NY; i++) {
 					for (int j = 0; j < NZ; j++) {
-						printf("%2d ", layer[rank][j][i]);
+						printf("%2d ", layer[k][i][j]);
 					}
 					printf("\n");
 				}
