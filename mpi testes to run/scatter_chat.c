@@ -4,16 +4,77 @@
 
 #define X_DIM 3
 #define Y_DIM 3
+#define N_SPECIES 9
 
 
 
 unsigned int seed;
 
 typedef struct {
-    int *** data;
+    char *** data;
 } Matrix3D;
 
-void flattenMatrix(Matrix3D *matrix, int *flatMatrix, int Z_DIM) {
+Matrix3D matrix;
+
+void init_r4uni(int input_seed)
+{
+    seed = input_seed + 987654321;
+}
+
+float r4_uni()
+{
+    int seed_in = seed;
+
+    seed ^= (seed << 13);
+    seed ^= (seed >> 17);
+    seed ^= (seed << 5);
+
+    return 0.5 + 0.2328306e-09 * (seed_in + (int) seed);
+}
+
+char *** allocated_matrix(int N, float density, int input_seed)
+{
+
+}
+
+
+char ***gen_initial_grid(int N, float density, int input_seed)
+{
+    int x, y, z;
+    
+    init_r4uni(input_seed);
+    
+//alocacao da memeoria dinamica, alocando primeiro um apontador triplo o que corresponde a uma dimensao do cubo  ~
+    matrix.data = (char ***) malloc(N * sizeof(char **));
+    if(matrix.data == NULL) {
+        printf("Failed to allocate matrix1\n");
+        exit(1);
+    }
+	
+// aloca o eixo final, ataves de um apontador de arrays
+    for(x = 0; x < N; x++) {
+        matrix.data[x] = (char **) malloc(N * sizeof(char *));
+        if(matrix.data[x] == NULL) {
+            printf("Failed to allocate matrix3\n");
+            exit(1);
+        }
+        for (y = 0; y < N; y++){
+            matrix.data[x][y] = (char*) calloc(N, sizeof(char));
+            if(matrix.data[x][y] == NULL) {
+                printf("Failed to allocate matrix6\n");
+                exit(1);
+            }
+            for (z = 0; z < N; z++)
+                if(r4_uni() < density)
+                    {
+						// preenchimento initial do grid_even dependendo da seed
+                        matrix.data[x][y][z] = (int)(r4_uni() * N_SPECIES) + 1; // preenchimento initial do grid_even dependendo da seed
+                    }
+        }     
+    }
+}
+
+void flattenMatrix(Matrix3D *matrix, char *flatMatrix, int Z_DIM) {
     for (int i = 0; i < X_DIM; i++) {
         for (int j = 0; j < Y_DIM; j++) {
             for (int k = 0; k < Z_DIM; k++) {
@@ -23,7 +84,7 @@ void flattenMatrix(Matrix3D *matrix, int *flatMatrix, int Z_DIM) {
     }
 }
 
-void reconstructMatrix(int *flatMatrix, int received_matrix[X_DIM][Y_DIM]) {
+void reconstructMatrix(char *flatMatrix, char received_matrix[X_DIM][Y_DIM]) {
     for (int i = 0; i < X_DIM; i++) {
         for (int j = 0; j < Y_DIM; j++) {
 
@@ -33,7 +94,7 @@ void reconstructMatrix(int *flatMatrix, int received_matrix[X_DIM][Y_DIM]) {
     }
 }
 
-void printMatrix(int received_matrix[X_DIM][Y_DIM], int rank) {
+void printMatrix(char received_matrix[X_DIM][Y_DIM], int rank) {
     for (int i = 0; i < X_DIM; i++) {
         for (int j = 0; j < Y_DIM; j++) {
            
@@ -57,10 +118,21 @@ int main(int argc, char **argv) {
     
     int rank, size;
     int sendcounts[X_DIM], displs[X_DIM];
-    int flatMatrix[X_DIM * Y_DIM * Z_DIM];
-    int recvBuffer[X_DIM * Y_DIM]={0}; // Separate receive buffer for each process
-    int received_matrix[X_DIM][Y_DIM];
-    Matrix3D matrix;
+    //char flatMatrix[X_DIM * Y_DIM * Z_DIM];
+    char * flatMatrix;
+
+    for(int aux_x = 0; aux_x < (X_DIM*Y_DIM*Z_DIM); aux_x++) {
+        flatMatrix[aux_x] = (char **) malloc((X_DIM*Y_DIM*Z_DIM) * sizeof(char *));
+        if(flatMatrix[aux_x] == NULL) {
+            printf("Failed to allocate matrix3\n");
+            exit(1);
+        }
+        flatMatrix[aux_x]=0;
+    }
+
+    char recvBuffer[X_DIM * Y_DIM]={0}; // Separate receive buffer for each process
+    char received_matrix[X_DIM][Y_DIM];
+    
 
     MPI_Init(&argc, &argv);
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
