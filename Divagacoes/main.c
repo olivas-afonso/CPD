@@ -4,14 +4,15 @@
 
 #define WIDTH 12
 #define HEIGHT 12
-#define DEPTH 6
+#define DEPTH 12
 
+int valor=0;
 // Function to initialize the 3D matrix
 void initializeMatrix(int matrix[WIDTH][HEIGHT][DEPTH]) {
     for (int x = 0; x < WIDTH; ++x) {
         for (int y = 0; y < HEIGHT; ++y) {
-            for (int z = 0; z < DEPTH; ++z) {
-                matrix[x][y][z] = x + y + z; // Example initialization
+            for (int z = 0; z < DEPTH; ++z, ++valor) {
+                matrix[x][y][z] = valor; // Example initialization
             }
         }
     }
@@ -85,7 +86,7 @@ int main(int argc, char** argv) {
                     subWidth * subHeight * subDepth, MPI_INT, 0, MPI_COMM_WORLD);
     } else {
         // Receive the sub-matrix data from process 0
-        MPI_Scatter(NULL, subWidth * subHeight * subDepth, MPI_INT, subMatrix,
+        //MPI_Scatter(NULL, subWidth * subHeight * subDepth, MPI_INT, subMatrix,
                     subWidth * subHeight * subDepth, MPI_INT, 0, MPI_COMM_WORLD);
     }
 
