@@ -56,6 +56,14 @@ int main(int argc, char **argv) {
     MPI_Type_contiguous(X_DIM * Y_DIM * Z_DIM, MPI_INT, &matrix3d_type);
     MPI_Type_commit(&matrix3d_type);
 
+    for (int i = 0; i < X_DIM; i++) {
+        for (int j = 0; j < Y_DIM; j++) {
+            for (int k = 0; k < Z_DIM; k++) {
+                received_matrix.data[i][j][k] = 0;
+            }
+        }
+    }
+    
     // Prepare data to scatter
     if (rank == 0) {
         // Initialize the matrix
