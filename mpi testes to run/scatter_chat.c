@@ -9,7 +9,7 @@
 unsigned int seed;
 
 typedef struct {
-    int data[X_DIM][Y_DIM][];
+    int data[][][];
 } Matrix3D;
 
 void flattenMatrix(Matrix3D *matrix, int *flatMatrix) {
@@ -43,6 +43,17 @@ void printMatrix(int received_matrix[X_DIM][Y_DIM], int rank) {
 }
 
 int main(int argc, char **argv) {
+
+    int number_of_gens,  number_of_cells;
+    float density;
+
+    number_of_gens = atoi (argv[1]);
+    number_of_cells = atoi (argv[2]);
+    density = atof (argv[3]);
+    seed = atoi (argv[4]);
+
+    int Z_DIM = number_of_cells;
+
     int rank, size;
     int sendcounts[X_DIM], displs[X_DIM];
     int flatMatrix[X_DIM * Y_DIM * Z_DIM]={0};
@@ -58,15 +69,7 @@ int main(int argc, char **argv) {
     MPI_Type_contiguous(X_DIM * Y_DIM * Z_DIM, MPI_INT, &matrix3d_type);
     MPI_Type_commit(&matrix3d_type);
 
-    int number_of_gens,  number_of_cells;
-    float density;
-
-    number_of_gens = atoi (argv[1]);
-    number_of_cells = atoi (argv[2]);
-    density = atof (argv[3]);
-    seed = atoi (argv[4]);
-
-    int Z_DIM = number_of_cells;
+    
 
     for (int i = 0; i < X_DIM; i++) {
         for (int j = 0; j < Y_DIM; j++) {
