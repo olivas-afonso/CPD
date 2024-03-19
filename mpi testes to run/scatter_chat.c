@@ -9,7 +9,7 @@
 unsigned int seed;
 
 typedef struct {
-    int data[X_DIM][Y_DIM][Z_DIM];
+    int data[X_DIM][Y_DIM][];
 } Matrix3D;
 
 void flattenMatrix(Matrix3D *matrix, int *flatMatrix) {
@@ -107,7 +107,7 @@ int main(int argc, char **argv) {
 
         // Prepare sendcounts and displs for scatterv
         for (int i = 0; i < X_DIM; i++) {
-            sendcounts[i] = Y_DIM * ;
+            sendcounts[i] = Y_DIM * Z_DIM;
             displs[i] = i * Y_DIM * Z_DIM;
         }
         
