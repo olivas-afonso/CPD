@@ -48,6 +48,9 @@ int main(int argc, char *argv[]) {
                 }
             }
         }
+
+        
+
     }
     printf("SUBGRID: %d\n", subgrid[0][0][0]);
     // Allocate memory for gathered_subgrids for all processes
@@ -66,9 +69,9 @@ int main(int argc, char *argv[]) {
     // Process 0 prints the gathered subgrid
     if (rank == 0) {
         printf("Gathered Subgrid:\n");
-        for (int i = 0; i < subgrid_size_x; i++) {
-            for (int j = 0; j < subgrid_size_y; j++) {
-                for (int k = 0; k < subgrid_size_z; k++) {
+        for (int i = 0; i < N_X; i++) {
+            for (int j = 0; j < N_Y; j++) {
+                for (int k = 0; k < N_Z; k++) {
                     printf("%d ", subgrid[i][j][k]);
                 }
                 printf("\n");
