@@ -450,10 +450,11 @@ int main(int argc, char *argv[]) {
     //fprintf(stderr, "%.1fs\n", exec_time);
     
     // Synchronize the output
-    MPI_Barrier(MPI_COMM_WORLD);
+	MPI_Barrier(MPI_COMM_WORLD);
 
     // Only let process 0 print the initial grid
-    if (rank == 0) {
+    /*
+	if (rank == 0) {
         printf("Initial Grid:\n");
         for (int k = 0; k < NZ; k++) {
 			printf("Rank %d: Layer %d\n", rank, rank);
@@ -466,10 +467,10 @@ int main(int argc, char *argv[]) {
 				printf("\n");
 				
 		}
-    }
+    }*/
 
     // Synchronize the output
-    MPI_Barrier(MPI_COMM_WORLD);
+    //MPI_Barrier(MPI_COMM_WORLD);
 /*
     // Print out the layer of the grid for each process one at a time
     for (int i = 0; i < size; i++) {
