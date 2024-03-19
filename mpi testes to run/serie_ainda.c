@@ -385,7 +385,7 @@ int main(int argc, char *argv[]) {
                 MPI_Bcast(&layer, NX * NY * NZ, MPI_INT, i, MPI_COMM_WORLD); // Broadcast the layer
                 
 				printf("Rank %d: Layer %d\n", rank, rank);
-				for (int i = 0; i < NX; i++) {
+				for (int i = 0; i < NZ; i++) {
 					for (int j = 0; j < NY; j++) {
 						printf("%2d ", layer[i][j][rank]);
 					}
