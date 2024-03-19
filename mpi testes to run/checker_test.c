@@ -64,7 +64,7 @@ int main(int argc, char *argv[]) {
     }
     printf("TESTING \n");
     MPI_Gather(&(subgrid[0][0][0]), subgrid_size_x * subgrid_size_y * subgrid_size_z, MPI_CHAR, 
-               &(gathered_subgrids[start_x][0][0]), subgrid_size_x * subgrid_size_y * subgrid_size_z, MPI_CHAR, 0, MPI_COMM_WORLD);
+               &(gathered_subgrids[0][0][0]), subgrid_size_x * subgrid_size_y * subgrid_size_z, MPI_CHAR, 0, MPI_COMM_WORLD);
 
     // Process 0 aggregates all subgrids
     if (rank == 0) {
