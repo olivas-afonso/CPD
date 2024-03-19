@@ -119,8 +119,8 @@ int main(int argc, char *argv[]) {
     int rank, size;
     int sendcounts[X_DIM], displs[X_DIM];
     //char flatMatrix[X_DIM * Y_DIM * Z_DIM];
-    char * flatMatrix;
-    flatMatrix = (char *) malloc((X_DIM*Y_DIM*Z_DIM) * sizeof(char *));
+    
+    char * flatMatrix = (char *) malloc((X_DIM*Y_DIM*Z_DIM) * sizeof(char));
         if(flatMatrix == NULL) {
             printf("Failed to allocate matrix3\n");
             exit(1);
