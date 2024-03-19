@@ -43,7 +43,6 @@ void printMatrix(Matrix3D *matrix, int rank) {
 
 int main(int argc, char **argv) {
     int rank, size;
-    int count=0;
     int sendcounts[X_DIM], displs[X_DIM];
     int flatMatrix[X_DIM * Y_DIM * Z_DIM];
     Matrix3D matrix, received_matrix;
@@ -62,7 +61,7 @@ int main(int argc, char **argv) {
         for (int i = 0; i < X_DIM; i++) {
             for (int j = 0; j < Y_DIM; j++) {
                 for (int k = 0; k < Z_DIM; k++) {
-                    matrix.data[i][j][k] = (i * 100) + (j * 10) + k;;
+                    matrix.data[i][j][k] = i + j + k;
                 }
             }
         }
