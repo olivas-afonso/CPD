@@ -24,7 +24,7 @@ void reconstructMatrix(int *flatMatrix, int received_matrix[X_DIM][Y_DIM]) {
     for (int i = 0; i < X_DIM; i++) {
         for (int j = 0; j < Y_DIM; j++) {
 
-            received_matrix[i][j] = flatMatrix[i * Y_DIM j];
+            received_matrix[i][j] = flatMatrix[i * Y_DIM + j];
             
         }
     }
@@ -59,7 +59,7 @@ int main(int argc, char **argv) {
     for (int i = 0; i < X_DIM; i++) {
         for (int j = 0; j < Y_DIM; j++) {
 
-                received_matrix.data[i][j] = 0;
+                received_matrix[i][j] = 0;
    
         }
     }
@@ -77,7 +77,7 @@ int main(int argc, char **argv) {
 
         // Print the initial matrix
         printf("Initial matrix (rank 0):\n");
-        printMatrix(&matrix, rank);
+        //printMatrix(&matrix, rank);
 
         // Flatten the matrix
         flattenMatrix(&matrix, flatMatrix);
@@ -119,12 +119,12 @@ int main(int argc, char **argv) {
     MPI_Barrier(MPI_COMM_WORLD);
 
     // Reconstruct the matrix
-    reconstructMatrix(recvBuffer, &received_matrix);
+    reconstructMatrix(recvBuffer, received_matrix);
 
     MPI_Barrier(MPI_COMM_WORLD);
     // Print the received matrix for each process
     printf("Received matrix (rank %d):\n", rank);
-    printMatrix(&received_matrix, rank);
+    printMatrix(received_matrix, rank);
     MPI_Barrier(MPI_COMM_WORLD);
     MPI_Type_free(&matrix3d_type);
     MPI_Finalize();
