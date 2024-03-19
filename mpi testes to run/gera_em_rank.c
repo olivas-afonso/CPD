@@ -109,7 +109,7 @@ char ***gen_initial_grid(int N, float density, int input_seed)
 
     return grid_even;
 }/************************************************************************************************
-* Nome: gen_initial_grid
+* Nome: gen_initial_bloco
 * funcao: gera as duas matrizes, a inicial e a auxiliar; ao longo das geracoes as celulas iram
 *passar de uma para a outra.
 ************************************************************************************************/
@@ -514,7 +514,8 @@ int main(int argc, char *argv[]) {
 				min = 16*rank;
 				max = min + 15;
 				
-				grid_odd = gen_initial_bloco(max, min, number_of_cells, density, seed);
+				grid_odd =  gen_initial_grid(number_of_cells, density, seed);
+				//grid_odd = gen_initial_bloco(max, min, number_of_cells, density, seed);
 				
 				
             }
