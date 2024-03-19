@@ -23,7 +23,9 @@ void flattenMatrix(Matrix3D *matrix, int *flatMatrix) {
 void reconstructMatrix(int *flatMatrix, int received_matrix[X_DIM][Y_DIM]) {
     for (int i = 0; i < X_DIM; i++) {
         for (int j = 0; j < Y_DIM; j++) {
-            received_matrix[i][j] = flatMatrix[i * Y_DIM + j];
+
+            received_matrix[i][j] = flatMatrix[i * Y_DIM j];
+            
         }
     }
 }
@@ -31,6 +33,7 @@ void reconstructMatrix(int *flatMatrix, int received_matrix[X_DIM][Y_DIM]) {
 void printMatrix(int received_matrix[X_DIM][Y_DIM], int rank) {
     for (int i = 0; i < X_DIM; i++) {
         for (int j = 0; j < Y_DIM; j++) {
+           
             printf("Process %d: matrix[%d][%d] = %d\n", rank, i, j, received_matrix[i][j]);
         }
     }
@@ -40,9 +43,10 @@ void printMatrix(int received_matrix[X_DIM][Y_DIM], int rank) {
 int main(int argc, char **argv) {
     int rank, size;
     int sendcounts[X_DIM], displs[X_DIM];
-    int flatMatrix[X_DIM * Y_DIM];
-    int recvBuffer[X_DIM * Y_DIM]; // Separate receive buffer for each process
-    int received_matrix[X_DIM][Y_DIM]; // Matrix to hold received data
+    int flatMatrix[X_DIM * Y_DIM * Z_DIM]={0};
+    int recvBuffer[X_DIM * Y_DIM]={0}; // Separate receive buffer for each process
+    int received_matrix[X_DIM][Y_DIM];
+    Matrix3D matrix;
 
     MPI_Init(&argc, &argv);
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
@@ -52,10 +56,17 @@ int main(int argc, char **argv) {
     MPI_Type_contiguous(X_DIM * Y_DIM * Z_DIM, MPI_INT, &matrix3d_type);
     MPI_Type_commit(&matrix3d_type);
 
+    for (int i = 0; i < X_DIM; i++) {
+        for (int j = 0; j < Y_DIM; j++) {
+
+                received_matrix.data[i][j] = 0;
+   
+        }
+    }
+
     // Prepare data to scatter
     if (rank == 0) {
         // Initialize the matrix
-        Matrix3D matrix;
         for (int i = 0; i < X_DIM; i++) {
             for (int j = 0; j < Y_DIM; j++) {
                 for (int k = 0; k < Z_DIM; k++) {
@@ -66,21 +77,15 @@ int main(int argc, char **argv) {
 
         // Print the initial matrix
         printf("Initial matrix (rank 0):\n");
-        for (int i = 0; i < X_DIM; i++) {
-            for (int j = 0; j < Y_DIM; j++) {
-                printf("%d ", matrix.data[i][j][0]);
-            }
-            printf("\n");
-        }
-        printf("\n");
+        printMatrix(&matrix, rank);
 
         // Flatten the matrix
         flattenMatrix(&matrix, flatMatrix);
 
         // Prepare sendcounts and displs for scatterv
         for (int i = 0; i < X_DIM; i++) {
-            sendcounts[i] = Y_DIM;
-            displs[i] = i * Y_DIM;
+            sendcounts[i] = Y_DIM * Z_DIM;
+            displs[i] = i * Y_DIM * Z_DIM;
         }
         
         // Print sendcounts and displs for debugging
@@ -100,19 +105,27 @@ int main(int argc, char **argv) {
     MPI_Barrier(MPI_COMM_WORLD);
 
     // Scatter the matrix to all processes
-    MPI_Scatterv(flatMatrix, sendcounts, displs, MPI_INT, recvBuffer, X_DIM * Y_DIM, MPI_INT, 0, MPI_COMM_WORLD);
+    MPI_Scatterv(flatMatrix, sendcounts, displs, MPI_INT, recvBuffer, Y_DIM * Z_DIM, MPI_INT, 0, MPI_COMM_WORLD);
 
+    MPI_Barrier(MPI_COMM_WORLD);
     // Print received data for debugging
-    MPI_Gather(recvBuffer, X_DIM * Y_DIM, MPI_INT, flatMatrix, X_DIM * Y_DIM, MPI_INT, 0, MPI_COMM_WORLD);
-    if (rank == 0) {
-        printf("Received matrices:\n");
-        for (int p = 0; p < size; p++) {
-            reconstructMatrix(&flatMatrix[p * X_DIM * Y_DIM], received_matrix);
-            printf("Received matrix (rank %d):\n", p);
-            printMatrix(received_matrix, p);
-        }
+    printf("Received data (rank %d): ", rank);
+    for (int i = 0; i < Y_DIM * Z_DIM; i++) {
+        printf("%d ", recvBuffer[i]);
     }
+    printf("\n");
 
+    // Ensure all processes receive their data before proceeding
+    MPI_Barrier(MPI_COMM_WORLD);
+
+    // Reconstruct the matrix
+    reconstructMatrix(recvBuffer, &received_matrix);
+
+    MPI_Barrier(MPI_COMM_WORLD);
+    // Print the received matrix for each process
+    printf("Received matrix (rank %d):\n", rank);
+    printMatrix(&received_matrix, rank);
+    MPI_Barrier(MPI_COMM_WORLD);
     MPI_Type_free(&matrix3d_type);
     MPI_Finalize();
     return 0;
