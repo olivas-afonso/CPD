@@ -49,7 +49,7 @@ int main(int argc, char *argv[]) {
             }
         }
     }
-
+    printf("SUBGRID: %d\n" subgrid[0][0][0]);
     // Allocate memory for gathered_subgrids for all processes
     char ***gathered_subgrids = (char ***)malloc(N_X * sizeof(char **));
     for (int i = 0; i < N_X; i++) {
@@ -64,11 +64,6 @@ int main(int argc, char *argv[]) {
                                    (subgrid != NULL) ? (subgrid_size_x * subgrid_size_y * subgrid_size_z) : 0, MPI_CHAR, 
                                    &(gathered_subgrids[0][0][0]), (subgrid != NULL) ? (subgrid_size_x * subgrid_size_y * subgrid_size_z) : 0, MPI_CHAR, 0, MPI_COMM_WORLD);
 
-    // Print diagnostic information
-    if (gather_status != MPI_SUCCESS) {
-        fprintf(stderr, "Error: MPI_Gather failed with status %d\n", gather_status);
-        return 1;
-    }
     // Process 0 prints the gathered subgrid
     if (rank == 0) {
         printf("Gathered Subgrid:\n");
