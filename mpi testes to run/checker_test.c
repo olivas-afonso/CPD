@@ -59,8 +59,7 @@ int main(int argc, char *argv[]) {
         }
     }
 
-    MPI_Gather(&(subgrid[0][0][0]), subgrid_size_x * subgrid_size_y * subgrid_size_z, MPI_CHAR, 
-               &(gathered_subgrids[0][0][0]), subgrid_size_x * subgrid_size_y * subgrid_size_z, MPI_CHAR, 0, MPI_COMM_WORLD);
+    MPI_Gather(&(subgrid[0][0][0]), subgrid_size_x * subgrid_size_y * subgrid_size_z, MPI_CHAR, &(gathered_subgrids[0][0][0]), subgrid_size_x * subgrid_size_y * subgrid_size_z, MPI_CHAR, 0, MPI_COMM_WORLD);
 
     // Process 0 prints the gathered subgrid
     if (rank == 0) {
