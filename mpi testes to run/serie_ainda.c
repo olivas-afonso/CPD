@@ -351,18 +351,18 @@ int main(int argc, char *argv[]) {
         }
     
 	}
-	
-	printf("GRID\n");
-	for(int merda_z= 0; merda_z < NX; merda_z++){
-		for(int merda_y = 0; merda_y < NX; merda_y++){
-			for(int merda_x = 0; merda_x < NX; merda_x++){
-				printf("%d ", grid[merda_z][merda_y][merda_x]);
-			}			
-				printf("\n");			
+	if(rank==0){
+		printf("GRID\n");
+		for(int merda_z= 0; merda_z < NX; merda_z++){
+			for(int merda_y = 0; merda_y < NX; merda_y++){
+				for(int merda_x = 0; merda_x < NX; merda_x++){
+					printf("%d ", grid[merda_z][merda_y][merda_x]);
+				}			
+					printf("\n");			
+			}
+			printf("\n\n");
 		}
-		printf("\n\n");
 	}
-	
    // exec_time += omp_get_wtime();
     //fprintf(stderr, "%.1fs\n", exec_time);
     
@@ -374,9 +374,9 @@ int main(int argc, char *argv[]) {
         printf("Initial Grid:\n");
         for (int k = 0; k < NZ; k++) {
 			printf("Rank %d: Layer %d\n", rank, rank);
-				for (int i = 0; i < NX; i++) {
-					for (int j = 0; j < NY; j++) {
-						printf("%2d ", layer[i][j][rank]);
+				for (int i = 0; i < NY; i++) {
+					for (int j = 0; j < NZ; j++) {
+						printf("%2d ", layer[rank][j][i]);
 					}
 					printf("\n");
 				}
