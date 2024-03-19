@@ -114,6 +114,8 @@ int main(int argc, char *argv[]) {
     density = atof (argv[3]);
     seed = atoi (argv[4]);
 
+    printf("gens: %d    cells:%d    density:%f  seed:%d\n",number_of_gens, number_of_cells, density, seed );
+
     int Z_DIM = number_of_cells;
     
     int rank, size;
