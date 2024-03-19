@@ -6,11 +6,11 @@
 #define N_Y 100
 #define N_Z 100
 
-void printGrid(char ***grid, int dim_x, int dim_y, int dim_z) {
-    for (int i = 0; i < dim_x; i++) {
-        for (int j = 0; j < dim_y; j++) {
-            for (int k = 0; k < dim_z; k++) {
-                printf("%c ", grid[i][j][k]);
+void printSubgrid(char ***subgrid, int subgrid_size_x, int subgrid_size_y, int subgrid_size_z) {
+    for (int i = 0; i < subgrid_size_x; i++) {
+        for (int j = 0; j < subgrid_size_y; j++) {
+            for (int k = 0; k < subgrid_size_z; k++) {
+                printf("%c ", subgrid[i][j][k]);
             }
             printf("\n");
         }
@@ -29,11 +29,7 @@ int main(int argc, char *argv[]) {
     int subgrid_size_y = N_Y / size; // Divide N_Y by the number of processes
     int subgrid_size_z = N_Z / size; // Divide N_Z by the number of processes
 
-    // Calculate start and end indices along the X-axis for each process
-    int start_x = rank * subgrid_size_x;
-    int end_x = start_x + subgrid_size_x;
-
-    // Create subgrid for each process
+    // Create subgrid for this process
     char ***subgrid = (char ***)malloc(subgrid_size_x * sizeof(char **));
     for (int i = 0; i < subgrid_size_x; i++) {
         subgrid[i] = (char **)malloc(subgrid_size_y * sizeof(char *));
@@ -42,7 +38,7 @@ int main(int argc, char *argv[]) {
         }
     }
 
-    // Perform computation on the subgrid (for demonstration, let's fill it with process rank)
+    // Fill subgrid with some data (for demonstration)
     for (int i = 0; i < subgrid_size_x; i++) {
         for (int j = 0; j < subgrid_size_y; j++) {
             for (int k = 0; k < subgrid_size_z; k++) {
@@ -51,7 +47,7 @@ int main(int argc, char *argv[]) {
         }
     }
 
-    // Gather results from all processes
+    // Gather subgrids from all processes to process 0
     char ***gathered_subgrids = NULL;
     if (rank == 0) {
         gathered_subgrids = (char ***)malloc(N_X * sizeof(char **));
@@ -62,15 +58,14 @@ int main(int argc, char *argv[]) {
             }
         }
     }
-    printf("TESTING \n");
+
     MPI_Gather(&(subgrid[0][0][0]), subgrid_size_x * subgrid_size_y * subgrid_size_z, MPI_CHAR, 
                &(gathered_subgrids[0][0][0]), subgrid_size_x * subgrid_size_y * subgrid_size_z, MPI_CHAR, 0, MPI_COMM_WORLD);
 
-    // Process 0 aggregates all subgrids
+    // Process 0 prints the gathered subgrid
     if (rank == 0) {
-        // Print the gathered subgrid
         printf("Gathered Subgrid:\n");
-        printGrid(gathered_subgrids, N_X, N_Y, N_Z);
+        printSubgrid(gathered_subgrids, N_X, N_Y, N_Z);
     }
 
     // Free memory
@@ -95,4 +90,3 @@ int main(int argc, char *argv[]) {
     MPI_Finalize();
     return 0;
 }
- 
