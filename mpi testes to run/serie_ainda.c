@@ -358,9 +358,9 @@ int main(int argc, char *argv[]) {
 			for(int merda_x = 0; merda_x < NX; merda_x++){
 				printf("%d ", grid[merda_z][merda_y][merda_x]);
 			}			
-				printf("/n");			
+				printf("\n");			
 		}
-		printf("/n/n");
+		printf("\n\n");
 	}
 	
    // exec_time += omp_get_wtime();
