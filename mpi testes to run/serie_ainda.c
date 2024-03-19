@@ -4,9 +4,10 @@
 //#include <omp.h>
 #include <mpi.h>
 
-
 #define N_SPECIES 9
 
+
+char *** grid;
 char *** grid_even;
 char *** grid_odd;
 unsigned int seed;
@@ -359,7 +360,7 @@ int main(int argc, char *argv[]) {
         {
             for(aux_z=0; aux_z<NZ; aux_z++)
             {
-				 layer[aux_x][aux_y][aux_z] = rid[aux_x][aux_y][aux_z]; 
+				 layer[aux_x][aux_y][aux_z] = grid[aux_x][aux_y][aux_z]; 
             }
         }
     
