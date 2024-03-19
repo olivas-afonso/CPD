@@ -77,7 +77,6 @@ int main(int argc, char **argv) {
 
         // Print the initial matrix
         printf("Initial matrix (rank 0):\n");
-        printf("GENERATION %d\n", gen_number);
             for(int aux_x4=0; aux_x4<4; aux_x4++)
             {
                 for(int aux_y4=0; aux_y4<4; aux_y4++)
