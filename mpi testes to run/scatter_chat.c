@@ -6,13 +6,14 @@
 #define Y_DIM 3
 
 
+
 unsigned int seed;
 
 typedef struct {
-    int data[][][];
+    int data***;
 } Matrix3D;
 
-void flattenMatrix(Matrix3D *matrix, int *flatMatrix) {
+void flattenMatrix(Matrix3D *matrix, int *flatMatrix, int Z_DIM) {
     for (int i = 0; i < X_DIM; i++) {
         for (int j = 0; j < Y_DIM; j++) {
             for (int k = 0; k < Z_DIM; k++) {
@@ -53,7 +54,7 @@ int main(int argc, char **argv) {
     seed = atoi (argv[4]);
 
     int Z_DIM = number_of_cells;
-
+    
     int rank, size;
     int sendcounts[X_DIM], displs[X_DIM];
     int flatMatrix[X_DIM * Y_DIM * Z_DIM]={0};
@@ -106,7 +107,7 @@ int main(int argc, char **argv) {
             }
 
         // Flatten the matrix
-        flattenMatrix(&matrix, flatMatrix);
+        flattenMatrix(&matrix, flatMatrix, Z_DIM);
 
         // Prepare sendcounts and displs for scatterv
         for (int i = 0; i < X_DIM; i++) {
