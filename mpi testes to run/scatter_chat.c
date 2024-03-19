@@ -10,7 +10,7 @@
 unsigned int seed;
 
 typedef struct {
-    int data***;
+    int *** data;
 } Matrix3D;
 
 void flattenMatrix(Matrix3D *matrix, int *flatMatrix, int Z_DIM) {
@@ -57,7 +57,7 @@ int main(int argc, char **argv) {
     
     int rank, size;
     int sendcounts[X_DIM], displs[X_DIM];
-    int flatMatrix[X_DIM * Y_DIM * Z_DIM]={0};
+    int flatMatrix[X_DIM * Y_DIM * Z_DIM];
     int recvBuffer[X_DIM * Y_DIM]={0}; // Separate receive buffer for each process
     int received_matrix[X_DIM][Y_DIM];
     Matrix3D matrix;
