@@ -69,6 +69,7 @@ char ***gen_initial_grid(int N, float density, int input_seed)
                     {
 						// preenchimento initial do grid_even dependendo da seed
                         matrix.data[x][y][z] = (int)(r4_uni() * N_SPECIES) + 1; // preenchimento initial do grid_even dependendo da seed
+                        printf("%d \n", matrix.data[x][y][z]);
                     }
         }     
     }
@@ -163,7 +164,7 @@ int main(int argc, char *argv[]) {
 
         // Print the initial matrix
         printf("Initial matrix (rank 0):\n");
-        printf("%d \n", matrix.data[0][0][0]);
+        
             /*for(int aux_x4=0; aux_x4<Z_DIM; aux_x4++)
             {
                 for(int aux_y4=0; aux_y4<Z_DIM; aux_y4++)
