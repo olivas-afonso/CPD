@@ -73,12 +73,16 @@ int main(int argc, char **argv) {
         // Flatten the matrix
         flattenMatrix(&matrix, flatMatrix);
 
-        // Prepare sendcounts and displs for scatterv
+        // Calculate sendcounts and displs for scatterv
         int elementsPerProcess = (X_DIM * Y_DIM * Z_DIM) / size;
         int remainder = (X_DIM * Y_DIM * Z_DIM) % size;
+
         for (int i = 0; i < size; i++) {
-            sendcounts[i] = (i < remainder) ? elementsPerProcess + 1 : elementsPerProcess;
-            displs[i] = (i == 0) ? 0 : displs[i - 1] + sendcounts[i - 1];
+            sendcounts[i] = elementsPerProcess;
+            if (i < remainder) {
+                sendcounts[i]++;
+            }
+            displs[i] = (i > 0) ? displs[i - 1] + sendcounts[i - 1] : 0;
         }
     }
 
