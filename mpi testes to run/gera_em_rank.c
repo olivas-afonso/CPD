@@ -425,7 +425,7 @@ int main(int argc, char *argv[]) {
         {
             for(aux_z=0; aux_z<NZ; aux_z++)
             {
-				 layer[aux_x][aux_y][aux_z] = grid[aux_x][aux_y][aux_z]; 
+				//layer[aux_x][aux_y][aux_z] = grid[aux_x][aux_y][aux_z]; 
             }
         }
     
