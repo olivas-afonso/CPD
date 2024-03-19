@@ -5,4 +5,4 @@ critical/single - Pioram o speedup
 schedule (static/dynamic)->Aloca as threads por iteração a iteração
 chunk(static, dynamic)->Aloca as threads por blocos
 reduction(+:var)-> Pode ser um vetor (METER NO PROJETO)
-collapse -> colapsate os loops (tentar mas o outro grupo ficou 1s mais lento)
+collapse -> colapsate os loops (tentar mas o outro grupo ficou 1s mais lento)	

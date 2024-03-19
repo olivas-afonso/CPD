@@ -16,16 +16,16 @@ int main(int argc, char *argv[]) {
   /* variables */
   int i, tid;
 
-/* create parallel region, make both variable thread prexivate */
-#pragma omp parallel private(i,tid)
+  /* create parallel region, make both variable thread prexivate */
+  #pragma omp parallel private(i,tid)
   {
-      /* get id of thread */
-      tid = omp_get_thread_num();
+    /* get id of thread */
+    tid = omp_get_thread_num();
 
-/* divide loop iterations evenly by threads */  
-#pragma omp for nowait
+    /* divide loop iterations evenly by threads */  
+    #pragma omp for nowait
       for(i = 0; i < NUMITER; i++)
-	  printf("Thread: %d\titer=%d\n", tid, i);  fflush(stdout);
+       printf("Thread: %d\titer=%d\n", tid, i);  fflush(stdout);
 
       /* one of these messages per thread */
       printf("Thread %d, almost..\n", tid);  fflush(stdout);
