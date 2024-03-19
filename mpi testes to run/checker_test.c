@@ -66,7 +66,7 @@ int main(int argc, char *argv[]) {
     // Process 0 prints the gathered subgrid
     if (rank == 0) {
         printf("Gathered Subgrid:\n");
-        //printSubgrid(gathered_subgrids, N_X, N_Y, N_Z);
+        printSubgrid(gathered_subgrids, N_X, N_Y, N_Z);
     }
     /*/
     // Free memory
