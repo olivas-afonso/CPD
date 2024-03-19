@@ -43,9 +43,8 @@ void printMatrix(Matrix3D *matrix, int rank) {
 
 int main(int argc, char **argv) {
     int rank, size;
-    int sendcounts[X_DIM], displs[X_DIM];
+    int sendcounts[size], displs[size];
     int flatMatrix[X_DIM * Y_DIM * Z_DIM];
-    int count=0;
     Matrix3D matrix, received_matrix;
 
     MPI_Init(&argc, &argv);
@@ -62,8 +61,7 @@ int main(int argc, char **argv) {
         for (int i = 0; i < X_DIM; i++) {
             for (int j = 0; j < Y_DIM; j++) {
                 for (int k = 0; k < Z_DIM; k++) {
-                    matrix.data[i][j][k] = count;
-                    count++;
+                    matrix.data[i][j][k] = i + j + k;
                 }
             }
         }
@@ -76,20 +74,16 @@ int main(int argc, char **argv) {
         flattenMatrix(&matrix, flatMatrix);
 
         // Prepare sendcounts and displs for scatterv
-        for (int i = 0; i < X_DIM; i++) {
-            sendcounts[i] = Y_DIM * Z_DIM;
-            displs[i] = i * Y_DIM * Z_DIM;
+        int elementsPerProcess = (X_DIM * Y_DIM * Z_DIM) / size;
+        int remainder = (X_DIM * Y_DIM * Z_DIM) % size;
+        for (int i = 0; i < size; i++) {
+            sendcounts[i] = (i < remainder) ? elementsPerProcess + 1 : elementsPerProcess;
+            displs[i] = (i == 0) ? 0 : displs[i - 1] + sendcounts[i - 1];
         }
     }
 
-    // Ensure all processes reach this point before proceeding
-    MPI_Barrier(MPI_COMM_WORLD);
-
     // Scatter the matrix to all processes
     MPI_Scatterv(flatMatrix, sendcounts, displs, MPI_INT, flatMatrix, X_DIM * Y_DIM * Z_DIM, MPI_INT, 0, MPI_COMM_WORLD);
-
-    // Ensure all processes receive their data before proceeding
-    MPI_Barrier(MPI_COMM_WORLD);
 
     // Reconstruct the matrix
     reconstructMatrix(flatMatrix, &received_matrix);
