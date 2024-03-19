@@ -163,13 +163,13 @@ int main(int argc, char *argv[]) {
 
         // Print the initial matrix
         printf("Initial matrix (rank 0):\n");
-            for(int aux_x4=0; aux_x4<X_DIM; aux_x4++)
+            for(int aux_x4=0; aux_x4<Z_DIM; aux_x4++)
             {
-                for(int aux_y4=0; aux_y4<Y_DIM; aux_y4++)
+                for(int aux_y4=0; aux_y4<Z_DIM; aux_y4++)
                 {
                     for(int aux_z4=0; aux_z4<Z_DIM; aux_z4++)
                     {
-                        printf("%c ", matrix.data[aux_x4][aux_y4][aux_z4]);
+                        printf("%d ", matrix.data[aux_x4][aux_y4][aux_z4]);
                     }
                     printf("\n");
                 }
