@@ -60,9 +60,9 @@ int main(int argc, char *argv[]) {
     }
 
     // Gather subgrids from all processes to process 0
-    MPI_Gather((subgrid != NULL) ? &(subgrid[0][0][0]) : NULL, 
-               (subgrid != NULL) ? (subgrid_size_x * subgrid_size_y * subgrid_size_z) : 0, MPI_CHAR, 
-               &(gathered_subgrids[0][0][0]), (subgrid != NULL) ? (subgrid_size_x * subgrid_size_y * subgrid_size_z) : 0, MPI_CHAR, 0, MPI_COMM_WORLD);
+    int gather_status = MPI_Gather((subgrid != NULL) ? &(subgrid[0][0][0]) : NULL, 
+                                   (subgrid != NULL) ? (subgrid_size_x * subgrid_size_y * subgrid_size_z) : 0, MPI_CHAR, 
+                                   &(gathered_subgrids[0][0][0]), (subgrid != NULL) ? (subgrid_size_x * subgrid_size_y * subgrid_size_z) : 0, MPI_CHAR, 0, MPI_COMM_WORLD);
 
     // Process 0 prints the gathered subgrid
     if (rank == 0) {
@@ -90,5 +90,12 @@ int main(int argc, char *argv[]) {
     free(gathered_subgrids);
 
     MPI_Finalize();
+
+    // Print diagnostic information
+    if (gather_status != MPI_SUCCESS) {
+        fprintf(stderr, "Error: MPI_Gather failed with status %d\n", gather_status);
+        return 1;
+    }
+
     return 0;
 }
