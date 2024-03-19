@@ -169,7 +169,7 @@ int main(int argc, char *argv[]) {
                 {
                     for(int aux_z4=0; aux_z4<Z_DIM; aux_z4++)
                     {
-                        printf("%d ", matrix.data[aux_x4][aux_y4][aux_z4]);
+                        printf("%c ", matrix.data[aux_x4][aux_y4][aux_z4]);
                     }
                     printf("\n");
                 }
