@@ -176,7 +176,9 @@ char ***gen_initial_bloco(int max, int min, int N, float density, int input_seed
             max_gen[x]=0;
         }
     } 
-                    
+    
+   return grid_even;
+		
 }
 
 /************************************************************************************************
@@ -505,7 +507,7 @@ int main(int argc, char *argv[]) {
 				min = 16*rank;
 				max = min + 15;
 				
-				grid_odd = gen_initial_grid(max, min, number_of_cells, density, seed);
+				grid_odd = gen_initial_bloco(max, min, number_of_cells, density, seed);
 				
 				
             }
