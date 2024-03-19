@@ -45,6 +45,7 @@ int main(int argc, char **argv) {
     int rank, size;
     int sendcounts[X_DIM], displs[X_DIM];
     int flatMatrix[X_DIM * Y_DIM * Z_DIM];
+    int recvBuffer[Y_DIM * Z_DIM]; // Separate receive buffer for each process
     Matrix3D matrix, received_matrix;
 
     MPI_Init(&argc, &argv);
@@ -61,7 +62,7 @@ int main(int argc, char **argv) {
         for (int i = 0; i < X_DIM; i++) {
             for (int j = 0; j < Y_DIM; j++) {
                 for (int k = 0; k < Z_DIM; k++) {
-                    matrix.data[i][j][k] = (i * 100) + (j * 10) + k;
+                    matrix.data[i][j][k] = i + j + k;
                 }
             }
         }
@@ -84,13 +85,13 @@ int main(int argc, char **argv) {
     MPI_Barrier(MPI_COMM_WORLD);
 
     // Scatter the matrix to all processes
-    MPI_Scatterv(flatMatrix, sendcounts, displs, MPI_INT, flatMatrix, X_DIM * Y_DIM * Z_DIM, MPI_INT, 0, MPI_COMM_WORLD);
+    MPI_Scatterv(flatMatrix, sendcounts, displs, MPI_INT, recvBuffer, Y_DIM * Z_DIM, MPI_INT, 0, MPI_COMM_WORLD);
 
     // Ensure all processes receive their data before proceeding
     MPI_Barrier(MPI_COMM_WORLD);
 
     // Reconstruct the matrix
-    reconstructMatrix(flatMatrix, &received_matrix);
+    reconstructMatrix(recvBuffer, &received_matrix);
 
     // Print the received matrix for each process
     printf("Received matrix (rank %d):\n", rank);
