@@ -4,7 +4,9 @@
 
 #define X_DIM 3
 #define Y_DIM 3
-#define Z_DIM 3
+
+
+unsigned int seed;
 
 typedef struct {
     int data[X_DIM][Y_DIM][Z_DIM];
@@ -56,6 +58,16 @@ int main(int argc, char **argv) {
     MPI_Type_contiguous(X_DIM * Y_DIM * Z_DIM, MPI_INT, &matrix3d_type);
     MPI_Type_commit(&matrix3d_type);
 
+    int number_of_gens,  number_of_cells;
+    float density;
+
+    number_of_gens = atoi (argv[1]);
+    number_of_cells = atoi (argv[2]);
+    density = atof (argv[3]);
+    seed = atoi (argv[4]);
+
+    int Z_DIM = number_of_cells;
+
     for (int i = 0; i < X_DIM; i++) {
         for (int j = 0; j < Y_DIM; j++) {
 
@@ -95,7 +107,7 @@ int main(int argc, char **argv) {
 
         // Prepare sendcounts and displs for scatterv
         for (int i = 0; i < X_DIM; i++) {
-            sendcounts[i] = Y_DIM * Z_DIM;
+            sendcounts[i] = Y_DIM * ;
             displs[i] = i * Y_DIM * Z_DIM;
         }
         
