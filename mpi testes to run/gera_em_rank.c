@@ -506,8 +506,8 @@ int main(int argc, char *argv[]) {
         if (rank == i) {
             printf("Rank %d is runing...\n", rank);
             
-			MPI_Barrier(MPI_COMM_WORLD); // Synchronize before receiving
-			MPI_Bcast(&layer, NX * NY * NZ, MPI_INT, i, MPI_COMM_WORLD); // Broadcast the layer
+			//MPI_Barrier(MPI_COMM_WORLD); // Synchronize before receiving
+			//MPI_Bcast(&layer, NX * NY * NZ, MPI_INT, i, MPI_COMM_WORLD); // Broadcast the layer
 			
 			printf("Rank e Layer %d\n", rank);
 			
