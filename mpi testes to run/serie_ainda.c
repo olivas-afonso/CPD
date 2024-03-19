@@ -352,7 +352,7 @@ int main(int argc, char *argv[]) {
     
 	}
 	
-	printf("GRID\n")
+	printf("GRID\n");
 	for(int merda_z= 0; merda_x < NX; merda_z++){
 		for(int merda_y = 0; merda_y < NX; merda_y++){
 			for(int merda_x = 0; merda_x < NX; merda_x++){
