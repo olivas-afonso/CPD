@@ -77,7 +77,19 @@ int main(int argc, char **argv) {
 
         // Print the initial matrix
         printf("Initial matrix (rank 0):\n");
-        //printMatrix(&matrix, rank);
+        printf("GENERATION %d\n", gen_number);
+            for(int aux_x4=0; aux_x4<4; aux_x4++)
+            {
+                for(int aux_y4=0; aux_y4<4; aux_y4++)
+                {
+                    for(int aux_z4=0; aux_z4<4; aux_z4++)
+                    {
+                        printf("%d ", matrix.data[aux_x4][aux_y4][aux_z4]);
+                    }
+                    printf("\n");
+                }
+                printf("\n");
+            }
 
         // Flatten the matrix
         flattenMatrix(&matrix, flatMatrix);
