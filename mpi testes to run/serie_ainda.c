@@ -304,9 +304,9 @@ int main(int argc, char *argv[]) {
     density = atof (argv[3]);
     seed = atoi (argv[4]);
 	
-	NX = number_of_cells;
-	NY = NX;
-	NZ = NX;
+	int NX = number_of_cells;
+	int NY = NX;
+	int NZ = NX;
 	
 	printf("valor da aresta = %d\n", NZ);
 	
