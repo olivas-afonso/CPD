@@ -121,10 +121,11 @@ int main(int argc, char **argv) {
     // Reconstruct the matrix
     reconstructMatrix(recvBuffer, &received_matrix);
 
+    MPI_Barrier(MPI_COMM_WORLD);
     // Print the received matrix for each process
     printf("Received matrix (rank %d):\n", rank);
     printMatrix(&received_matrix, rank);
-
+    MPI_Barrier(MPI_COMM_WORLD);
     MPI_Type_free(&matrix3d_type);
     MPI_Finalize();
     return 0;
