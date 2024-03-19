@@ -68,7 +68,7 @@ int main(int argc, char *argv[]) {
         printf("Gathered Subgrid:\n");
         //printSubgrid(gathered_subgrids, N_X, N_Y, N_Z);
     }
-
+    /*/
     // Free memory
     if (subgrid != NULL) {
         for (int i = 0; i < subgrid_size_x; i++) {
@@ -87,7 +87,7 @@ int main(int argc, char *argv[]) {
         free(gathered_subgrids[i]);
     }
     free(gathered_subgrids);
-
+    */
     MPI_Finalize();
 
     // Print diagnostic information
