@@ -156,18 +156,10 @@ int main(int argc, char *argv[]) {
    
         }
     }
-    /*
+
     // Prepare data to scatter
     if (rank == 0) {
         // Initialize the matrix
-        for (int i = 0; i < X_DIM; i++) {
-            for (int j = 0; j < Y_DIM; j++) {
-                for (int k = 0; k < Z_DIM; k++) {
-                    matrix.data[i][j][k] = (i * Y_DIM * Z_DIM) + (j * Z_DIM) + k; // Ensure values are within manageable range
-                }
-            }
-        }
-        */
 
         // Print the initial matrix
         printf("Initial matrix (rank 0):\n");
