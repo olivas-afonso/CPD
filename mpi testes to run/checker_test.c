@@ -36,7 +36,7 @@ int main(int argc, char *argv[]) {
         for (int i = 0; i < subgrid_size_x; i++) {
             subgrid[i] = (char **)malloc(subgrid_size_y * sizeof(char *));
             for (int j = 0; j < subgrid_size_y; j++) {
-                subgrid[i][j] = (char *)malloc(subgrid_size_z * sizeof(char));
+                subgrid[i][j] = (char *)calloc(subgrid_size_z, sizeof(char));
             }
         }
 
@@ -55,21 +55,20 @@ int main(int argc, char *argv[]) {
     for (int i = 0; i < N_X; i++) {
         gathered_subgrids[i] = (char **)malloc(N_Y * sizeof(char *));
         for (int j = 0; j < N_Y; j++) {
-            gathered_subgrids[i][j] = (char *)malloc(N_Z * sizeof(char));
+            gathered_subgrids[i][j] = (char *)calloc(N_Z, sizeof(char));
         }
     }
 
     // Gather subgrids from all processes to process 0
-    int gather_status = MPI_Gather((subgrid != NULL) ? &(subgrid[0][0][0]) : NULL, 
-                                   (subgrid != NULL) ? (subgrid_size_x * subgrid_size_y * subgrid_size_z) : 0, MPI_CHAR, 
-                                   &(gathered_subgrids[0][0][0]), (subgrid != NULL) ? (subgrid_size_x * subgrid_size_y * subgrid_size_z) : 0, MPI_CHAR, 0, MPI_COMM_WORLD);
+    int gather_status = MPI_Gather(&(subgrid[0][0][0]), (subgrid_size_x * subgrid_size_y * subgrid_size_z), MPI_CHAR, 
+                                   &(gathered_subgrids[0][0][0]), (subgrid_size_x * subgrid_size_y * subgrid_size_z) , MPI_CHAR, 0, MPI_COMM_WORLD);
 
     // Process 0 prints the gathered subgrid
     if (rank == 0) {
         printf("Gathered Subgrid:\n");
-        printSubgrid(gathered_subgrids, N_X, N_Y, N_Z);
+        //printSubgrid(gathered_subgrids, N_X, N_Y, N_Z);
     }
-
+    /*/
     // Free memory
     if (subgrid != NULL) {
         for (int i = 0; i < subgrid_size_x; i++) {
@@ -88,7 +87,7 @@ int main(int argc, char *argv[]) {
         free(gathered_subgrids[i]);
     }
     free(gathered_subgrids);
-
+    */
     MPI_Finalize();
 
     // Print diagnostic information
