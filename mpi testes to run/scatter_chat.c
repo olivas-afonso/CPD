@@ -63,7 +63,7 @@ int main(int argc, char **argv) {
             }
         }
     }
-    
+
     // Prepare data to scatter
     if (rank == 0) {
         // Initialize the matrix
@@ -107,6 +107,7 @@ int main(int argc, char **argv) {
     // Scatter the matrix to all processes
     MPI_Scatterv(flatMatrix, sendcounts, displs, MPI_INT, recvBuffer, Y_DIM * Z_DIM, MPI_INT, 0, MPI_COMM_WORLD);
 
+    MPI_Barrier(MPI_COMM_WORLD);
     // Print received data for debugging
     printf("Received data (rank %d): ", rank);
     for (int i = 0; i < Y_DIM * Z_DIM; i++) {
