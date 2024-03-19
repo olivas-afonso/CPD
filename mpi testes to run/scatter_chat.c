@@ -104,7 +104,7 @@ void printMatrix(char received_matrix[X_DIM][Y_DIM], int rank) {
     printf("\n");
 }
 
-int main(int argc, char **argv) {
+int main(int argc, char *argv[]) {
 
     int number_of_gens,  number_of_cells;
     float density;
@@ -120,15 +120,17 @@ int main(int argc, char **argv) {
     int sendcounts[X_DIM], displs[X_DIM];
     //char flatMatrix[X_DIM * Y_DIM * Z_DIM];
     char * flatMatrix;
-
-    for(int aux_x = 0; aux_x < (X_DIM*Y_DIM*Z_DIM); aux_x++) {
-        flatMatrix[aux_x] = (char **) malloc((X_DIM*Y_DIM*Z_DIM) * sizeof(char *));
-        if(flatMatrix[aux_x] == NULL) {
+    flatMatrix = (char *) malloc((X_DIM*Y_DIM*Z_DIM) * sizeof(char *));
+        if(flatMatrix == NULL) {
             printf("Failed to allocate matrix3\n");
             exit(1);
         }
+
+    for(int aux_x = 0; aux_x < (X_DIM*Y_DIM*Z_DIM); aux_x++) {
+        
         flatMatrix[aux_x]=0;
     }
+    
 
     char recvBuffer[X_DIM * Y_DIM]={0}; // Separate receive buffer for each process
     char received_matrix[X_DIM][Y_DIM];
