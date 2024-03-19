@@ -114,7 +114,7 @@ int main(int argc, char *argv[]) {
     density = atof (argv[3]);
     seed = atoi (argv[4]);
 
-    printf("gens: %d    cells:%d    density:%f  seed:%d\n",number_of_gens, number_of_cells, density, seed );
+    //printf("gens: %d    cells:%d    density:%f  seed:%d\n",number_of_gens, number_of_cells, density, seed );
 
     int Z_DIM = number_of_cells;
     
@@ -156,7 +156,7 @@ int main(int argc, char *argv[]) {
    
         }
     }
-
+    /*
     // Prepare data to scatter
     if (rank == 0) {
         // Initialize the matrix
@@ -167,6 +167,7 @@ int main(int argc, char *argv[]) {
                 }
             }
         }
+        */
 
         // Print the initial matrix
         printf("Initial matrix (rank 0):\n");
