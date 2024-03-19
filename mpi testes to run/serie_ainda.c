@@ -17,20 +17,6 @@ long max_count[10]={0,0,0,0,0,0,0,0,0};
 int max_gen[10];
 
 
-
-void printLayer(int layer[NX][NY][NZ], int layer_num, int rank) {
-    printf("Rank %d: Layer %d\n", rank, layer_num);
-    for (int i = 0; i < NX; i++) {
-        for (int j = 0; j < NY; j++) {
-            printf("%2d ", layer[i][j][layer_num]);
-        }
-        printf("\n");
-    }
-    printf("\n");
-}
-
-
-
 void init_r4uni(int input_seed)
 {
     seed = input_seed + 987654321;
@@ -375,8 +361,16 @@ int main(int argc, char *argv[]) {
     if (rank == 0) {
         printf("Initial Grid:\n");
         for (int k = 0; k < NZ; k++) {
-            printLayer(layer, k, rank);
-        }
+			printf("Rank %d: Layer %d\n", rank, layer_num);
+				for (int i = 0; i < NX; i++) {
+					for (int j = 0; j < NY; j++) {
+						printf("%2d ", layer[i][j][layer_num]);
+					}
+					printf("\n");
+				}
+				printf("\n");
+				
+		}
     }
 
     // Synchronize the output
@@ -389,8 +383,18 @@ int main(int argc, char *argv[]) {
             for (int k = start_layer; k < end_layer; k++) {
                 MPI_Barrier(MPI_COMM_WORLD); // Synchronize before receiving
                 MPI_Bcast(&layer, NX * NY * NZ, MPI_INT, i, MPI_COMM_WORLD); // Broadcast the layer
-                printLayer(layer, k, rank); // Print the received layer
-                if (k != end_layer - 1) {
+                
+				printf("Rank %d: Layer %d\n", rank, layer_num);
+				for (int i = 0; i < NX; i++) {
+					for (int j = 0; j < NY; j++) {
+						printf("%2d ", layer[i][j][layer_num]);
+					}
+					printf("\n");
+				}
+				printf("\n");
+				
+				
+				if (k != end_layer - 1) {
                     printf("\n"); // Print new line unless it's the last layer
                 }
             }
