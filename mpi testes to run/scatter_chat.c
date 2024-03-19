@@ -45,6 +45,7 @@ int main(int argc, char **argv) {
     int rank, size;
     int sendcounts[X_DIM], displs[X_DIM];
     int flatMatrix[X_DIM * Y_DIM * Z_DIM];
+    int count=0;
     Matrix3D matrix, received_matrix;
 
     MPI_Init(&argc, &argv);
@@ -61,7 +62,8 @@ int main(int argc, char **argv) {
         for (int i = 0; i < X_DIM; i++) {
             for (int j = 0; j < Y_DIM; j++) {
                 for (int k = 0; k < Z_DIM; k++) {
-                    matrix.data[i][j][k] = i + j + k;
+                    matrix.data[i][j][k] = cont;
+                    count++;
                 }
             }
         }
