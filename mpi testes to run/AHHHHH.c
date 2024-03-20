@@ -66,7 +66,7 @@ int main(int argc, char *argv[]) {
         for (int j = 0; j < dims[1]; ++j) {
             data_send[i][j] = (int *)malloc(dims[2] * sizeof(int));
             for (int k = 0; k < dims[2]; ++k) {
-                data_send[i][j][k]=rank + 100*my_coords[0];
+                data_send[i][j][k]=rank + 100*my_coords[0] + 1000*my_coords[1] + 10000*my_coords[2];
                 //data_send[i][j][k] = rank + my_coords[0] * 100 + my_coords[1] * 1000 + my_coords[2] * 10000;  // Example data
             }
         }
