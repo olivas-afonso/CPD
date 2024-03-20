@@ -17,17 +17,31 @@ int main(int argc, char *argv[]) {
 
     // Get Cartesian coordinates of current process
     int my_coords[3];
+    //int my_coords_aux[3];
     MPI_Cart_coords(cart_comm, rank, 3, my_coords);
 
     // Get neighbors
-    int up_rank, down_rank, left_rank, right_rank, forward_rank, backward_rank;
+    int up_rank, down_rank, left_rank, right_rank, forward_rank, backward_rank, diag_rank, source_rank;
     MPI_Cart_shift(cart_comm, 0, 1, &up_rank, &down_rank);
     MPI_Cart_shift(cart_comm, 1, 1, &left_rank, &right_rank);
     MPI_Cart_shift(cart_comm, 2, 1, &forward_rank, &backward_rank);
 
-    int diagonal_coords[2] = {(my_coords[0] + 1) % dims[0], (my_coords[1] + 1) % dims[1]};
-    int diagonal_rank_left, diagonal_rank_right;
-    MPI_Cart_rank(cart_comm, diagonal_coords, &diagonal_rank_left, &diagonal_rank_right);
+    //int diagonal_coords[2] = {(my_coords[0] + 1) % dims[0], (my_coords[1] + 1) % dims[1]};
+    //int diagonal_rank_global;
+    //MPI_Cart_rank(cart_comm, diagonal_coords, &diagonal_rank_global);
+
+    MPI_Comm_rank(cart_comm, &rank);
+    MPI_Cart_coords(cart_comm, rank, 3, my_coords);
+    int my_coords1 = my_coords[1];
+    int my_coords2 = my_coords[2];
+    coords[1]= my_coords1 + 1;
+    coords[2] = my_coords2 + 1;
+    MPI_Cart_rank(cart_comm, my_coords, &diag_rank);
+    coords[1]= my_coords1 -1 ;
+    coords[2]= my_coords2 -1;
+    MPI_Cart_rank(cart_comm, my_coords, &source_rank);
+
+
 
     // Send and receive data between neighbors
     //int data_send = rank * 10 + my_coords[0] * 100 + my_coords[1] * 1000 + my_coords[2] * 10000;  // Example data
@@ -56,9 +70,8 @@ int main(int argc, char *argv[]) {
     for( aux=0; aux < dims[2]; aux++)
     {
         //printf("rank: %d, SUPPOSED TO SEND %d\n",rank, data_send[0][aux]);
-        //MPI_Sendrecv(data_send[0][aux], dims[2], MPI_INT, down_rank, 0, data_recv_down[0][aux], dims[2], MPI_INT, up_rank, 0, cart_comm, MPI_STATUS_IGNORE);
+        MPI_Sendrecv(data_send[0][aux], dims[2], MPI_INT, source_rank, 0, data_recv_down[0][aux], dims[2], MPI_INT, diag_rank, 0, cart_comm, MPI_STATUS_IGNORE);
         //printf("Process %d, down: %d\n", rank, data_recv_down[0][aux]);
-        MPI_Sendrecv(data_send[0][aux], dims[2], MPI_INT, diagonal_rank_left, 0, data_recv_down[0][aux], dims[2], MPI_INT, diagonal_rank_right, 0, cart_comm, MPI_STATUS_IGNORE);
         
     }
     
@@ -69,7 +82,7 @@ int main(int argc, char *argv[]) {
     //MPI_Sendrecv(&data_send, 1, MPI_INT, backward_rank, 0, &data_recv_forward, 1, MPI_INT, forward_rank, 0, cart_comm, MPI_STATUS_IGNORE);
 
     // Print received data
-    if(rank==3)
+    if(rank==4)
     {
         for(aux=0;aux<dims[2];aux++)
         {
