@@ -530,11 +530,11 @@ int main(int argc, char *argv[]) {
 if (rank == 0){
 	grid_odd =  gen_initial_grid(number_of_cells, density, seed);
 }
-
+/*
 if (rank == 1){
 	grid_odd =  gen_initial_grid(number_of_cells, density, seed);
 }
-
+*/
 
     MPI_Comm_free(&cart_comm);
     MPI_Finalize();
