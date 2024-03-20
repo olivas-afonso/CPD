@@ -114,6 +114,7 @@ char ***gen_initial_grid(int N, float density, int input_seed)
 char ***gen_initial_bloco(int max, int min ,int N, float density, int input_seed)
 {
     int x, y, z;
+	int prov = 0;
     
     init_r4uni(input_seed);
     
@@ -159,9 +160,12 @@ char ***gen_initial_bloco(int max, int min ,int N, float density, int input_seed
                 if(r4_uni() < density)
                     {
 						// preenchimento initial do grid_even dependendo da seed
-                        grid_even[x][y][z] = (int)(r4_uni() * N_SPECIES) + 1; // preenchimento initial do grid_even dependendo da seed
+                        prov = (int)(r4_uni() * N_SPECIES) + 1; // preenchimento initial do grid_even dependendo da seed
                         count_species[grid_even[x][y][z]]++;
-                    }
+						 if (z >= min && z <= max) {
+							printf("O valor está dentro do intervalo.\n");
+						} 
+					}
         }     
     }
 
