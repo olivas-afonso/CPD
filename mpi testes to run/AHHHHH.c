@@ -38,7 +38,7 @@ int main(int argc, char *argv[]) {
             }
         }
     }
-
+    printf("OLA IHIHIHIHIH\n");
     int ***data_recv_down = (int ***)malloc(dims[0] * sizeof(int **));
     for (int i = 0; i < dims[0]; ++i) {
         data_recv_down[i] = (int **)malloc(dims[1] * sizeof(int *));
