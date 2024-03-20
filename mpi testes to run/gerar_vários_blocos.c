@@ -411,7 +411,11 @@ int main(int argc, char *argv[]) {
 for (int i = 0; i < size; i++) {
 	if (rank == i) {
   	char *** grid;
-	grid = gen_initial_grid(number_of_cells, density, seed);
+	
+	min = 16*rank;
+	max = min + 15;
+			
+	grid = gen_initial_bloco(max, min,number_of_cells, density, seed);
 	
 	//exec_time = -omp_get_wtime();
 
