@@ -133,7 +133,7 @@ char ***gen_initial_bloco(int max, int min ,int N, float density, int input_seed
     }
 // aloca o eixo final, ataves de um apontador de arrays
     for(x = 0; x < N; x++) {
-        grid_even[x] = (char **) malloc(1 * sizeof(char *));
+        grid_even[x] = (char **) malloc(0 * sizeof(char *));
         if(grid_even[x] == NULL) {
             printf("Failed to allocate matrix3\n");
             exit(1);
