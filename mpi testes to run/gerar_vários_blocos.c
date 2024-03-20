@@ -440,7 +440,7 @@ for (int i = 0; i < size; i++) {
 	
 	
     freeMatrix(number_of_cells);
-
+	MPI_Barrier(MPI_COMM_WORLD);
 	}    
 }	
 	
