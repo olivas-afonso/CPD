@@ -5,17 +5,20 @@
 int rank, size;
 int my_coords[3];
 
-void My_MPI_Cart_Shift(MPI_Comm cart_comm, int pos_x, int pos_y, int idk, int idk2, int *source, int*dest)
+void My_MPI_Cart_Shift(MPI_Comm cart_comm, int pos_x, int pos_y,int pos_z, int dist_x, int dist_y,int dist_z, int *source, int*dest)
 {
     MPI_Comm_rank(cart_comm, &rank);
     MPI_Cart_coords(cart_comm, rank, 3, my_coords);
-    int my_coords1 = my_coords[idk];
-    int my_coords2 = my_coords[idk2];
-    my_coords[1]= my_coords1 + pos_x;
-    my_coords[2] = my_coords2 + pos_y;
+    int my_coords1 = my_coords[pos_y];
+    int my_coords2 = my_coords[pos_y];
+    int my_coords3 = my_coords[pos_z];
+    my_coords[pos_y]= my_coords1 + dist_y;
+    my_coords[pos_x] = my_coords2 + dist_x;
+    my_coords[pos_z] = my_coords3 + dist_z;
     MPI_Cart_rank(cart_comm, my_coords, dest);
-    my_coords[1]= my_coords1 -pos_x ;
-    my_coords[2]= my_coords2 -pos_y;
+    my_coords[pos_y]= my_coords1 -dist_y ;
+    my_coords[pos_x]= my_coords2 -dist_x;
+    my_coords[pos_z]= my_coords3 -dist_z;
     MPI_Cart_rank(cart_comm, my_coords, source);
 }
 
@@ -36,14 +39,15 @@ int main(int argc, char *argv[]) {
     
     //int my_coords_aux[3];
     MPI_Cart_coords(cart_comm, rank, 3, my_coords);
-    // IMPORTANTE: COORD 0 - CAMADA, COORD 1 - COLUNA
+    // IMPORTANTE: COORD 0 - CAMADA, COORD 1 - COLUNA, COORD 2- LINHA
     // Get neighbors
     int up_rank, down_rank, left_rank, right_rank, forward_rank, backward_rank, diag_rank, source_rank;
     MPI_Cart_shift(cart_comm, 0, 1, &up_rank, &down_rank);  
     MPI_Cart_shift(cart_comm, 1, 1, &left_rank, &right_rank);
     MPI_Cart_shift(cart_comm, 2, 1, &forward_rank, &backward_rank);
-    MPI_Cart_shift(cart_comm, 2, 2, &source_rank, &diag_rank);
+    //MPI_Cart_shift(cart_comm, 2, 2, &source_rank, &diag_rank);
     //My_MPI_Cart_Shift(cart_comm, 1, 1, 2, 1, &source_rank, &diag_rank);
+    My_MPI_Cart_Shift(cart_comm, 1, 2, 0, 1, 1, 1, &source_rank, &diag_rank);
 
     //int diagonal_coords[2] = {(my_coords[0] + 1) % dims[0], (my_coords[1] + 1) % dims[1]};
     //int diagonal_rank_global;
