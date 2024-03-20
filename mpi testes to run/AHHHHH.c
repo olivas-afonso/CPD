@@ -25,7 +25,8 @@ int main(int argc, char *argv[]) {
     MPI_Cart_shift(cart_comm, 2, 1, &forward_rank, &backward_rank);
 
     // Send and receive data between neighbors
-    int data_send = rank * 10 + my_coords[0] * 100 + my_coords[1] * 1000 + my_coords[2] * 10000;  // Example data
+    //int data_send = rank * 10 + my_coords[0] * 100 + my_coords[1] * 1000 + my_coords[2] * 10000;  // Example data
+    int ***data=
     int data_recv_up, data_recv_down, data_recv_left, data_recv_right, data_recv_forward, data_recv_backward;
     MPI_Sendrecv(&data_send, 1, MPI_INT, up_rank, 0, &data_recv_down, 1, MPI_INT, down_rank, 0, cart_comm, MPI_STATUS_IGNORE);
     MPI_Sendrecv(&data_send, 1, MPI_INT, down_rank, 0, &data_recv_up, 1, MPI_INT, up_rank, 0, cart_comm, MPI_STATUS_IGNORE);
