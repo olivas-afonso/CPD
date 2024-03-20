@@ -437,6 +437,8 @@ if(rank == 0){
 			printf("\n\n");
 		}
 	
+	
+    freeMatrix(number_of_cells);
 
 }    
 	
@@ -496,8 +498,6 @@ if(rank == 0){
     MPI_Comm_free(&cart_comm);
     MPI_Finalize();
 	
-    freeMatrix(number_of_cells);
-
 
     return 0;
 }
