@@ -39,10 +39,19 @@ int main(int argc, char *argv[]) {
         }
     }
 
-    int data_recv_up, data_recv_down, data_recv_left, data_recv_right, data_recv_forward, data_recv_backward;
+    int ***data_recv_down = (int ***)malloc(dims[0] * sizeof(int **));
+    for (int i = 0; i < dims[0]; ++i) {
+        data_recv_down[i] = (int **)malloc(dims[1] * sizeof(int *));
+        for (int j = 0; j < dims[1]; ++j) {
+            data_recv_down[i][j] = (int *)malloc(dims[2] * sizeof(int));
+        }
+    }
+
+
+    int data_recv_up, data_recv_left, data_recv_right, data_recv_forward, data_recv_backward;
     for(int aux=0; aux < dims[2]; aux++)
     {
-        MPI_Sendrecv(data_send[0][aux], dims[2], MPI_INT, up_rank, 0, &data_recv_down, 1, MPI_INT, down_rank, 0, cart_comm, MPI_STATUS_IGNORE);
+        MPI_Sendrecv(data_send[0][aux], dims[2], MPI_INT, up_rank, 0, data_recv_down[0][aux], dims[2], MPI_INT, down_rank, 0, cart_comm, MPI_STATUS_IGNORE);
     }
     
     //MPI_Sendrecv(&data_send, 1, MPI_INT, down_rank, 0, &data_recv_up, 1, MPI_INT, up_rank, 0, cart_comm, MPI_STATUS_IGNORE);
