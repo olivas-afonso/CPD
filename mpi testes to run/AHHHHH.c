@@ -10,7 +10,7 @@ void My_MPI_Cart_Shift(MPI_Comm cart_comm, int pos_x, int pos_y,int pos_z, int d
     MPI_Comm_rank(cart_comm, &rank);
     MPI_Cart_coords(cart_comm, rank, 3, my_coords);
     int my_coords1 = my_coords[pos_y];
-    int my_coords2 = my_coords[pos_y];
+    int my_coords2 = my_coords[pos_x];
     int my_coords3 = my_coords[pos_z];
     my_coords[pos_y]= my_coords1 + dist_y;
     my_coords[pos_x] = my_coords2 + dist_x;
