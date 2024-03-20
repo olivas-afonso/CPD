@@ -411,7 +411,7 @@ int main(int argc, char *argv[]) {
 	
 	//cria a grid aleatoria atraves dos inputs (funcao fornecida)
 for (int i = 0; i < size; i++) {
-	if (rank == i) {
+	if (rank == 0) {
 		char *** grid;
 		int min = 0;
 		int max = 0;
