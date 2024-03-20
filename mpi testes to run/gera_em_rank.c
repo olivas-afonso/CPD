@@ -528,7 +528,7 @@ int main(int argc, char *argv[]) {
 */
 
 if (rank == 0){
-	grid_even =  gen_initial_grid(number_of_cells, density, seed);
+	//grid_even =  gen_initial_grid(number_of_cells, density, seed);
 }
 /*
 if (rank == 1){
