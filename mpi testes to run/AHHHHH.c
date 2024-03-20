@@ -15,9 +15,10 @@ void My_MPI_Cart_Shift(MPI_Comm cart_comm, int pos_x, int pos_y, int idk, int id
     my_coords[2]= my_coords2 -pos_y;
     MPI_Cart_rank(cart_comm, my_coords, source);
 }
-
+int rank, size;
+int my_coords[3];
 int main(int argc, char *argv[]) {
-    int rank, size;
+    
 
     MPI_Init(&argc, &argv);
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
@@ -30,7 +31,7 @@ int main(int argc, char *argv[]) {
     MPI_Cart_create(MPI_COMM_WORLD, 3, dims, periods, 0, &cart_comm);
 
     // Get Cartesian coordinates of current process
-    int my_coords[3];
+    
     //int my_coords_aux[3];
     MPI_Cart_coords(cart_comm, rank, 3, my_coords);
 
