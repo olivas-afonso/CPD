@@ -427,7 +427,7 @@ for (int i = 0; i < size; i++) {
         }
     
 	}
-		printf("GRID\n");
+		printf("Rank %d: Layer %d\n", rank, rank);	
 		for(int merda_z= 0; merda_z < NX; merda_z++){
 			for(int merda_y = 0; merda_y < NX; merda_y++){
 				for(int merda_x = 0; merda_x < NX; merda_x++){
@@ -450,7 +450,7 @@ for (int i = 0; i < size; i++) {
     
     // Synchronize the output
     MPI_Barrier(MPI_COMM_WORLD);
-
+/*
     // Only let process 0 print the initial grid
     if (rank == 0) {
         printf("Initial Grid:\n");
