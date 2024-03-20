@@ -26,14 +26,29 @@ int main(int argc, char *argv[]) {
 
     // Send and receive data between neighbors
     //int data_send = rank * 10 + my_coords[0] * 100 + my_coords[1] * 1000 + my_coords[2] * 10000;  // Example data
-    int ***data=
+
+    int ***data_send = (int ***)malloc(dims[0] * sizeof(int **));
+    for (int i = 0; i < dims[0]; ++i) {
+        data_send[i] = (int **)malloc(dims[1] * sizeof(int *));
+        for (int j = 0; j < dims[1]; ++j) {
+            data_send[i][j] = (int *)malloc(dims[2] * sizeof(int));
+            for (int k = 0; k < dims[2]; ++k) {
+                data_send[i][j][k] = rank * 100 + i * 1000 + j * 10000 + k * 100000;  // Example data
+            }
+        }
+    }
+
     int data_recv_up, data_recv_down, data_recv_left, data_recv_right, data_recv_forward, data_recv_backward;
-    MPI_Sendrecv(&data_send, 1, MPI_INT, up_rank, 0, &data_recv_down, 1, MPI_INT, down_rank, 0, cart_comm, MPI_STATUS_IGNORE);
-    MPI_Sendrecv(&data_send, 1, MPI_INT, down_rank, 0, &data_recv_up, 1, MPI_INT, up_rank, 0, cart_comm, MPI_STATUS_IGNORE);
-    MPI_Sendrecv(&data_send, 1, MPI_INT, left_rank, 0, &data_recv_right, 1, MPI_INT, right_rank, 0, cart_comm, MPI_STATUS_IGNORE);
-    MPI_Sendrecv(&data_send, 1, MPI_INT, right_rank, 0, &data_recv_left, 1, MPI_INT, left_rank, 0, cart_comm, MPI_STATUS_IGNORE);
-    MPI_Sendrecv(&data_send, 1, MPI_INT, forward_rank, 0, &data_recv_backward, 1, MPI_INT, backward_rank, 0, cart_comm, MPI_STATUS_IGNORE);
-    MPI_Sendrecv(&data_send, 1, MPI_INT, backward_rank, 0, &data_recv_forward, 1, MPI_INT, forward_rank, 0, cart_comm, MPI_STATUS_IGNORE);
+    for(int aux=0; aux < dims[2]; aux++)
+    {
+        MPI_Sendrecv(data_send[0][0][aux], 1, MPI_INT, up_rank, 0, &data_recv_down, 1, MPI_INT, down_rank, 0, cart_comm, MPI_STATUS_IGNORE);
+    }
+    
+    //MPI_Sendrecv(&data_send, 1, MPI_INT, down_rank, 0, &data_recv_up, 1, MPI_INT, up_rank, 0, cart_comm, MPI_STATUS_IGNORE);
+    //MPI_Sendrecv(&data_send, 1, MPI_INT, left_rank, 0, &data_recv_right, 1, MPI_INT, right_rank, 0, cart_comm, MPI_STATUS_IGNORE);
+    //MPI_Sendrecv(&data_send, 1, MPI_INT, right_rank, 0, &data_recv_left, 1, MPI_INT, left_rank, 0, cart_comm, MPI_STATUS_IGNORE);
+    //MPI_Sendrecv(&data_send, 1, MPI_INT, forward_rank, 0, &data_recv_backward, 1, MPI_INT, backward_rank, 0, cart_comm, MPI_STATUS_IGNORE);
+    //MPI_Sendrecv(&data_send, 1, MPI_INT, backward_rank, 0, &data_recv_forward, 1, MPI_INT, forward_rank, 0, cart_comm, MPI_STATUS_IGNORE);
 
     // Print received data
     printf("Process %d: Received from up: %d, down: %d, left: %d, right: %d, forward: %d, backward: %d\n", rank, data_recv_up, data_recv_down, data_recv_left, data_recv_right, data_recv_forward, data_recv_backward);
