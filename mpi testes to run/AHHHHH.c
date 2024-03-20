@@ -61,7 +61,7 @@ int main(int argc, char *argv[]) {
     //MPI_Sendrecv(&data_send, 1, MPI_INT, backward_rank, 0, &data_recv_forward, 1, MPI_INT, forward_rank, 0, cart_comm, MPI_STATUS_IGNORE);
 
     // Print received data
-    printf("Process %d: Received from up: %d, down: %d, left: %d, right: %d, forward: %d, backward: %d\n", rank, data_recv_up, data_recv_down, data_recv_left, data_recv_right, data_recv_forward, data_recv_backward);
+    printf("Process %d: Received from up: %d, down: %d\n", rank, data_recv_down);
 
     MPI_Finalize();
     return 0;
