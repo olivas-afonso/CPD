@@ -7,7 +7,6 @@
 #define N_SPECIES 9
 
 
-char *** grid;
 char *** grid_even;
 char *** grid_odd;
 unsigned int seed;
@@ -409,8 +408,10 @@ int main(int argc, char *argv[]) {
 	
 	
 	//cria a grid aleatoria atraves dos inputs (funcao fornecida)
-  grid = gen_initial_grid(number_of_cells, density, seed);
-
+if(rank == 0){  
+	char *** grid;
+	grid = gen_initial_grid(number_of_cells, density, seed);
+}    
 	
 	
 	
