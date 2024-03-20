@@ -2,6 +2,20 @@
 #include <stdlib.h>
 #include <mpi.h>
 
+void My_MPI_Cart_Shift(MPI_Comm cart_comm, int pos_x, int pos_y, int idk, int idk2, int *source, int*dest)
+{
+    MPI_Comm_rank(cart_comm, &rank);
+    MPI_Cart_coords(cart_comm, rank, 3, my_coords);
+    int my_coords1 = my_coords[idk];
+    int my_coords2 = my_coords[idk2];
+    my_coords[1]= my_coords1 + pos_x;
+    my_coords[2] = my_coords2 + pos_y;
+    MPI_Cart_rank(cart_comm, my_coords, dest);
+    my_coords[1]= my_coords1 -pos_x ;
+    my_coords[2]= my_coords2 -pos_y;
+    MPI_Cart_rank(cart_comm, my_coords, source);
+}
+
 int main(int argc, char *argv[]) {
     int rank, size;
 
@@ -26,20 +40,11 @@ int main(int argc, char *argv[]) {
     MPI_Cart_shift(cart_comm, 1, 1, &left_rank, &right_rank);
     MPI_Cart_shift(cart_comm, 2, 1, &forward_rank, &backward_rank);
 
+    My_MPI_Cart_Shift(cart_comm, 1, 1, 2, 1, &source_rank, &diag_rank);
+
     //int diagonal_coords[2] = {(my_coords[0] + 1) % dims[0], (my_coords[1] + 1) % dims[1]};
     //int diagonal_rank_global;
-    //MPI_Cart_rank(cart_comm, diagonal_coords, &diagonal_rank_global);
-
-    MPI_Comm_rank(cart_comm, &rank);
-    MPI_Cart_coords(cart_comm, rank, 3, my_coords);
-    int my_coords1 = my_coords[1];
-    int my_coords2 = my_coords[2];
-    my_coords[1]= my_coords1 + 1;
-    my_coords[2] = my_coords2 + 1;
-    MPI_Cart_rank(cart_comm, my_coords, &diag_rank);
-    my_coords[1]= my_coords1 -1 ;
-    my_coords[2]= my_coords2 -1;
-    MPI_Cart_rank(cart_comm, my_coords, &source_rank);
+    //MPI_Cart_rank(cart_comm, diagonal_coords, &diagonal_rank_global)
 
 
 
