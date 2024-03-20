@@ -64,7 +64,7 @@ int main(int argc, char *argv[]) {
     //MPI_Sendrecv(&data_send, 1, MPI_INT, backward_rank, 0, &data_recv_forward, 1, MPI_INT, forward_rank, 0, cart_comm, MPI_STATUS_IGNORE);
 
     // Print received data
-    if(rank==5)
+    if(rank==4)
     {
         for(aux=0;aux<dims[2];aux++)
         {
