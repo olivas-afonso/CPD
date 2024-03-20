@@ -13,20 +13,17 @@ int main(int argc, char *argv[]) {
     int dims[3] = {2, 2, 2};  // 2x2x2 grid
     int periods[3] = {1, 1, 1};  // Enable wraparound
     MPI_Comm cart_comm;
-    printf("OLA IHIHIHIHIH\n");
     MPI_Cart_create(MPI_COMM_WORLD, 3, dims, periods, 0, &cart_comm);
 
     // Get Cartesian coordinates of current process
     int my_coords[3];
     MPI_Cart_coords(cart_comm, rank, 3, my_coords);
-    printf("OLA IHIHIHIHIH\n");
 
     // Get neighbors
     int up_rank, down_rank, left_rank, right_rank, forward_rank, backward_rank;
     MPI_Cart_shift(cart_comm, 0, 1, &up_rank, &down_rank);
     MPI_Cart_shift(cart_comm, 1, 1, &left_rank, &right_rank);
     MPI_Cart_shift(cart_comm, 2, 1, &forward_rank, &backward_rank);
-    printf("OLA IHIHIHIHIH\n");
 
     // Send and receive data between neighbors
     //int data_send = rank * 10 + my_coords[0] * 100 + my_coords[1] * 1000 + my_coords[2] * 10000;  // Example data
@@ -41,6 +38,7 @@ int main(int argc, char *argv[]) {
             }
         }
     }
+
     int ***data_recv_down = (int ***)malloc(dims[0] * sizeof(int **));
     for (int i = 0; i < dims[0]; ++i) {
         data_recv_down[i] = (int **)malloc(dims[1] * sizeof(int *));
