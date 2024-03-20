@@ -466,7 +466,7 @@ if(rank == 0){
 
     // Synchronize the output
     MPI_Barrier(MPI_COMM_WORLD);
-
+/*
     // Print out the layer of the grid for each process one at a time
     for (int i = 0; i < size; i++) {
         if (rank == i) {
@@ -492,7 +492,7 @@ if(rank == 0){
         }
         MPI_Barrier(MPI_COMM_WORLD);
     }
-
+*/
     MPI_Comm_free(&cart_comm);
     MPI_Finalize();
 	
