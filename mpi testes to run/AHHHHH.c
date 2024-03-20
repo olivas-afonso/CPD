@@ -34,11 +34,11 @@ int main(int argc, char *argv[]) {
     MPI_Cart_coords(cart_comm, rank, 3, my_coords);
     int my_coords1 = my_coords[1];
     int my_coords2 = my_coords[2];
-    coords[1]= my_coords1 + 1;
-    coords[2] = my_coords2 + 1;
+    my_coords[1]= my_coords1 + 1;
+    my_coords[2] = my_coords2 + 1;
     MPI_Cart_rank(cart_comm, my_coords, &diag_rank);
-    coords[1]= my_coords1 -1 ;
-    coords[2]= my_coords2 -1;
+    my_coords[1]= my_coords1 -1 ;
+    my_coords[2]= my_coords2 -1;
     MPI_Cart_rank(cart_comm, my_coords, &source_rank);
 
 
