@@ -51,9 +51,10 @@ int main(int argc, char *argv[]) {
     int data_recv_up, data_recv_left, data_recv_right, data_recv_forward, data_recv_backward;
     for( aux=0; aux < dims[2]; aux++)
     {
-        printf("SUPPOSED TO SEND %d\n", data_send[0][aux]);
+        printf("rank: %d, SUPPOSED TO SEND %d\n",rank, data_send[0][aux]);
         MPI_Sendrecv(data_send[0][aux], dims[2], MPI_INT, up_rank, 0, data_recv_down[0][aux], dims[2], MPI_INT, down_rank, 0, cart_comm, MPI_STATUS_IGNORE);
         printf("Process %d, down: %d\n", rank, data_recv_down[0][aux]);
+        
     }
     
     //MPI_Sendrecv(&data_send, 1, MPI_INT, down_rank, 0, &data_recv_up, 1, MPI_INT, up_rank, 0, cart_comm, MPI_STATUS_IGNORE);
