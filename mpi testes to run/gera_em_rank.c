@@ -107,6 +107,79 @@ char ***gen_initial_grid(int N, float density, int input_seed)
 }
 
 /************************************************************************************************
+* Nome: gen_initial_bloco
+* funcao: gera as duas matrizes, a inicial e a auxiliar; ao longo das geracoes as celulas iram
+*passar de uma para a outra.
+************************************************************************************************/
+char ***gen_initial_bloco(int max, int min ,int N, float density, int input_seed)
+{
+    int x, y, z;
+    
+    init_r4uni(input_seed);
+    
+//alocacao da memeoria dinamica, alocando primeiro um apontador triplo o que corresponde a uma dimensao do cubo  ~
+    grid_even = (char ***) malloc(N * sizeof(char **));
+    if(grid_even == NULL) {
+        printf("Failed to allocate matrix1\n");
+        exit(1);
+    }
+	
+//aloca a dimensao x atraves de um apontador de um apontador    
+    grid_odd = (char ***) malloc(N * sizeof(char **));
+    if(grid_odd == NULL) {
+        printf("Failed to allocate matrix2\n");
+        exit(1);
+    }
+// aloca o eixo final, ataves de um apontador de arrays
+    for(x = 0; x < N; x++) {
+        grid_even[x] = (char **) malloc(N * sizeof(char *));
+        if(grid_even[x] == NULL) {
+            printf("Failed to allocate matrix3\n");
+            exit(1);
+        }
+
+        grid_odd[x] = (char **) malloc(N * sizeof(char *));
+        if(grid_odd[x] == NULL) {
+            printf("Failed to allocate matrix5\n");
+            exit(1);
+        }
+
+        for (y = 0; y < N; y++){
+            grid_even[x][y] = (char*) calloc(N, sizeof(char));
+            if(grid_even[x][y] == NULL) {
+                printf("Failed to allocate matrix6\n");
+                exit(1);
+            }
+            grid_odd[x][y] = (char*) calloc(N, sizeof(char));
+            if(grid_odd[x][y] == NULL) {
+                printf("Failed to allocate matrix6\n");
+                exit(1);
+            }
+            for (z = 0; z < N; z++)
+                if(r4_uni() < density)
+                    {
+						// preenchimento initial do grid_even dependendo da seed
+                        grid_even[x][y][z] = (int)(r4_uni() * N_SPECIES) + 1; // preenchimento initial do grid_even dependendo da seed
+                        count_species[grid_even[x][y][z]]++;
+                    }
+        }     
+    }
+
+	// conta as especies da geracao 0
+    for(x=1; x < 10; x++)
+    {
+        if(count_species[x] > max_count[x])
+        {
+            max_count[x] = count_species[x];
+            max_gen[x]=0;
+        }
+    } 
+                    
+
+    return grid_even;
+}
+
+/************************************************************************************************
 * Nome:death_rule
 * funcao: verifica os vizinhos no caso da celula ter estado morta na geracao anterior
 *
