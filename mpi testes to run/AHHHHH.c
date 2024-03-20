@@ -13,6 +13,7 @@ int main(int argc, char *argv[]) {
     int dims[3] = {2, 2, 2};  // 2x2x2 grid
     int periods[3] = {1, 1, 1};  // Enable wraparound
     MPI_Comm cart_comm;
+    printf("OLA IHIHIHIHIH\n");
     MPI_Cart_create(MPI_COMM_WORLD, 3, dims, periods, 0, &cart_comm);
 
     // Get Cartesian coordinates of current process
