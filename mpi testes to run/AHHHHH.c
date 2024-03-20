@@ -48,7 +48,7 @@ int main(int argc, char *argv[]) {
     //MPI_Cart_shift(cart_comm, 2, 2, &source_rank, &diag_rank);
     //My_MPI_Cart_Shift(cart_comm, 1, 1, 2, 1, &source_rank, &diag_rank);
     //printf("ANTES\n");
-    My_MPI_Cart_Shift(cart_comm, 1, 2, 0, 1, 1, 0, &source_rank, &diag_rank);
+    My_MPI_Cart_Shift(cart_comm, 1, 2, 0, 2, 2, 0, &source_rank, &diag_rank);
 
     //int diagonal_coords[2] = {(my_coords[0] + 1) % dims[0], (my_coords[1] + 1) % dims[1]};
     //int diagonal_rank_global;
