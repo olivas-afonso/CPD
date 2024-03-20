@@ -409,9 +409,8 @@ int main(int argc, char *argv[]) {
 	
 	
 	//cria a grid aleatoria atraves dos inputs (funcao fornecida)
-if(rank == 0){  
   grid = gen_initial_grid(number_of_cells, density, seed);
-}    
+
 	
 	
 	
