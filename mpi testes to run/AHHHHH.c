@@ -48,7 +48,7 @@ int main(int argc, char *argv[]) {
     //MPI_Cart_shift(cart_comm, 2, 2, &source_rank, &diag_rank);
     //My_MPI_Cart_Shift(cart_comm, 1, 1, 2, 1, &source_rank, &diag_rank);
     //printf("ANTES\n");
-
+    
     My_MPI_Cart_Shift(cart_comm, 2, 1, 0, 1, 1, 1, &source_rank, &diag_rank);
 
     //int diagonal_coords[2] = {(my_coords[0] + 1) % dims[0], (my_coords[1] + 1) % dims[1]};
@@ -85,7 +85,7 @@ int main(int argc, char *argv[]) {
     for( aux=0; aux < dims[2]; aux++)
     {
         //printf("rank: %d, SUPPOSED TO SEND %d\n",rank, data_send[0][aux]);
-        MPI_Sendrecv(data_send[0][aux], dims[2], MPI_INT, diag_rank, 0, data_recv_down[0][aux], dims[2], MPI_INT, source_rank, 0, cart_comm, MPI_STATUS_IGNORE);
+        MPI_Sendrecv(data_send[0][aux], dims[2], MPI_INT, source_rank, 0, data_recv_down[0][aux], dims[2], MPI_INT, diag_rank, 0, cart_comm, MPI_STATUS_IGNORE);
         //printf("Process %d, down: %d\n", rank, data_recv_down[0][aux]);
         
     }
@@ -105,7 +105,7 @@ int main(int argc, char *argv[]) {
         }
     }
 
-    if(rank==0)
+    if(rank==13)
     {
         for(aux=0;aux<dims[2];aux++)
         {
