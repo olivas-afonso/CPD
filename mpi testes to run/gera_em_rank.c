@@ -411,9 +411,6 @@ int main(int argc, char *argv[]) {
 if(rank == 0){  
 	char *** grid;
 	grid = gen_initial_grid(number_of_cells, density, seed);
-}    
-	
-	
 	
 	//exec_time = -omp_get_wtime();
 
@@ -429,7 +426,6 @@ if(rank == 0){
         }
     
 	}
-	if(rank==0){
 		printf("GRID\n");
 		for(int merda_z= 0; merda_z < NX; merda_z++){
 			for(int merda_y = 0; merda_y < NX; merda_y++){
@@ -440,7 +436,12 @@ if(rank == 0){
 			}
 			printf("\n\n");
 		}
-	}
+	
+
+}    
+	
+	
+	
    // exec_time += omp_get_wtime();
     //fprintf(stderr, "%.1fs\n", exec_time);
     
