@@ -411,6 +411,8 @@ int main(int argc, char *argv[]) {
 for (int i = 0; i < size; i++) {
 	if (rank == i) {
   	char *** grid;
+	int min = 0;
+	int max = 0;
 	
 	min = 16*rank;
 	max = min + 15;
