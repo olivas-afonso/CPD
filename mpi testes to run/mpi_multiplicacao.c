@@ -1,199 +1,226 @@
-/*
-*Matrix-vector multiplication, Version 3
-*
-*This program multiplies a matrix and a vector.
-*The matrix and vector are input from files.
-*The answer is printed to standard output.
-*Does only work for square p (number of processors).
-*
-*Data distribution of matrix: checkerboard block-wise
-*Data distribution of vector: block
-*
-*
-Programmed by Annika Biermann
-*
-*Last modification: 24 November 2009
-*/
+// Program 12.8 Release 1.3 on 30.08.2006
+// The Parallel Gauss-Seidel Method (checkerboard decomposion)
+  bool IsPrintEnabled;
+  double *u;
+  char methodName[] = "MPI Zeidel Block";
+  TParams params;
+  int mpiSsize;
+  MPI_Datatype BlockType;
+  MPI_Datatype VectorType;
 
-#include <stdio.h>
-#include <mpi.h>
-#include <string.h>
-#include "./MyMPI.h"
-#include "./MyMPI.c"
-/*Change these two definitions when the matrix and vector element types change */
-typedef double dtype;
-#define mpitype MPI_DOUBLE
-int main (int argc, char *argv[]) {
-dtype **a;	/* First factor, a matrix */
-dtype *b;	/* Second factor, a vector */
-dtype *v;	/* Local vector block */
-dtype *c_part_out;	/* Partial sums, sent */
-dtype *storage;	/* Matrix elements stored here */
-int p;	/* Number of processes */
-int size[2];	/* Vector with size of each grid dimension*/
-int periodic[2];	/* Message wraparound flags*/
-int id; 	/* Rank of process in virtual grid */
-int i, j;	/* Loop indice */
-int grid_coords[2];	/* Location of process in grid */
-int m; /* Rows in the matrix */
-int n;	/* Columns in the matrix */
-int	nprime;	/* # of elements in the local initial vector block */
-int nfinal;	/* # of elements in the local final vector block */
-int dims;	/* # of dimensions of the grid */
-int	local_cols; /* Local # of columns */
-int	local_rows; /* Local # of rows */
-double max_seconds;
-double seconds; /* Elapsed time for matrix-vector multiply */
-MPI_Comm grid_comm;	/* 2-D process grid, Cartesian topology	communicator */
-MPI_Comm row_comm;	/* Processes in same row */
-MPI_Comm column_comm;	/* Processes in same column */
-MPI_Status status;	/* Result of receive */
-
-/* Initialization */
-MPI_Init (&argc, &argv);
-MPI_Comm_rank (MPI_COMM_WORLD, &id);
-MPI_Comm_size (MPI_COMM_WORLD, &p);
-dims = 2;
-nprime = 0;
-
-/* Create virtual grid */
-size[0] = size[1] = 0;
-MPI_Dims_create(p, dims, size);
-periodic[0] = periodic[1] = 0;
-MPI_Cart_create(MPI_COMM_WORLD, dims, size, periodic, 1, &grid_comm);
-if(size[0] == size[1]) {
-	/* Read and print checkerboard matrix */
-	read_checkerboard_matrix (argv[1], (void ***) &a, (void **) &storage, mpitype, &m, &n, grid_comm);
-	print_checkerboard_matrix ((void **) a, mpitype, m, n, grid_comm);
-	/* Read and print vector */
-	MPI_Cart_coords (grid_comm, id, dims, grid_coords);
-	MPI_Comm_split (grid_comm, grid_coords[1], grid_coords[0], &column_comm);
-	if(grid_coords[1] == 0) { // only processes of the first column
-		read_block_vector (argv[2], (void **) &b, mpitype, &nprime, column_comm);
-		print_block_vector ((void *) b, mpitype, nprime,column_comm);
-	}
-	
-	/* Redistribute vector */
-	redistribute_vector((void *) b, (void **) &v, mpitype, n, nprime, (int *) &nfinal, size[0], size[1], grid_coords[0], grid_coords[1], grid_comm);
-	/* Matrix-vector multiply */
-	/* Each process multiplies its submatrix of 'a' and block of vector 'b', resulting in a partial block sum of product 'c'. */
-	local_rows = BLOCK_SIZE(grid_coords[0], size[0], m);
-	local_cols = BLOCK_SIZE(grid_coords[1], size[1], n);
-	c_part_out = (dtype *) my_malloc (id, local_rows *sizeof(dtype));
-	MPI_Barrier (MPI_COMM_WORLD);
-	seconds = -MPI_Wtime();
-	for (i = 0; i < local_rows; i++) {
-		c_part_out[i] = 0.0;
-		for (j = 0; j < local_cols; j++)
-			c_part_out[i] += a[i][j] * v[j];
-	}
-	/* Reduce vectors across rows */
-	/* Split grid_communicator into row_communicators */
-	MPI_Comm_split (grid_comm, grid_coords[0], grid_coords[1], &row_comm);
-	dtype c_part_in[size[1]-1][local_rows];
-
-	/* If process not in first grid column */
-	if (grid_coords[1] != 0) {
-		/* Send block of c to first process in row */
-		MPI_Send (c_part_out, local_rows, mpitype, 0, DATA_MSG, row_comm);
-	}
-	/* if process in first grid column */
-	else {
-		// for each column except the first one
-		for (i = 1; i < size[1]; i++) {
-			/* Receive blocks of c from other processes and do summation */
-			MPI_Recv (c_part_in[i-1], local_rows, mpitype, i, DATA_MSG, row_comm, &status);
-		}
-		for (i = 0; i < local_rows; i++) {
-			for(j=0;j<size[1]-1;j++){
-				c_part_out[i] += c_part_in[j][i];
-			}
-		}
-	}
-	MPI_Barrier (MPI_COMM_WORLD);
-	seconds += MPI_Wtime();
-	MPI_Allreduce (&seconds, &max_seconds, 1, mpitype, MPI_MAX, MPI_COMM_WORLD);
-	if (!id) {
-		printf ("MV3) N = %d, Processes = %d, Time = %12.6f sec,", n, p, max_seconds);
-		printf ("Mflop = %6.2f\n", 2*n*n/(1000000.0*max_seconds));
-	}
-	if(grid_coords[1] == 0)
-		print_block_vector ((void *) c_part_out, mpitype, n, column_comm);
-}
-MPI_Finalize();
-return 0;
-}
-
-/*
-* This function is used to redistribute a vector block from the first process grid column processes
-* to all processes within a communicator.
-*/
-void redistribute_vector(
-void *b, 			/* IN - Address of vector */
-void **v,			/* OUT - Subvector */
-MPI_Datatype dtype,	/* IN - Vector element type */
-int n,				/* IN - Size of (whole) input vector */
-int nprime,			/* IN - Elements in initial block vector */
-int *nfinal,		/* OUT - Elements in final block vector */
-int grid_rows,		/* IN - Number of rows in the virtual process grid */
-int grid_cols,		/* IN - Number of columns in the virtual process grid */
-int grid_row_coord,	/* IN - row index of process in virtual process grid */
-int grid_col_coord,	/* IN - column index of process in virtual process grid */
-MPI_Comm grid_comm)	/* IN - Communicator */
+int main(int argc, char *argv[])
 {
-int datum_size;		/* Bytes per vector element */
-MPI_Status status;	/* Result of receive */
-int id; 			/* Process rank */
-int p;				/* Number of processes */
-int dest_coords[2];	/* Coordinates of receiving process */
-int	dest_id;		/* Rank of receiving process */
-int sent_coords[2];	/* Coordinates of sending process */
-int sent_id;		/* Rank of sending process */
-MPI_Comm column_comm;/* Virtual grid column communicator */
+  MPI_Init(&argc, &argv);
 
-MPI_Comm_size (grid_comm, &p);
-MPI_Comm_rank (grid_comm, &id);
-datum_size = get_size (dtype);
-*nfinal = BLOCK_SIZE(grid_row_coord, grid_cols, n);
+  if (argc < 2)
+  {
+    printf("USAGE: GZ_MPIB.exe N\n");
+    return 1;
+  }
+  if (argc == 2)
+    IsPrintEnabled = 0;
+  else
+    IsPrintEnabled = atoi(argv[2]);
 
-/* Allocate memory for final local vector block */
-*v = my_malloc (id, (*nfinal) * datum_size);
-/* if p is a square number (grid_rows == grid_cols) */
-if(grid_rows == grid_cols) {
-	/* Send/receive blocks of vector */
-	/* if process of first grid column */
-	if(grid_col_coord == 0) {
-		/* if process 0 */
-		if (grid_row_coord == 0) {
-		/* copy vector block */
-			memcpy(*v, b, (*nfinal) * datum_size);
-		}
-		else {
-			/* Set coordinates */
-			dest_coords[0] = grid_col_coord;
-			dest_coords[1] = grid_row_coord;
-			/* Get rank of destinating process */
-			MPI_Cart_rank (grid_comm, dest_coords, &dest_id);
-			/* Send vector block */
-			MPI_Send (b, *nfinal, dtype, dest_id, DATA_MSG, grid_comm);
-		}
-	}
-	/* if process of first grid row (except process 0) */
-	else if (grid_row_coord == 0) {
-		/* Set coordinates */
-		sent_coords[0] = grid_col_coord;
-		sent_coords[1] = grid_row_coord;
-		/* Get rank of sending process */
-		MPI_Cart_rank (grid_comm, sent_coords, &sent_id);
-		/* Receive vector block */
-		MPI_Recv (*v, *nfinal, dtype, sent_id, DATA_MSG, grid_comm, &status);
-	}
-	/* Broadcast blocks from first row per column */
-	/* Split grid communicator into column communicator */
-	MPI_Comm_split (grid_comm, grid_col_coord, grid_row_coord, &column_comm);
-	/* Broadcast vector block per column */
-	MPI_Bcast (*v, *nfinal, dtype, 0, column_comm);
+  MPI_Comm_rank(MPI_COMM_WORLD, ¶ms.mpiRank);
+  MPI_Comm_size(MPI_COMM_WORLD, ¶ms.mpiSize);
+
+  if (params.mpiRank)
+    IsPrintEnabled = 0;
+
+  if (!params.mpiRank)
+    printf("Hello from %s method\n", methodName);
+
+  int N = atoi(argv[1]);
+
+  params.matrixWidth = N;
+  params.matrixHeight = N;
+  params.delta = 0.1;
+  params.mainMatrix = CreateMatrix(N);
+
+  GZ_Par(N, params);  
+
+  MPI_Finalize();
+
+  return 0;
 }
-/* if p is not a square number (grid_rows != grid_cols) */
-else { } //not implemented
+
+int GZ_Par(int N, TParams params)
+{
+  if (initMethod(params))
+  {
+    printf("Error in initialization. Exit\n");
+    return NULL;
+  }
+  
+  MPI_Barrier(MPI_COMM_WORLD);
+  double timeStart = MPI_Wtime();
+  double currDelta, delta;
+  
+  // Main Loop
+  int steps;
+  for (steps = 0; steps < MAX_STEPS; steps++ )
+  {
+    currDelta = zeidelIteration(params);
+    exchangeData(params);
+    MPI_Allreduce(&currDelta, &delta, 1, MPI_DOUBLE, MPI_MAX, MPI_COMM_WORLD);
+    if (delta <= params.delta)
+      break;
+  }
+  getData(params);
+  MPI_Barrier(MPI_COMM_WORLD);
+  double timeFinish = MPI_Wtime();
+
+  if (!params.mpiRank && IsPrintEnabled)
+    PrintMatrix(params.mainMatrix, N);
+
+  deinitMethod(params);
+
+  if (!params.mpiRank)
+    printf("Results:\r\n- current eps = %f\r\n- required eps = %f\r\n- matrix Size = %d\r\n- iterations = %d\r\n- time = %f\r\n",
+      delta, params.delta, N, steps, timeFinish - timeStart);
+
+  return 0;
 }
+
+// init methods data, types etc.
+int initMethod(TParams params)
+{
+  mpiSsize = 0;
+
+  for (int i = 0; i < 10; i++)
+    if (i * i + 1 == params.mpiSize)
+      mpiSsize = i;
+  if (!mpiSsize)
+  {
+    printf("Sorry, yours machine's count (%d != x*x+1) is not supports\n", params.mpiSize);
+    return 1;
+  }
+  
+  if (!params.mpiRank)
+  {
+    int BW = (params.matrixWidth - 2) / mpiSsize + 2;
+    int BH = (params.matrixHeight - 2) / mpiSsize + 2;
+    TParams pars;
+    pars.matrixWidth = BW;
+    pars.matrixHeight = BH;
+    pars.mainMatrix = NULL;
+    pars.anotherMatrix = NULL;
+    pars.delta = params.delta;
+    pars.mpiRank = -1;
+    pars.mpiSize = -1;
+    for(int i = 1; i < params.mpiSize; i++)
+      MPI_Send(&pars, sizeof(pars), MPI_BYTE, i, 1, MPI_COMM_WORLD);
+    
+    MPI_Type_vector(BH, BW, params.matrixWidth, MPI_DOUBLE, &BlockType);
+    MPI_Type_commit(&BlockType);
+    int c = 1;
+    for (i = 0; i < mpiSsize; i++)
+      for (int j = 0; j < mpiSsize; j++)
+        MPI_Send(params.mainMatrix + i * params.matrixWidth * (BH - 2) +
+        j * (BW - 2), 1, BlockType, c++, 2, MPI_COMM_WORLD);
+  }
+  else
+  {
+    MPI_Status status;
+    MPI_Recv(¶ms, sizeof(params), MPI_BYTE, 0, 1, MPI_COMM_WORLD, &status);
+    params.mainMatrix = new double [params.matrixWidth * params.matrixHeight];
+    MPI_Recv(params.mainMatrix, params.matrixWidth * params.matrixHeight,
+      MPI_DOUBLE, 0, 2, MPI_COMM_WORLD, &status);
+    MPI_Type_vector(params.matrixHeight, 1, params.matrixWidth, MPI_DOUBLE, &VectorType);
+    MPI_Type_commit(&VectorType);
+  }
+  return 0;
+}
+
+// exchange with edges of matrix
+int exchangeData(TParams params)
+{
+  int c = 1;
+  MPI_Status status;
+  for (int i = 0; i < mpiSsize; i++)
+    for (int j = 0; j < mpiSsize; j++)
+    {
+      if (params.mpiRank == c++)
+      {
+        int right  = (j == mpiSsize - 1)? MPI_PROC_NULL : i * mpiSsize + j + 1 + 1;
+        int left   = (j == 0)? MPI_PROC_NULL : i * mpiSsize + j - 1 + 1;
+        int bottom = (i == mpiSsize - 1)? MPI_PROC_NULL : (i + 1) * mpiSsize + j + 1;
+        int top    = (i == 0)? MPI_PROC_NULL : (i - 1) * mpiSsize + j + 1;
+        MPI_Sendrecv(params.mainMatrix + params.matrixWidth * (params.matrixHeight - 2),
+          params.matrixWidth, MPI_DOUBLE, bottom, 4, params.mainMatrix, params.matrixWidth,
+          MPI_DOUBLE, top, 4, MPI_COMM_WORLD, &status);
+        MPI_Sendrecv(params.mainMatrix + params.matrixWidth, params.matrixWidth, MPI_DOUBLE, top, 5,
+          params.mainMatrix + (params.matrixHeight - 1) * params.matrixWidth, params.matrixWidth,
+          MPI_DOUBLE, bottom, 5, MPI_COMM_WORLD, &status);
+        MPI_Sendrecv(params.mainMatrix + params.matrixWidth - 2, 1, VectorType, right, 6,
+          params.mainMatrix, 1, VectorType, left, 6, MPI_COMM_WORLD, &status);
+        MPI_Sendrecv(params.mainMatrix + 1, 1, VectorType, left, 7, params.mainMatrix +
+          params.matrixWidth - 1, 1, VectorType, right, 7, MPI_COMM_WORLD, &status);
+      }
+    }
+
+  return 0;
+}
+
+// Zeidel iteration
+int zeidelIteration(TParams params)
+{
+  double * A = params.mainMatrix;
+
+  //    printf("Seidel Iteration");
+  if (params.mpiRank)
+  {
+    double OldValue, CurrentAccuracy, Accuracy = 0.0;
+    for (int i = 1; i < params.matrixHeight - 1; i++)
+      for (int j = 1; j < params.matrixWidth - 1; j++)
+      {
+        OldValue = A[i * params.matrixWidth + j];
+        A[i * params.matrixWidth + j] = 0.25 * (A[(i - 1) * params.matrixWidth + j]
+          + A[(i + 1) * params.matrixWidth + j] + A[i * params.matrixWidth + j - 1]
+          + A[i * params.matrixWidth + j + 1]);
+        CurrentAccuracy = fabs(A[i * params.matrixWidth + j] - OldValue);
+        if (Accuracy < CurrentAccuracy)
+          Accuracy = CurrentAccuracy;
+      }
+      return Accuracy;
+  }
+  return 0;
+}
+
+// delete matrix
+int deinitMethod(TParams params)
+{
+  if (params.mpiRank)
+  {
+    MPI_Type_free(&VectorType);
+    delete [] params.mainMatrix;
+  }
+  else
+    MPI_Type_free(&BlockType);
+  return 0;
+}
+
+// receive all computed data from slaves to master
+int getData(TParams params)
+{
+  if (!params.mpiRank)
+  {
+    MPI_Status status;
+    int BW = (params.matrixWidth - 2) / mpiSsize + 2;
+    int BH = (params.matrixHeight - 2) / mpiSsize + 2;
+    int c = 1;
+    for (int i = 0; i < mpiSsize; i++)
+      for (int j = 0; j < mpiSsize; j++)
+        MPI_Recv(params.mainMatrix + i * params.matrixWidth * (BH - 2) +
+        j * (BW - 2), 1, BlockType, c++, 1234, MPI_COMM_WORLD, &status);
+  }
+  else
+  {
+    MPI_Send(params.mainMatrix, params.matrixWidth * params.matrixHeight,
+      MPI_DOUBLE, 0, 1234, MPI_COMM_WORLD);
+  }
+
+  return 0;
+}
+
