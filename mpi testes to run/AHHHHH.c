@@ -2,6 +2,9 @@
 #include <stdlib.h>
 #include <mpi.h>
 
+int rank, size;
+int my_coords[3];
+
 void My_MPI_Cart_Shift(MPI_Comm cart_comm, int pos_x, int pos_y, int idk, int idk2, int *source, int*dest)
 {
     MPI_Comm_rank(cart_comm, &rank);
@@ -15,8 +18,7 @@ void My_MPI_Cart_Shift(MPI_Comm cart_comm, int pos_x, int pos_y, int idk, int id
     my_coords[2]= my_coords2 -pos_y;
     MPI_Cart_rank(cart_comm, my_coords, source);
 }
-int rank, size;
-int my_coords[3];
+
 int main(int argc, char *argv[]) {
     
 
