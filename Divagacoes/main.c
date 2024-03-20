@@ -6,12 +6,15 @@
 #define HEIGHT 12
 #define DEPTH 12
 
+int valor = 0;
+
 // Function to initialize the 3D matrix
 void initializeMatrix(int matrix[WIDTH][HEIGHT][DEPTH]) {
     for (int x = 0; x < WIDTH; ++x) {
         for (int y = 0; y < HEIGHT; ++y) {
             for (int z = 0; z < DEPTH; ++z) {
-                matrix[x][y][z] = x + y + z; // Example initialization
+                matrix[x][y][z] = valor; // Example initialization
+                ++valor;
             }
         }
     }
@@ -43,15 +46,34 @@ int main(int argc, char** argv) {
     int subHeight = HEIGHT / size;
     int subDepth = DEPTH / size;
 
-    // Check if the number of processes is compatible with the matrix dimensions
-    if (WIDTH % size != 0 || HEIGHT % size != 0 || DEPTH % size != 0) {
-        if (rank == 0) {
-            printf("Error: Number of processes must evenly divide matrix dimensions.\n");
-        }
-        MPI_Finalize();
-        return 1;
+    // Calculate the remaining elements if dimensions are not evenly divisible
+    int remainderWidth = WIDTH % size;
+    int remainderHeight = HEIGHT % size;
+    int remainderDepth = DEPTH % size;
+
+    // Adjust the sub-matrix size if there's a remainder
+    if (rank < remainderWidth) {
+        subWidth++;
+    }
+    if (rank >= size - remainderWidth) {
+        subWidth--;
     }
 
+    if (rank < remainderHeight) {
+        subHeight++;
+    }
+    if (rank >= size - remainderHeight) {
+        subHeight--;
+    }
+
+    if (rank < remainderDepth) {
+        subDepth++;
+    }
+    if (rank >= size - remainderDepth) {
+        subDepth--;
+    }
+
+    // Allocate memory for sub-matrix
     int subMatrix[subWidth][subHeight][subDepth];
 
     // Initialize the 3D matrix on process 0
