@@ -502,7 +502,7 @@ int main(int argc, char *argv[]) {
     }
 */
 
-  for (int i = 0; i < size; i++) {
+/*  for (int i = 0; i < size; i++) {
         if (rank == i) {
             printf("Rank %d is runing...\n", rank);
             
@@ -521,10 +521,19 @@ int main(int argc, char *argv[]) {
 			/*for (int k = start_layer; k < end_layer; k++) {
                 
 				
-            }*/
+            }
         }
         MPI_Barrier(MPI_COMM_WORLD);
     }
+*/
+
+if (rank == 0){
+	grid_odd =  gen_initial_grid(number_of_cells, density, seed);
+}
+
+if (rank == 1){
+	grid_odd =  gen_initial_grid(number_of_cells, density, seed);
+}
 
 
     MPI_Comm_free(&cart_comm);
