@@ -42,24 +42,25 @@ int main(int argc, char *argv[]) {
     MPI_Cart_coords(cart_comm, rank, 3, my_coords);
     // IMPORTANTE: COORD 0 - CAMADA, COORD 1 - COLUNA, COORD 2- LINHA
     //IMPORTANTE: NAO PRECISO DE VERTICES, MAS SIM DE ARESTAS + FACES.
+    //IMPORTANTE: ACHO QUE AFINAL PRECISO DE VERTICES TAMBEM...
     //IMPORATNTE: FACE DIREITA X=0,Y MUDA, Z MUDA
     //IMPORATNTE: FACE FRENTE X MUDA,Y=0, Z MUDA
     //IMPORTANTE: FACE ESQUERDA X=N, Y MUDA, Z MUDA
     //IMPORTANTE: FACE TRAS X MUDA, Y =N, Z MUDA
     //IMPORTANTE: FACE CIMA X MUDA, Y MUDA, Z=0
     //IMPORTANTE: FACE BAIXA X MUDA, Y MUDA, Z =N
-    //IMPORTANTE: DIAGONAL CIMA DIREITA: X=0, Y MUDA, Z=0
-    //IMPORTANTE: DIAGONAL CIMA FRENTE: X MUDA, Y=0, Z=0
-    //IMPORTANTE: DIAGONAL CIMA ESQUERDA: X=N, Y=0, Z=0
-    //IMPORTANTE: DIAGONAL CIMA FRENTE: X MUDA, Y=N, Z=0
-    //IMPORTANTE: DIAGONAL MEIO FRENTE_DIR: X=0, Y=0, Z MUDA
-    //IMPORTANTE: DIAGONAL MEIO TRAS_DIR: X=0, Y=N, Z MUDA
-    //IMPORTANTE: DIAGONAL MEIO FRENTE_ESQ: X=N, Y=0, Z MUDA
-    //IMPORTANTE: DIAGONAL MEIO TRAS_ESQ: X=N, Y=N, Z MUDA
-    //IMPORTANTE: DIAGONAL BAIXA DIREITA: X=0, Y MUDA, Z=N
-    //IMPORTANTE: DIAGONAL BAIXA FRENTE: X MUDA, Y=0, Z=N
-    //IMPORTANTE: DIAGONAL BAIXA ESQUERDA: X=N, Y=0, Z=N
-    //IMPORTANTE: DIAGONAL BAIXA FRENTE: X MUDA, Y=N, Z=N
+    //IMPORTANTE: ARESTA CIMA DIREITA: X=0, Y MUDA, Z=0
+    //IMPORTANTE: ARESTA CIMA FRENTE: X MUDA, Y=0, Z=0
+    //IMPORTANTE: ARESTA CIMA ESQUERDA: X=N, Y=MUDA, Z=0
+    //IMPORTANTE: ARESTA CIMA FRENTE: X MUDA, Y=N, Z=0
+    //IMPORTANTE: ARESTA MEIO FRENTE_DIR: X=0, Y=0, Z MUDA
+    //IMPORTANTE: ARESTA MEIO TRAS_DIR: X=0, Y=N, Z MUDA
+    //IMPORTANTE: ARESTA MEIO FRENTE_ESQ: X=N, Y=0, Z MUDA
+    //IMPORTANTE: ARESTA MEIO TRAS_ESQ: X=N, Y=N, Z MUDA
+    //IMPORTANTE: ARESTA BAIXA DIREITA: X=0, Y MUDA, Z=N
+    //IMPORTANTE: ARESTA BAIXA FRENTE: X MUDA, Y=0, Z=N
+    //IMPORTANTE: ARESTA BAIXA ESQUERDA: X=N, Y=0, Z=N
+    //IMPORTANTE: ARESTA BAIXA FRENTE: X MUDA, Y=N, Z=N
     // Get neighbors
     int up_rank, down_rank, left_rank, right_rank, forward_rank, backward_rank, diag_rank, source_rank;
     MPI_Cart_shift(cart_comm, 0, 1, &up_rank, &down_rank);  
@@ -106,7 +107,19 @@ int main(int argc, char *argv[]) {
     for( aux=0; aux < dims[2]; aux++)
     {
         //printf("rank: %d, SUPPOSED TO SEND %d\n",rank, data_send[0][aux]);
-        MPI_Sendrecv(&data_send[0][aux][0], dims[2], MPI_INT, source_rank, 0, &data_recv_down[0][aux][0], dims[2], MPI_INT, diag_rank, 0, cart_comm, MPI_STATUS_IGNORE);
+        //My_MPI_Cart_Shift(cart_comm, 2, 1, 0, 1, 1, 1, &source_rank, &diag_rank); // dir tras cima
+        My_MPI_Cart_Shift(cart_comm, 2, 1, 0, 1, 0, 1, &source_rank, &diag_rank); // dir cima
+        MPI_Sendrecv(&data_send[0][aux][0], dims[2], MPI_INT, source_rank, 0, &data_recv_down[0][aux][0], dims[2], MPI_INT, diag_rank, 0, cart_comm, MPI_STATUS_IGNORE); // AR cima dir
+        My_MPI_Cart_Shift(cart_comm, 2, 1, 0, 0, -1, 1, &source_rank, &diag_rank); // frente cima
+        MPI_Sendrecv(&data_send[aux][0][0], dims[2], MPI_INT, source_rank, 0, &data_recv_down[aux][0][0], dims[2], MPI_INT, diag_rank, 0, cart_comm, MPI_STATUS_IGNORE); // AR cima fre
+        /*
+        MPI_Sendrecv(&data_send[dims[2]][aux][0], dims[2], MPI_INT, source_rank, 0, &data_recv_down[dims[2]][aux][0], dims[2], MPI_INT, diag_rank, 0, cart_comm, MPI_STATUS_IGNORE); // AR cima fre
+        MPI_Sendrecv(&data_send[aux][0][0], dims[2], MPI_INT, source_rank, 0, &data_recv_down[aux][0][0], dims[2], MPI_INT, diag_rank, 0, cart_comm, MPI_STATUS_IGNORE); // AR cima fre
+        MPI_Sendrecv(&data_send[aux][0][0], dims[2], MPI_INT, source_rank, 0, &data_recv_down[aux][0][0], dims[2], MPI_INT, diag_rank, 0, cart_comm, MPI_STATUS_IGNORE); // AR cima fre
+        MPI_Sendrecv(&data_send[aux][0][0], dims[2], MPI_INT, source_rank, 0, &data_recv_down[aux][0][0], dims[2], MPI_INT, diag_rank, 0, cart_comm, MPI_STATUS_IGNORE); // AR cima fre
+        MPI_Sendrecv(&data_send[aux][0][0], dims[2], MPI_INT, source_rank, 0, &data_recv_down[aux][0][0], dims[2], MPI_INT, diag_rank, 0, cart_comm, MPI_STATUS_IGNORE); // AR cima fre
+        MPI_Sendrecv(&data_send[aux][0][0], dims[2], MPI_INT, source_rank, 0, &data_recv_down[aux][0][0], dims[2], MPI_INT, diag_rank, 0, cart_comm, MPI_STATUS_IGNORE); // AR cima fre
+        */
         //printf("Process %d, down: %d\n", rank, data_recv_down[0][aux]);
         
     }
@@ -130,7 +143,8 @@ int main(int argc, char *argv[]) {
     {
         for(aux=0;aux<dims[2];aux++)
         {
-            printf("rank: %d, SUPPOSED TO RECEIVE (aux %d) %d\n",rank,aux, data_recv_down[0][aux][0]);
+            printf("rank: %d, SUPPOSED TO RECEIVE DIR CIMA (aux %d) %d\n",rank,aux, data_recv_down[0][aux][0]);
+            printf("rank: %d, SUPPOSED TO RECEIVE FRENTE CIMA (aux %d) %d\n",rank,aux  &data_recv_down[aux][0][0]);
             //printf("rank: %d, SUPPOSED TO RECEIVE (aux %d) %d\n",rank,aux, data_recv_down[0][aux][1]);
             //printf("rank: %d, SUPPOSED TO RECEIVE (aux %d) %d\n",rank,aux, data_recv_down[0][aux][2]);
         }
