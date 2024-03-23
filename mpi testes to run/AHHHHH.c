@@ -64,7 +64,7 @@ int main(int argc, char *argv[]) {
     //IMPORTANTE: ARESTA BAIXA FRENTE: X MUDA, Y=N, Z=N
     // Get neighbors
     int cima_rank, baixo_rank, esq_rank, dir_rank, frente_rank, tras_rank;
-    int dir_cima_rank, esq_baixo_rank, frente_cima_rank, tras_baixo_rank;
+    int dir_cima_rank, esq_baixo_rank,dir_baixo_rank, esq_cima_rank, frente_cima_rank, tras_baixo_rank;
 
     //MPI_Cart_shift(cart_comm, 0, 1, &up_rank, &down_rank);  
     //MPI_Cart_shift(cart_comm, 1, 1, &left_rank, &right_rank);
@@ -124,6 +124,7 @@ int main(int argc, char *argv[]) {
     int data_recv_up, data_recv_left, data_recv_right, data_recv_forward, data_recv_backward;
     //My_MPI_Cart_Shift(cart_comm, 2, 1, 0, 0, 1, 1, &source_rank, &diag_rank); // frente cima
     My_MPI_Cart_Shift(cart_comm, 2, 1, 0, 1, 0, 1, &esq_baixo_rank, &dir_cima_rank); // DIAG DIR CIMA/ ESQ BAIXO
+    My_MPI_Cart_Shift(cart_comm, 2, 1, 0, -1, 0, -1, &esq_cima_rank, &dir_baixo_rank); // DIAG DIR BAIXO/ ESQ CIMA
     My_MPI_Cart_Shift(cart_comm, 2, 1, 0, 0, TAMANHO_GRID-1, 1, &tras_baixo_rank, &frente_cima_rank); // DIAG FRENTE CIMA / TRAS BAIXO
     My_MPI_Cart_Shift(cart_comm, 2, 1, 0, 1, 0, 0, &esq_rank, &dir_rank); // FACE DIR/ESQ
     
@@ -133,6 +134,7 @@ int main(int argc, char *argv[]) {
         {
             MPI_Sendrecv(&data_send[aux_z][aux_y][0], dims[2], MPI_INT, esq_rank, 0, &data_recv_dir[aux_z+1][aux_y], dims[2], MPI_INT, dir_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir
             MPI_Sendrecv(&data_send[0][aux_y][0], dims[2], MPI_INT, esq_baixo_rank, 0, &data_recv_dir[TAMANHO_GRID+1][aux_y], dims[2], MPI_INT, dir_cima_rank, 0, cart_comm, MPI_STATUS_IGNORE); // AR dir cima
+            MPI_Sendrecv(&data_send[TAMANHO_GRID-1][aux_y][TAMANHO_GRID-1], dims[2], MPI_INT, esq_cima_rank, 0, &data_recv_dir[TAMANHO_GRID-1][aux_y], dims[2], MPI_INT, dir_baixo_rank, 0, cart_comm, MPI_STATUS_IGNORE); // AR dir cima
             for(aux_x=0;aux_x<TAMANHO_GRID; aux_x++)
             {
                 //
