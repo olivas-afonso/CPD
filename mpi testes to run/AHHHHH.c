@@ -106,7 +106,7 @@ int main(int argc, char *argv[]) {
     for( aux=0; aux < dims[2]; aux++)
     {
         //printf("rank: %d, SUPPOSED TO SEND %d\n",rank, data_send[0][aux]);
-        MPI_Sendrecv(&data_send[0][0][aux], dims[2], MPI_INT, source_rank, 0, &data_recv_down[0][0][aux], dims[2], MPI_INT, diag_rank, 0, cart_comm, MPI_STATUS_IGNORE);
+        MPI_Sendrecv(&data_send[0][aux][0], dims[2], MPI_INT, source_rank, 0, &data_recv_down[0][aux][0], dims[2], MPI_INT, diag_rank, 0, cart_comm, MPI_STATUS_IGNORE);
         //printf("Process %d, down: %d\n", rank, data_recv_down[0][aux]);
         
     }
@@ -131,8 +131,8 @@ int main(int argc, char *argv[]) {
         for(aux=0;aux<dims[2];aux++)
         {
             printf("rank: %d, SUPPOSED TO RECEIVE (aux %d) %d\n",rank,aux, data_recv_down[0][aux][0]);
-            printf("rank: %d, SUPPOSED TO RECEIVE (aux %d) %d\n",rank,aux, data_recv_down[0][aux][1]);
-            printf("rank: %d, SUPPOSED TO RECEIVE (aux %d) %d\n",rank,aux, data_recv_down[0][aux][2]);
+            //printf("rank: %d, SUPPOSED TO RECEIVE (aux %d) %d\n",rank,aux, data_recv_down[0][aux][1]);
+            //printf("rank: %d, SUPPOSED TO RECEIVE (aux %d) %d\n",rank,aux, data_recv_down[0][aux][2]);
         }
     }
 
