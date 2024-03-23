@@ -201,7 +201,7 @@ int main(int argc, char *argv[]) {
             //printf("rank: %d, SUPPOSED TO RECEIVE ESQ BAIXO (aux %d) %d\n",rank,aux, data_recv_down[TAMANHO_GRID-1][aux][TAMANHO_GRID-1]);
 
         }
-
+        printf("\n");
         for(aux_z=0;aux_z<(TAMANHO_GRID+2);aux_z++)
         {
             for(aux_y=0;aux_y<TAMANHO_GRID;aux_y++)
