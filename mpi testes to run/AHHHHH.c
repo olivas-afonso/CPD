@@ -128,9 +128,9 @@ int main(int argc, char *argv[]) {
     {
         for(aux=0;aux<dims[2];aux++)
         {
-            printf("rank: %d, SUPPOSED TO RECEIVE (FROM 0) %d\n",rank, data_recv_down[0][aux][0]);
-            printf("rank: %d, SUPPOSED TO RECEIVE (FROM 1) %d\n",rank, data_recv_down[0][aux][1]);
-            printf("rank: %d, SUPPOSED TO RECEIVE (FROM 2) %d\n",rank, data_recv_down[0][aux][2]);
+            printf("rank: %d, SUPPOSED TO RECEIVE (aux %d) %d\n",rank,aux, data_recv_down[0][aux][0]);
+            printf("rank: %d, SUPPOSED TO RECEIVE (aux %d) %d\n",rank,aux, data_recv_down[0][aux][1]);
+            printf("rank: %d, SUPPOSED TO RECEIVE (aux %d) %d\n",rank,aux, data_recv_down[0][aux][2]);
         }
     }
 
