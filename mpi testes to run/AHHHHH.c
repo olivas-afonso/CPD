@@ -158,8 +158,8 @@ int main(int argc, char *argv[]) {
     {
         for(aux=0;aux<dims[2];aux++)
         {
-            //printf("rank: %d, SUPPOSED TO RECEIVE FRENTE CIMA (aux %d) %d\n",rank,aux, data_recv_down[0][0][aux]);
-            //printf("rank: %d, SUPPOSED TO RECEIVE TRAS BAIXO (aux %d) %d\n",rank,aux, data_recv_down[TAMANHO_GRID-1][TAMANHO_GRID-1][aux]);
+            printf("rank: %d, SUPPOSED TO RECEIVE FRENTE CIMA (aux %d) %d\n",rank,aux, data_recv_down[0][0][aux]);
+            printf("rank: %d, SUPPOSED TO RECEIVE TRAS BAIXO (aux %d) %d\n",rank,aux, data_recv_down[TAMANHO_GRID-1][TAMANHO_GRID-1][aux]);
 
             printf("rank: %d, SUPPOSED TO RECEIVE DIR CIMA (aux %d) %d\n",rank,aux, data_recv_down[0][aux][0]);
             printf("rank: %d, SUPPOSED TO RECEIVE ESQ BAIXO (aux %d) %d\n",rank,aux, data_recv_down[TAMANHO_GRID-1][aux][TAMANHO_GRID-1]);
