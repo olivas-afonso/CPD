@@ -148,15 +148,20 @@ int main(int argc, char *argv[]) {
     for( aux_z=0; aux_z < TAMANHO_GRID; aux_z++)
     {
 
-        //FACE DIREITA
+        //FACE DIREITA DIAGS
         MPI_Sendrecv(&data_send[0][aux_z][0], dims[2], MPI_INT, esq_baixo_rank, 0, &data_recv_dir[TAMANHO_GRID+1][aux_z], dims[2], MPI_INT, dir_cima_rank, 0, cart_comm, MPI_STATUS_IGNORE); // AR dir cima
         MPI_Sendrecv(&data_send[TAMANHO_GRID-1][aux_z][0], dims[2], MPI_INT, esq_cima_rank, 0, &data_recv_dir[0][aux_z], dims[2], MPI_INT, dir_baixo_rank, 0, cart_comm, MPI_STATUS_IGNORE); // AR dir baixo
 
-        //FACE CIMA
+        //FACE CIMA DIAGS
         MPI_Sendrecv(&data_send[0][aux_z][TAMANHO_GRID-1], dims[2], MPI_INT, dir_baixo_rank, 0, &data_recv_cima[TAMANHO_GRID+1][aux_z], dims[2], MPI_INT, esq_cima_rank, 0, cart_comm, MPI_STATUS_IGNORE); // AR esq baixo
+        
+        //FACE ESQUERDA DIAGS
+        MPI_Sendrecv(&data_send[TAMANHO_GRID-1][aux_z][TAMANHO_GRID-1], dims[2], MPI_INT, dir_cima_rank, 0, &data_recv_esq[0][aux_z], dims[2], MPI_INT, esq_baixo_rank, 0, cart_comm, MPI_STATUS_IGNORE); // AR esq baixo
+        MPI_Sendrecv(&data_send[0][aux_z][TAMANHO_GRID-1], dims[2], MPI_INT, dir_baixo_rank, 0, &data_recv_esq[TAMANHO_GRID+1][aux_z], dims[2], MPI_INT, esq_cima_rank, 0, cart_comm, MPI_STATUS_IGNORE); // AR esq baixo
+
         for (aux_y=0; aux_y<TAMANHO_GRID; aux_y++)
         {
-            //FACE DIREITA INTEIRA
+            //FACE DIREITA 
             MPI_Sendrecv(&data_send[aux_z][aux_y][0], dims[2], MPI_INT, esq_rank, 0, &data_recv_dir[aux_z+1][aux_y], dims[2], MPI_INT, dir_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir
     
             
@@ -164,17 +169,15 @@ int main(int argc, char *argv[]) {
 
             //FACE ESQUERDA
             MPI_Sendrecv(&data_send[aux_z][aux_y][TAMANHO_GRID-1], dims[2], MPI_INT, dir_rank, 0, &data_recv_esq[aux_z+1][aux_y], dims[2], MPI_INT, esq_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir
-            MPI_Sendrecv(&data_send[TAMANHO_GRID-1][aux_y][TAMANHO_GRID-1], dims[2], MPI_INT, dir_cima_rank, 0, &data_recv_esq[0][aux_y], dims[2], MPI_INT, esq_baixo_rank, 0, cart_comm, MPI_STATUS_IGNORE); // AR esq baixo
-            MPI_Sendrecv(&data_send[0][aux_y][TAMANHO_GRID-1], dims[2], MPI_INT, dir_baixo_rank, 0, &data_recv_esq[TAMANHO_GRID+1][aux_y], dims[2], MPI_INT, esq_cima_rank, 0, cart_comm, MPI_STATUS_IGNORE); // AR esq baixo
             
-
-            
+            //FACE CIMA
+            MPI_Sendrecv(&data_send[0][aux_z][aux_y], dims[2], MPI_INT, baixo_rank, 0, &data_recv_cima[aux_z+1][aux_y], dims[2], MPI_INT, cima_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir            
 
 
             for(aux_x=0;aux_x<TAMANHO_GRID; aux_x++)
             {
                 //FACE CIMA
-                MPI_Sendrecv(&data_send[0][aux_y][aux_x], dims[2], MPI_INT, baixo_rank, 0, &data_recv_cima[aux_y+1][aux_x], dims[2], MPI_INT, cima_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir
+                //MPI_Sendrecv(&data_send[0][aux_y][aux_x], dims[2], MPI_INT, baixo_rank, 0, &data_recv_cima[aux_y+1][aux_x], dims[2], MPI_INT, cima_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir
                 
             }
         }
