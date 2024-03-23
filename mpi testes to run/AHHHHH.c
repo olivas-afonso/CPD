@@ -85,7 +85,7 @@ int main(int argc, char *argv[]) {
         for (int j = 0; j < dims[1]; ++j) {
             data_send[i][j] = (int *)malloc(dims[2] * sizeof(int));
             for (int k = 0; k < dims[2]; ++k) {
-                data_send[i][j][k]=rank*1000 + k;
+                data_send[i][j][k]=rank*1000 +k;
                 //data_send[i][j][k] = rank + my_coords[0] * 100 + my_coords[1] * 1000 + my_coords[2] * 10000;  // Example data
             }
         }
@@ -104,7 +104,7 @@ int main(int argc, char *argv[]) {
     for( aux=0; aux < dims[2]; aux++)
     {
         //printf("rank: %d, SUPPOSED TO SEND %d\n",rank, data_send[0][aux]);
-        MPI_Sendrecv(data_send[0][aux][0], dims[2], MPI_INT, source_rank, 0, data_recv_down[0][aux][0], dims[2], MPI_INT, diag_rank, 0, cart_comm, MPI_STATUS_IGNORE);
+        MPI_Sendrecv(&data_send[0][aux][0], dims[2], MPI_INT, source_rank, 0, &data_recv_down[0][aux][0], dims[2], MPI_INT, diag_rank, 0, cart_comm, MPI_STATUS_IGNORE);
         //printf("Process %d, down: %d\n", rank, data_recv_down[0][aux]);
         
     }
