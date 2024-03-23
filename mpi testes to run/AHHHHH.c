@@ -63,11 +63,13 @@ int main(int argc, char *argv[]) {
     //IMPORTANTE: ARESTA BAIXA ESQUERDA: X=N, Y=0, Z=N
     //IMPORTANTE: ARESTA BAIXA FRENTE: X MUDA, Y=N, Z=N
     // Get neighbors
-    int up_rank, down_rank, left_rank, right_rank, forward_rank, backward_rank;
+    int cima_rank, baixo_rank, esq_rank, dir_rank, frente_rank, tras_rank;
     int dir_cima_rank, esq_baixo_rank, frente_cima_rank, tras_baixo_rank;
-    MPI_Cart_shift(cart_comm, 0, 1, &up_rank, &down_rank);  
-    MPI_Cart_shift(cart_comm, 1, 1, &left_rank, &right_rank);
-    MPI_Cart_shift(cart_comm, 2, 1, &forward_rank, &backward_rank);
+
+    //MPI_Cart_shift(cart_comm, 0, 1, &up_rank, &down_rank);  
+    //MPI_Cart_shift(cart_comm, 1, 1, &left_rank, &right_rank);
+    //MPI_Cart_shift(cart_comm, 2, 1, &forward_rank, &backward_rank);
+
     //MPI_Cart_shift(cart_comm, 2, 2, &source_rank, &diag_rank);
     //My_MPI_Cart_Shift(cart_comm, 1, 1, 2, 1, &source_rank, &diag_rank);
     //printf("ANTES\n");
@@ -96,7 +98,7 @@ int main(int argc, char *argv[]) {
         }
     }
 
-    int ***data_recv_down = (int ***)malloc(TAMANHO_GRID * sizeof(int **));
+    int **data_recv_down = (int ***)malloc(TAMANHO_GRID * sizeof(int **));
     for (int i = 0; i < TAMANHO_GRID; ++i) {
         data_recv_down[i] = (int **)malloc(TAMANHO_GRID * sizeof(int *));
         for (int j = 0; j < TAMANHO_GRID; ++j) {
@@ -109,23 +111,34 @@ int main(int argc, char *argv[]) {
         }
     }
 
-    int aux;
+    int aux_x, aux_y, aux_z;
     int data_recv_up, data_recv_left, data_recv_right, data_recv_forward, data_recv_backward;
     //My_MPI_Cart_Shift(cart_comm, 2, 1, 0, 0, 1, 1, &source_rank, &diag_rank); // frente cima
     My_MPI_Cart_Shift(cart_comm, 2, 1, 0, 1, 0, 1, &esq_baixo_rank, &dir_cima_rank); // dir tras cima
     My_MPI_Cart_Shift(cart_comm, 2, 1, 0, 0, TAMANHO_GRID-1, 1, &tras_baixo_rank, &frente_cima_rank); // dir tras cima
+    My_MPI_Cart_Shift(cart_comm, 2, 1, 0, 0, 0, 1, &esq_rank, &dir_rank); // dir tras cima
     
-    for( aux=0; aux < dims[2]; aux++)
+    for( aux_z=0; aux_z < TAMANHO_GRID; aux_z++)
     {
-        //printf("rank: %d, SUPPOSED TO SEND %d\n",rank, data_send[0][aux]);
+        for (aux_y=0; aux_y<TAMANHO_GRID; aux_y++)
+        {
+            MPI_Sendrecv(&data_send[aux_z][aux_y][TAMANHO_GRID-1], dims[2], MPI_INT, esq_rank, 0, &data_recv_down[aux_z][aux_y][TAMANHO_GRID-1], dims[2], MPI_INT, dir_rank, 0, cart_comm, MPI_STATUS_IGNORE); // AR dir cima
+
+            for(aux_x=0;aux_x<TAMANHO_GRID; aux_x++)
+            {
+                //
+            }
+        }
         
-        //My_MPI_Cart_Shift(cart_comm, 2, 1, 0, 1, 0, 1, &source_rank, &diag_rank); // dir cima
-        //My_MPI_Cart_Shift(cart_comm, 2, 1, 0, 0, dims[2]-1, 1, &source_rank, &dir_frente_rank); // dir tras cima
-        MPI_Sendrecv(&data_send[0][0][aux], dims[2], MPI_INT, tras_baixo_rank, 0, &data_recv_down[0][0][aux], dims[2], MPI_INT, frente_cima_rank, 0, cart_comm, MPI_STATUS_IGNORE); // AR fre cima
-        MPI_Sendrecv(&data_send[TAMANHO_GRID-1][TAMANHO_GRID-1][aux], dims[2], MPI_INT, frente_cima_rank, 0, &data_recv_down[TAMANHO_GRID-1][TAMANHO_GRID-1][aux], dims[2], MPI_INT, tras_baixo_rank, 0, cart_comm, MPI_STATUS_IGNORE); // AR tras baixo
         
-        MPI_Sendrecv(&data_send[0][aux][0], dims[2], MPI_INT, esq_baixo_rank, 0, &data_recv_down[0][aux][0], dims[2], MPI_INT, dir_cima_rank, 0, cart_comm, MPI_STATUS_IGNORE); // AR dir cima
-        MPI_Sendrecv(&data_send[TAMANHO_GRID-1][aux][TAMANHO_GRID-1], dims[2], MPI_INT, dir_cima_rank, 0, &data_recv_down[TAMANHO_GRID-1][aux][TAMANHO_GRID-1], dims[2], MPI_INT, esq_baixo_rank, 0, cart_comm, MPI_STATUS_IGNORE); // AR esq baixo
+
+        //MPI_Sendrecv(&data_send[0][0][aux], dims[2], MPI_INT, tras_baixo_rank, 0, &data_recv_down[0][0][aux], dims[2], MPI_INT, frente_cima_rank, 0, cart_comm, MPI_STATUS_IGNORE); // AR fre cima
+        //MPI_Sendrecv(&data_send[TAMANHO_GRID-1][TAMANHO_GRID-1][aux], dims[2], MPI_INT, frente_cima_rank, 0, &data_recv_down[TAMANHO_GRID-1][TAMANHO_GRID-1][aux], dims[2], MPI_INT, tras_baixo_rank, 0, cart_comm, MPI_STATUS_IGNORE); // AR tras baixo
+        
+        //MPI_Sendrecv(&data_send[0][aux][0], dims[2], MPI_INT, esq_baixo_rank, 0, &data_recv_down[0][aux][0], dims[2], MPI_INT, dir_cima_rank, 0, cart_comm, MPI_STATUS_IGNORE); // AR dir cima
+        //MPI_Sendrecv(&data_send[TAMANHO_GRID-1][aux][TAMANHO_GRID-1], dims[2], MPI_INT, dir_cima_rank, 0, &data_recv_down[TAMANHO_GRID-1][aux][TAMANHO_GRID-1], dims[2], MPI_INT, esq_baixo_rank, 0, cart_comm, MPI_STATUS_IGNORE); // AR esq baixo
+
+
         //MPI_Sendrecv(&data_send[0][2][aux], dims[2], MPI_INT, source_rank, 0, &data_recv_down[0][2][aux], dims[2], MPI_INT, diag_rank, 0, cart_comm, MPI_STATUS_IGNORE); // AR cima fre
         /*
         MPI_Sendrecv(&data_send[dims[2]][aux][0], dims[2], MPI_INT, source_rank, 0, &data_recv_down[dims[2]][aux][0], dims[2], MPI_INT, diag_rank, 0, cart_comm, MPI_STATUS_IGNORE); // AR cima fre
@@ -156,19 +169,21 @@ int main(int argc, char *argv[]) {
 
     if(rank==13)
     {
-        for(aux=0;aux<dims[2];aux++)
+        for(aux_z=0;aux_z<TAMANHO_GRID-1;aux_z++)
         {
-            printf("rank: %d, SUPPOSED TO RECEIVE FRENTE CIMA (aux %d) %d\n",rank,aux, data_recv_down[0][0][aux]);
-            printf("rank: %d, SUPPOSED TO RECEIVE TRAS BAIXO (aux %d) %d\n",rank,aux, data_recv_down[TAMANHO_GRID-1][TAMANHO_GRID-1][aux]);
+            for(aux_y=0;aux_y<TAMANHO_GRID-1;aux_y++)
+            {
+                printf("rank: %d, SUPPOSED TO RECEIVE FRENTE CIMA (aux %d / %d) %d\n",rank,aux_z, aux_y, data_recv_down[aux_z][aux_y][TAMANHO_GRID-1]);
+            }
 
-            printf("rank: %d, SUPPOSED TO RECEIVE DIR CIMA (aux %d) %d\n",rank,aux, data_recv_down[0][aux][0]);
-            printf("rank: %d, SUPPOSED TO RECEIVE ESQ BAIXO (aux %d) %d\n",rank,aux, data_recv_down[TAMANHO_GRID-1][aux][TAMANHO_GRID-1]);
+            //printf("rank: %d, SUPPOSED TO RECEIVE FRENTE CIMA (aux %d) %d\n",rank,aux, data_recv_down[0][0][aux]);
+            //printf("rank: %d, SUPPOSED TO RECEIVE TRAS BAIXO (aux %d) %d\n",rank,aux, data_recv_down[TAMANHO_GRID-1][TAMANHO_GRID-1][aux]);
+
+            //printf("rank: %d, SUPPOSED TO RECEIVE DIR CIMA (aux %d) %d\n",rank,aux, data_recv_down[0][aux][0]);
+            //printf("rank: %d, SUPPOSED TO RECEIVE ESQ BAIXO (aux %d) %d\n",rank,aux, data_recv_down[TAMANHO_GRID-1][aux][TAMANHO_GRID-1]);
 
 
 
-            //printf("rank: %d, SUPPOSED TO RECEIVE FRENTE CIMA (aux %d) %d\n",rank,aux,  &data_recv_down[0][0][aux]);
-            //printf("rank: %d, SUPPOSED TO RECEIVE (aux %d) %d\n",rank,aux, data_recv_down[0][aux][1]);
-            //printf("rank: %d, SUPPOSED TO RECEIVE (aux %d) %d\n",rank,aux, data_recv_down[0][aux][2]);
         }
     }
 
