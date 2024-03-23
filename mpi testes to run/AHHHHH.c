@@ -109,7 +109,7 @@ int main(int argc, char *argv[]) {
 
     int aux;
     int data_recv_up, data_recv_left, data_recv_right, data_recv_forward, data_recv_backward;
-    My_MPI_Cart_Shift(cart_comm, 2, 1, 0, 0, 1, 1, &source_rank, &diag_rank); // frente cima
+    My_MPI_Cart_Shift(cart_comm, 2, 1, 0, 1, 1, 1, &source_rank, &diag_rank); // frente cima
     for( aux=0; aux < dims[2]; aux++)
     {
         //printf("rank: %d, SUPPOSED TO SEND %d\n",rank, data_send[0][aux]);
