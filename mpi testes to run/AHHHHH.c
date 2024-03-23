@@ -111,10 +111,10 @@ int main(int argc, char *argv[]) {
         }
     }
 
-    int **data_recv_dir = (int **)malloc(TAMANHO_GRID * sizeof(int *));
-    for (int i = 0; i < TAMANHO_GRID; ++i) {
-        data_recv_dir[i] = (int *)malloc(TAMANHO_GRID * sizeof(int));
-        for (int j = 0; j < TAMANHO_GRID; ++j) {
+    int **data_recv_dir = (int **)malloc((TAMANHO_GRID+2) * sizeof(int *));
+    for (int i = 0; i < (TAMANHO_GRID+2); ++i) {
+        data_recv_dir[i] = (int *)malloc((TAMANHO_GRID+2) * sizeof(int));
+        for (int j = 0; j < (TAMANHO_GRID+2); ++j) {
              data_recv_dir[i][j]=0;
         }
     }
