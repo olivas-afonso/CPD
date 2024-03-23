@@ -44,24 +44,7 @@ int main(int argc, char *argv[]) {
     // IMPORTANTE: COORD 0 - CAMADA, COORD 1 - COLUNA, COORD 2- LINHA
     //IMPORTANTE: NAO PRECISO DE VERTICES, MAS SIM DE ARESTAS + FACES.
     //IMPORTANTE: ACHO QUE AFINAL PRECISO DE VERTICES TAMBEM...
-    //IMPORATNTE: FACE DIREITA X=0,Y MUDA, Z MUDA
-    //IMPORATNTE: FACE FRENTE X MUDA,Y=0, Z MUDA
-    //IMPORTANTE: FACE ESQUERDA X=N, Y MUDA, Z MUDA
-    //IMPORTANTE: FACE TRAS X MUDA, Y =N, Z MUDA
-    //IMPORTANTE: FACE CIMA X MUDA, Y MUDA, Z=0
-    //IMPORTANTE: FACE BAIXA X MUDA, Y MUDA, Z =N
-    //IMPORTANTE: ARESTA CIMA DIREITA: X=0, Y MUDA, Z=0
-    //IMPORTANTE: ARESTA CIMA FRENTE: X MUDA, Y=0, Z=0
-    //IMPORTANTE: ARESTA CIMA ESQUERDA: X=N, Y=MUDA, Z=0
-    //IMPORTANTE: ARESTA CIMA FRENTE: X MUDA, Y=N, Z=0
-    //IMPORTANTE: ARESTA MEIO FRENTE_DIR: X=0, Y=0, Z MUDA
-    //IMPORTANTE: ARESTA MEIO TRAS_DIR: X=0, Y=N, Z MUDA
-    //IMPORTANTE: ARESTA MEIO FRENTE_ESQ: X=N, Y=0, Z MUDA
-    //IMPORTANTE: ARESTA MEIO TRAS_ESQ: X=N, Y=N, Z MUDA
-    //IMPORTANTE: ARESTA BAIXA DIREITA: X=0, Y MUDA, Z=N
-    //IMPORTANTE: ARESTA BAIXA FRENTE: X MUDA, Y=0, Z=N
-    //IMPORTANTE: ARESTA BAIXA ESQUERDA: X=N, Y=0, Z=N
-    //IMPORTANTE: ARESTA BAIXA FRENTE: X MUDA, Y=N, Z=N
+    //IMPORTANTE: POSSO DIMINUIR COMUNICACOES SE COPIAR VETORES ? SIM!!! VAMOS VER NO FUTURO SE ISTO VALE A PENA FAZER
     // Get neighbors
     int cima_rank, baixo_rank, esq_rank, dir_rank, frente_rank, tras_rank;
     int dir_cima_rank, esq_baixo_rank,dir_baixo_rank, esq_cima_rank, frente_cima_rank, tras_baixo_rank;
@@ -154,7 +137,8 @@ int main(int argc, char *argv[]) {
 
         //FACE CIMA DIAGS
         MPI_Sendrecv(&data_send[0][aux_z][TAMANHO_GRID-1], dims[2], MPI_INT, dir_baixo_rank, 0, &data_recv_cima[TAMANHO_GRID+1][aux_z], dims[2], MPI_INT, esq_cima_rank, 0, cart_comm, MPI_STATUS_IGNORE); // AR esq baixo
-        
+        MPI_Sendrecv(&data_send[0][aux_z][0], dims[2], MPI_INT, esq_baixo_rank, 0, &data_recv_dir[0][aux_z], dims[2], MPI_INT, dir_cima_rank, 0, cart_comm, MPI_STATUS_IGNORE); // AR dir cima
+
         //FACE ESQUERDA DIAGS
         MPI_Sendrecv(&data_send[TAMANHO_GRID-1][aux_z][TAMANHO_GRID-1], dims[2], MPI_INT, dir_cima_rank, 0, &data_recv_esq[0][aux_z], dims[2], MPI_INT, esq_baixo_rank, 0, cart_comm, MPI_STATUS_IGNORE); // AR esq baixo
         MPI_Sendrecv(&data_send[0][aux_z][TAMANHO_GRID-1], dims[2], MPI_INT, dir_baixo_rank, 0, &data_recv_esq[TAMANHO_GRID+1][aux_z], dims[2], MPI_INT, esq_cima_rank, 0, cart_comm, MPI_STATUS_IGNORE); // AR esq baixo
@@ -163,9 +147,6 @@ int main(int argc, char *argv[]) {
         {
             //FACE DIREITA 
             MPI_Sendrecv(&data_send[aux_z][aux_y][0], dims[2], MPI_INT, esq_rank, 0, &data_recv_dir[aux_z+1][aux_y], dims[2], MPI_INT, dir_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir
-    
-            
-            
 
             //FACE ESQUERDA
             MPI_Sendrecv(&data_send[aux_z][aux_y][TAMANHO_GRID-1], dims[2], MPI_INT, dir_rank, 0, &data_recv_esq[aux_z+1][aux_y], dims[2], MPI_INT, esq_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir
