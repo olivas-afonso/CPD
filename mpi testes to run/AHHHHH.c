@@ -45,6 +45,7 @@ int main(int argc, char *argv[]) {
     //IMPORTANTE: NAO PRECISO DE VERTICES, MAS SIM DE ARESTAS + FACES.
     //IMPORTANTE: ACHO QUE AFINAL PRECISO DE VERTICES TAMBEM...
     //IMPORTANTE: POSSO DIMINUIR COMUNICACOES SE COPIAR VETORES ? SIM!!! VAMOS VER NO FUTURO SE ISTO VALE A PENA FAZER
+    //IMPORTANTE: FALTA 2 DIAGONAIS EM CADA FACE.... COMO FAZER?? TENHO DE PENSAR!!!! AH!!!
     // Get neighbors
     int cima_rank, baixo_rank, esq_rank, dir_rank, frente_rank, tras_rank;
     int dir_cima_rank, esq_baixo_rank,dir_baixo_rank, esq_cima_rank, frente_cima_rank, tras_baixo_rank;
