@@ -2,9 +2,9 @@
 #include <stdlib.h>
 #include <mpi.h>
 
-#define N_X 100
-#define N_Y 100
-#define N_Z 100
+#define N_X 50
+#define N_Y 50
+#define N_Z 50
 
 void printSubgrid(char ***subgrid, int subgrid_size_x, int subgrid_size_y, int subgrid_size_z) {
     for (int i = 0; i < subgrid_size_x; i++) {
@@ -37,17 +37,13 @@ int main(int argc, char *argv[]) {
             subgrid[i] = (char **)malloc(subgrid_size_y * sizeof(char *));
             for (int j = 0; j < subgrid_size_y; j++) {
                 subgrid[i][j] = (char *)calloc(subgrid_size_z, sizeof(char));
-            }
-        }
-
-        // Fill subgrid with some data (for demonstration)
-        for (int i = 0; i < subgrid_size_x; i++) {
-            for (int j = 0; j < subgrid_size_y; j++) {
+                
                 for (int k = 0; k < subgrid_size_z; k++) {
                     subgrid[i][j][k] = 'A' + rank; // Filling with characters starting from 'A' + rank
                 }
             }
         }
+
 
         
 
