@@ -121,8 +121,8 @@ int main(int argc, char *argv[]) {
         
         //My_MPI_Cart_Shift(cart_comm, 2, 1, 0, 1, 0, 1, &source_rank, &diag_rank); // dir cima
         //My_MPI_Cart_Shift(cart_comm, 2, 1, 0, 0, dims[2]-1, 1, &source_rank, &dir_frente_rank); // dir tras cima
-        //MPI_Sendrecv(&data_send[0][0][aux], dims[2], MPI_INT, tras_baixo_rank, 0, &data_recv_down[0][0][aux], dims[2], MPI_INT, frente_cima_rank, 0, cart_comm, MPI_STATUS_IGNORE); // AR fre cima
-        //MPI_Sendrecv(&data_send[TAMANHO_GRID-1][TAMANHO_GRID-1][aux], dims[2], MPI_INT, frente_cima_rank, 0, &data_recv_down[TAMANHO_GRID-1][TAMANHO_GRID-1][aux], dims[2], MPI_INT, tras_baixo_rank, 0, cart_comm, MPI_STATUS_IGNORE); // AR tras baixo
+        MPI_Sendrecv(&data_send[0][0][aux], dims[2], MPI_INT, tras_baixo_rank, 0, &data_recv_down[0][0][aux], dims[2], MPI_INT, frente_cima_rank, 0, cart_comm, MPI_STATUS_IGNORE); // AR fre cima
+        MPI_Sendrecv(&data_send[TAMANHO_GRID-1][TAMANHO_GRID-1][aux], dims[2], MPI_INT, frente_cima_rank, 0, &data_recv_down[TAMANHO_GRID-1][TAMANHO_GRID-1][aux], dims[2], MPI_INT, tras_baixo_rank, 0, cart_comm, MPI_STATUS_IGNORE); // AR tras baixo
         
         MPI_Sendrecv(&data_send[0][aux][0], dims[2], MPI_INT, esq_baixo_rank, 0, &data_recv_down[0][aux][0], dims[2], MPI_INT, dir_cima_rank, 0, cart_comm, MPI_STATUS_IGNORE); // AR dir cima
         MPI_Sendrecv(&data_send[TAMANHO_GRID-1][aux][TAMANHO_GRID-1], dims[2], MPI_INT, dir_cima_rank, 0, &data_recv_down[TAMANHO_GRID-1][aux][TAMANHO_GRID-1], dims[2], MPI_INT, esq_baixo_rank, 0, cart_comm, MPI_STATUS_IGNORE); // AR esq baixo
@@ -165,7 +165,7 @@ int main(int argc, char *argv[]) {
             printf("rank: %d, SUPPOSED TO RECEIVE ESQ BAIXO (aux %d) %d\n",rank,aux, data_recv_down[TAMANHO_GRID-1][aux][TAMANHO_GRID-1]);
 
 
-            
+
             //printf("rank: %d, SUPPOSED TO RECEIVE FRENTE CIMA (aux %d) %d\n",rank,aux,  &data_recv_down[0][0][aux]);
             //printf("rank: %d, SUPPOSED TO RECEIVE (aux %d) %d\n",rank,aux, data_recv_down[0][aux][1]);
             //printf("rank: %d, SUPPOSED TO RECEIVE (aux %d) %d\n",rank,aux, data_recv_down[0][aux][2]);
