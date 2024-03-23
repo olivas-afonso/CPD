@@ -113,7 +113,7 @@ int main(int argc, char *argv[]) {
 
     int **data_recv_dir = (int **)malloc((TAMANHO_GRID+2) * sizeof(int *));
     for (int i = 0; i < (TAMANHO_GRID+2); ++i) {
-        data_recv_dir[i] = (int *)malloc((TAMANHO_GRID+2) * sizeof(int));
+        data_recv_dir[i] = (int *)malloc((TAMANHO_GRID) * sizeof(int));
         for (int j = 0; j < (TAMANHO_GRID+2); ++j) {
              data_recv_dir[i][j]=0;
         }
@@ -131,8 +131,8 @@ int main(int argc, char *argv[]) {
     {
         for (aux_y=0; aux_y<TAMANHO_GRID; aux_y++)
         {
-            MPI_Sendrecv(&data_send[aux_z][aux_y][0], dims[2], MPI_INT, esq_rank, 0, &data_recv_dir[aux_z+1][aux_y+1], dims[2], MPI_INT, dir_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir
-
+            MPI_Sendrecv(&data_send[aux_z][aux_y][0], dims[2], MPI_INT, esq_rank, 0, &data_recv_dir[aux_z+1][aux_y], dims[2], MPI_INT, dir_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir
+            //MPI_Sendrecv(&data_send[0][aux_y][0], dims[2], MPI_INT, esq_baixo_rank, 0, &data_recv_dir[0][aux_y][0], dims[2], MPI_INT, dir_cima_rank, 0, cart_comm, MPI_STATUS_IGNORE); // AR dir cima
             for(aux_x=0;aux_x<TAMANHO_GRID; aux_x++)
             {
                 //
@@ -176,7 +176,7 @@ int main(int argc, char *argv[]) {
         {
             for(aux_y=0;aux_y<TAMANHO_GRID;aux_y++)
             {
-                printf("rank: %d, SUPPOSED TO RECEIVE FACE DIR (aux %d / %d) %d\n",rank,aux_z, aux_y, data_recv_dir[aux_z+1][aux_y+1]);
+                printf("rank: %d, SUPPOSED TO RECEIVE FACE DIR (aux %d / %d) %d\n",rank,aux_z, aux_y, data_recv_dir[aux_z+1][aux_y]);
             }
 
             //printf("rank: %d, SUPPOSED TO RECEIVE FRENTE CIMA (aux %d) %d\n",rank,aux, data_recv_down[0][0][aux]);
