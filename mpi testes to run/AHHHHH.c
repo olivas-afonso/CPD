@@ -111,18 +111,27 @@ int main(int argc, char *argv[]) {
         }
     }
 
+    int **data_recv_dir = (int **)malloc(TAMANHO_GRID * sizeof(int *));
+    for (int i = 0; i < TAMANHO_GRID; ++i) {
+        data_recv_dir[i] = (int *)malloc(TAMANHO_GRID * sizeof(int));
+        for (int j = 0; j < TAMANHO_GRID; ++j) {
+             data_recv_dir[i][j]=0;
+        }
+    }
+
+
     int aux_x, aux_y, aux_z;
     int data_recv_up, data_recv_left, data_recv_right, data_recv_forward, data_recv_backward;
     //My_MPI_Cart_Shift(cart_comm, 2, 1, 0, 0, 1, 1, &source_rank, &diag_rank); // frente cima
-    My_MPI_Cart_Shift(cart_comm, 2, 1, 0, 1, 0, 1, &esq_baixo_rank, &dir_cima_rank); // dir tras cima
-    My_MPI_Cart_Shift(cart_comm, 2, 1, 0, 0, TAMANHO_GRID-1, 1, &tras_baixo_rank, &frente_cima_rank); // dir tras cima
-    My_MPI_Cart_Shift(cart_comm, 2, 1, 0, 1, 0, 0, &esq_rank, &dir_rank); // dir tras cima
+    My_MPI_Cart_Shift(cart_comm, 2, 1, 0, 1, 0, 1, &esq_baixo_rank, &dir_cima_rank); // DIAG DIR CIMA/ ESQ BAIXO
+    My_MPI_Cart_Shift(cart_comm, 2, 1, 0, 0, TAMANHO_GRID-1, 1, &tras_baixo_rank, &frente_cima_rank); // DIAG FRENTE CIMA / TRAS BAIXO
+    My_MPI_Cart_Shift(cart_comm, 2, 1, 0, 1, 0, 0, &esq_rank, &dir_rank); // FACE DIR/ESQ
     
     for( aux_z=0; aux_z < TAMANHO_GRID; aux_z++)
     {
         for (aux_y=0; aux_y<TAMANHO_GRID; aux_y++)
         {
-            MPI_Sendrecv(&data_send[aux_z][aux_y][0], dims[2], MPI_INT, esq_rank, 0, &data_recv_down[aux_z][aux_y][0], dims[2], MPI_INT, dir_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir
+            MPI_Sendrecv(&data_send[aux_z][aux_y][0], dims[2], MPI_INT, esq_rank, 0, &data_recv_dir[aux_z+1][aux_y+1], dims[2], MPI_INT, dir_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir
 
             for(aux_x=0;aux_x<TAMANHO_GRID; aux_x++)
             {
@@ -167,7 +176,7 @@ int main(int argc, char *argv[]) {
         {
             for(aux_y=0;aux_y<TAMANHO_GRID;aux_y++)
             {
-                printf("rank: %d, SUPPOSED TO RECEIVE FACE DIR (aux %d / %d) %d\n",rank,aux_z, aux_y, data_recv_down[aux_z][aux_y][0]);
+                printf("rank: %d, SUPPOSED TO RECEIVE FACE DIR (aux %d / %d) %d\n",rank,aux_z, aux_y, data_recv_dir[aux_z+1][aux_y+1]);
             }
 
             //printf("rank: %d, SUPPOSED TO RECEIVE FRENTE CIMA (aux %d) %d\n",rank,aux, data_recv_down[0][0][aux]);
