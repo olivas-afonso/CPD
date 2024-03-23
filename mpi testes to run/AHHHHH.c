@@ -166,7 +166,7 @@ int main(int argc, char *argv[]) {
             for(aux_x=0;aux_x<TAMANHO_GRID; aux_x++)
             {
                 //FACE CIMA
-                MPI_Sendrecv(&data_send[0][aux_y][aux_x], dims[2], MPI_INT, baixo_rank, 0, &data_recv_cima[aux_z+1][aux_y], dims[2], MPI_INT, cima_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir
+                MPI_Sendrecv(&data_send[0][aux_y][aux_x], dims[2], MPI_INT, baixo_rank, 0, &data_recv_cima[aux_y+1][aux_x], dims[2], MPI_INT, cima_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir
             }
         }
         
