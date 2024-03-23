@@ -194,21 +194,26 @@ int main(int argc, char *argv[]) {
                 printf("rank: %d, SUPPOSED TO RECEIVE FACE DIR (aux %d / %d) %d\n",rank,aux_z, aux_y, data_recv_dir[aux_z][aux_y]);
             }
 
-            for(aux_y=0;aux_y<TAMANHO_GRID;aux_y++)
-            {
-                printf("rank: %d, SUPPOSED TO RECEIVE FACE ESQ (aux %d / %d) %d\n",rank,aux_z, aux_y, data_recv_esq[aux_z][aux_y]);
-            }
-
-
-            
-
             //printf("rank: %d, SUPPOSED TO RECEIVE FRENTE CIMA (aux %d) %d\n",rank,aux, data_recv_down[0][0][aux]);
             //printf("rank: %d, SUPPOSED TO RECEIVE TRAS BAIXO (aux %d) %d\n",rank,aux, data_recv_down[TAMANHO_GRID-1][TAMANHO_GRID-1][aux]);
 
             //printf("rank: %d, SUPPOSED TO RECEIVE DIR CIMA (aux %d) %d\n",rank,aux, data_recv_down[0][aux][0]);
             //printf("rank: %d, SUPPOSED TO RECEIVE ESQ BAIXO (aux %d) %d\n",rank,aux, data_recv_down[TAMANHO_GRID-1][aux][TAMANHO_GRID-1]);
 
+        }
 
+        for(aux_z=0;aux_z<(TAMANHO_GRID+2);aux_z++)
+        {
+            for(aux_y=0;aux_y<TAMANHO_GRID;aux_y++)
+            {
+                printf("rank: %d, SUPPOSED TO RECEIVE FACE ESQ (aux %d / %d) %d\n",rank,aux_z, aux_y, data_recv_esq[aux_z][aux_y]);
+            }
+
+            //printf("rank: %d, SUPPOSED TO RECEIVE FRENTE CIMA (aux %d) %d\n",rank,aux, data_recv_down[0][0][aux]);
+            //printf("rank: %d, SUPPOSED TO RECEIVE TRAS BAIXO (aux %d) %d\n",rank,aux, data_recv_down[TAMANHO_GRID-1][TAMANHO_GRID-1][aux]);
+
+            //printf("rank: %d, SUPPOSED TO RECEIVE DIR CIMA (aux %d) %d\n",rank,aux, data_recv_down[0][aux][0]);
+            //printf("rank: %d, SUPPOSED TO RECEIVE ESQ BAIXO (aux %d) %d\n",rank,aux, data_recv_down[TAMANHO_GRID-1][aux][TAMANHO_GRID-1]);
 
         }
     }
