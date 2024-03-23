@@ -115,8 +115,8 @@ int main(int argc, char *argv[]) {
         //My_MPI_Cart_Shift(cart_comm, 2, 1, 0, 1, 1, 1, &source_rank, &diag_rank); // dir tras cima
         My_MPI_Cart_Shift(cart_comm, 2, 1, 0, 1, 0, 1, &source_rank, &diag_rank); // dir cima
         MPI_Sendrecv(&data_send[0][aux][0], dims[2], MPI_INT, source_rank, 0, &data_recv_down[0][aux][0], dims[2], MPI_INT, diag_rank, 0, cart_comm, MPI_STATUS_IGNORE); // AR cima dir
-        My_MPI_Cart_Shift(cart_comm, 2, 1, 0, 0, 1, 1, &source_rank, &diag_rank); // frente cima
-        MPI_Sendrecv(&data_send[aux][0][0], dims[2], MPI_INT, diag_rank, 0, &data_recv_down[aux][0][0], dims[2], MPI_INT, source_rank, 0, cart_comm, MPI_STATUS_IGNORE); // AR cima fre
+        //My_MPI_Cart_Shift(cart_comm, 2, 1, 0, 0, 1, 1, &source_rank, &diag_rank); // frente cima
+        //MPI_Sendrecv(&data_send[aux][0][0], dims[2], MPI_INT, diag_rank, 0, &data_recv_down[aux][0][0], dims[2], MPI_INT, source_rank, 0, cart_comm, MPI_STATUS_IGNORE); // AR cima fre
         /*
         MPI_Sendrecv(&data_send[dims[2]][aux][0], dims[2], MPI_INT, source_rank, 0, &data_recv_down[dims[2]][aux][0], dims[2], MPI_INT, diag_rank, 0, cart_comm, MPI_STATUS_IGNORE); // AR cima fre
         MPI_Sendrecv(&data_send[aux][0][0], dims[2], MPI_INT, source_rank, 0, &data_recv_down[aux][0][0], dims[2], MPI_INT, diag_rank, 0, cart_comm, MPI_STATUS_IGNORE); // AR cima fre
