@@ -4,6 +4,7 @@
 
 int rank, size;
 int my_coords[3];
+#define TAMANHO_GRID 3
 
 void My_MPI_Cart_Shift(MPI_Comm cart_comm, int pos_x, int pos_y,int pos_z, int dist_x, int dist_y,int dist_z, int *source, int*dest)
 {
@@ -82,12 +83,12 @@ int main(int argc, char *argv[]) {
     // Send and receive data between neighbors
     //int data_send = rank * 10 + my_coords[0] * 100 + my_coords[1] * 1000 + my_coords[2] * 10000;  // Example data
 
-    int ***data_send = (int ***)malloc(dims[0] * sizeof(int **));
-    for (int i = 0; i < dims[0]; ++i) {
-        data_send[i] = (int **)malloc(dims[1] * sizeof(int *));
-        for (int j = 0; j < dims[1]; ++j) {
-            data_send[i][j] = (int *)malloc(dims[2] * sizeof(int));
-            for (int k = 0; k < dims[2]; ++k) {
+    int ***data_send = (int ***)malloc(TAMANHO_GRID * sizeof(int **));
+    for (int i = 0; i < TAMANHO_GRID; ++i) {
+        data_send[i] = (int **)malloc(TAMANHO_GRID * sizeof(int *));
+        for (int j = 0; j < TAMANHO_GRID; ++j) {
+            data_send[i][j] = (int *)malloc(TAMANHO_GRID * sizeof(int));
+            for (int k = 0; k < TAMANHO_GRID; ++k) {
                 data_send[i][j][k]=rank*1000 +count;
                 count++;
                 //data_send[i][j][k] = rank + my_coords[0] * 100 + my_coords[1] * 1000 + my_coords[2] * 10000;  // Example data
@@ -95,12 +96,12 @@ int main(int argc, char *argv[]) {
         }
     }
 
-    int ***data_recv_down = (int ***)malloc(dims[0] * sizeof(int **));
-    for (int i = 0; i < dims[0]; ++i) {
-        data_recv_down[i] = (int **)malloc(dims[1] * sizeof(int *));
-        for (int j = 0; j < dims[1]; ++j) {
-            data_recv_down[i][j] = (int *)malloc(dims[2] * sizeof(int));
-            for (int k = 0; k < dims[2]; ++k) {
+    int ***data_recv_down = (int ***)malloc(TAMANHO_GRID * sizeof(int **));
+    for (int i = 0; i < TAMANHO_GRID; ++i) {
+        data_recv_down[i] = (int **)malloc(TAMANHO_GRID * sizeof(int *));
+        for (int j = 0; j < TAMANHO_GRID; ++j) {
+            data_recv_down[i][j] = (int *)malloc(TAMANHO_GRID * sizeof(int));
+            for (int k = 0; k < TAMANHO_GRID; ++k) {
                 data_recv_down[i][j][k]=0;
                 
                 //data_send[i][j][k] = rank + my_coords[0] * 100 + my_coords[1] * 1000 + my_coords[2] * 10000;  // Example data
@@ -112,7 +113,7 @@ int main(int argc, char *argv[]) {
     int data_recv_up, data_recv_left, data_recv_right, data_recv_forward, data_recv_backward;
     //My_MPI_Cart_Shift(cart_comm, 2, 1, 0, 0, 1, 1, &source_rank, &diag_rank); // frente cima
     My_MPI_Cart_Shift(cart_comm, 2, 1, 0, 1, 0, 1, &esq_baixo_rank, &dir_cima_rank); // dir tras cima
-    My_MPI_Cart_Shift(cart_comm, 2, 1, 0, 0, dims[2]-1, 1, &tras_baixo_rank, &frente_cima_rank); // dir tras cima
+    My_MPI_Cart_Shift(cart_comm, 2, 1, 0, 0, TAMANHO_GRID-1, 1, &tras_baixo_rank, &frente_cima_rank); // dir tras cima
     
     for( aux=0; aux < dims[2]; aux++)
     {
@@ -121,7 +122,8 @@ int main(int argc, char *argv[]) {
         //My_MPI_Cart_Shift(cart_comm, 2, 1, 0, 1, 0, 1, &source_rank, &diag_rank); // dir cima
         //My_MPI_Cart_Shift(cart_comm, 2, 1, 0, 0, dims[2]-1, 1, &source_rank, &dir_frente_rank); // dir tras cima
         MPI_Sendrecv(&data_send[0][0][aux], dims[2], MPI_INT, tras_baixo_rank, 0, &data_recv_down[0][0][aux], dims[2], MPI_INT, frente_cima_rank, 0, cart_comm, MPI_STATUS_IGNORE); // AR fre cima
-        MPI_Sendrecv(&data_send[2][2][aux], dims[2], MPI_INT, frente_cima_rank, 0, &data_recv_down[2][2][aux], dims[2], MPI_INT, tras_baixo_rank, 0, cart_comm, MPI_STATUS_IGNORE); // AR tras baixo
+        MPI_Sendrecv(&data_send[TAMANHO_GRID-1][TAMANHO_GRID-1][aux], dims[2], MPI_INT, frente_cima_rank, 0, &data_recv_down[2][2][aux], dims[2], MPI_INT, tras_baixo_rank, 0, cart_comm, MPI_STATUS_IGNORE); // AR tras baixo
+        
         
         //MPI_Sendrecv(&data_send[0][2][aux], dims[2], MPI_INT, source_rank, 0, &data_recv_down[0][2][aux], dims[2], MPI_INT, diag_rank, 0, cart_comm, MPI_STATUS_IGNORE); // AR cima fre
         /*
