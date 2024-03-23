@@ -116,7 +116,7 @@ int main(int argc, char *argv[]) {
     //My_MPI_Cart_Shift(cart_comm, 2, 1, 0, 0, 1, 1, &source_rank, &diag_rank); // frente cima
     My_MPI_Cart_Shift(cart_comm, 2, 1, 0, 1, 0, 1, &esq_baixo_rank, &dir_cima_rank); // dir tras cima
     My_MPI_Cart_Shift(cart_comm, 2, 1, 0, 0, TAMANHO_GRID-1, 1, &tras_baixo_rank, &frente_cima_rank); // dir tras cima
-    My_MPI_Cart_Shift(cart_comm, 2, 1, 0, 0, 0, 1, &esq_rank, &dir_rank); // dir tras cima
+    My_MPI_Cart_Shift(cart_comm, 2, 1, 0, 1, 0, 0, &esq_rank, &dir_rank); // dir tras cima
     
     for( aux_z=0; aux_z < TAMANHO_GRID; aux_z++)
     {
