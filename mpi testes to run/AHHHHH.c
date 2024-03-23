@@ -98,7 +98,7 @@ int main(int argc, char *argv[]) {
         }
     }
 
-    int **data_recv_down = (int ***)malloc(TAMANHO_GRID * sizeof(int **));
+    int ***data_recv_down = (int ***)malloc(TAMANHO_GRID * sizeof(int **));
     for (int i = 0; i < TAMANHO_GRID; ++i) {
         data_recv_down[i] = (int **)malloc(TAMANHO_GRID * sizeof(int *));
         for (int j = 0; j < TAMANHO_GRID; ++j) {
@@ -159,13 +159,7 @@ int main(int argc, char *argv[]) {
     //MPI_Sendrecv(&data_send, 1, MPI_INT, backward_rank, 0, &data_recv_forward, 1, MPI_INT, forward_rank, 0, cart_comm, MPI_STATUS_IGNORE);
     MPI_Barrier(MPI_COMM_WORLD);
     // Print received data
-    if(rank==4)
-    {
-        for(aux=0;aux<dims[2];aux++)
-        {
-            //printf("rank: %d, SUPPOSED TO SEND (FROM 0) %d\n",rank, data_send[0][0][aux]);
-        }
-    }
+
 
     if(rank==13)
     {
