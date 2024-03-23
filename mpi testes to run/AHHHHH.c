@@ -147,7 +147,7 @@ int main(int argc, char *argv[]) {
     
     for( aux_z=0; aux_z < TAMANHO_GRID; aux_z++)
     {
-        MPI_Sendrecv(&data_send[0][aux_x][TAMANHO_GRID-1], dims[2], MPI_INT, dir_baixo_rank, 0, &data_recv_cima[TAMANHO_GRID+1][aux_x], dims[2], MPI_INT, esq_cima_rank, 0, cart_comm, MPI_STATUS_IGNORE); // AR esq baixo
+        MPI_Sendrecv(&data_send[0][aux_z][TAMANHO_GRID-1], dims[2], MPI_INT, dir_baixo_rank, 0, &data_recv_cima[TAMANHO_GRID+1][aux_z], dims[2], MPI_INT, esq_cima_rank, 0, cart_comm, MPI_STATUS_IGNORE); // AR esq baixo
         for (aux_y=0; aux_y<TAMANHO_GRID; aux_y++)
         {
             //FACE DIREITA INTEIRA
