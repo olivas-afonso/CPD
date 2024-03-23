@@ -122,7 +122,7 @@ int main(int argc, char *argv[]) {
     {
         for (aux_y=0; aux_y<TAMANHO_GRID; aux_y++)
         {
-            MPI_Sendrecv(&data_send[aux_z][aux_y][TAMANHO_GRID-1], dims[2], MPI_INT, esq_rank, 0, &data_recv_down[aux_z][aux_y][TAMANHO_GRID-1], dims[2], MPI_INT, dir_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir
+            MPI_Sendrecv(&data_send[aux_z][aux_y][0], dims[2], MPI_INT, esq_rank, 0, &data_recv_down[aux_z][aux_y][0], dims[2], MPI_INT, dir_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir
 
             for(aux_x=0;aux_x<TAMANHO_GRID; aux_x++)
             {
@@ -167,7 +167,7 @@ int main(int argc, char *argv[]) {
         {
             for(aux_y=0;aux_y<TAMANHO_GRID;aux_y++)
             {
-                printf("rank: %d, SUPPOSED TO RECEIVE FACE DIR (aux %d / %d) %d\n",rank,aux_z, aux_y, data_recv_down[aux_z][aux_y][TAMANHO_GRID-1]);
+                printf("rank: %d, SUPPOSED TO RECEIVE FACE DIR (aux %d / %d) %d\n",rank,aux_z, aux_y, data_recv_down[aux_z][aux_y][0]);
             }
 
             //printf("rank: %d, SUPPOSED TO RECEIVE FRENTE CIMA (aux %d) %d\n",rank,aux, data_recv_down[0][0][aux]);
