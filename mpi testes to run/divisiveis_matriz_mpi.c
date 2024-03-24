@@ -167,14 +167,14 @@ char ***gen_initial_bloco(int max, int min ,int N, float density, int input_seed
 					grid_even[x][y][z] = prov;	
 						
 					
-					/*if (x >= max) {
-						if(y >= max){
-							if(z>= max){
+					if (x <= max) {
+						if(y <= max){
+							if(z<= max){
 								grid_even[x][y][z] = prov;	
 							}
 						}
 					}
-					*/
+					
 				}
         }     
     }
