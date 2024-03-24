@@ -116,6 +116,8 @@ char ***gen_initial_bloco(int max, int min ,int N, float density, int input_seed
     int x, y, z;
 	int prov = 0;
     int aux = 0;
+	int flag=0;
+	int flag_cond = 0;
 	
     init_r4uni(input_seed);
     
@@ -133,43 +135,49 @@ char ***gen_initial_bloco(int max, int min ,int N, float density, int input_seed
         exit(1);
     }*/
 // aloca o eixo final, ataves de um apontador de arrays
-    for(x = 0; x < max; x++) {
-        grid_even[x] = (char **) malloc(max * sizeof(char *));
-        if(grid_even[x] == NULL) {
-            printf("Failed to allocate matrix3\n");
-            exit(1);
-        }
-
+    for(x = 0; x < N; x++) {
+        if(x < max){
+			flag++;
+			grid_even[x] = (char **) malloc(max * sizeof(char *));
+			if(grid_even[x] == NULL) {
+				printf("Failed to allocate matrix3\n");
+				exit(1);
+			}	
+		}
         /*grid_odd[x] = (char **) malloc(N * sizeof(char *));
         if(grid_odd[x] == NULL) {
             printf("Failed to allocate matrix5\n");
             exit(1);
         }*/
 
-        for (y = 0; y < max; y++){
-            grid_even[x][y] = (char*) calloc(max, sizeof(char));
-            if(grid_even[x][y] == NULL) {
-                printf("Failed to allocate matrix6\n");
-                exit(1);
-            }
-          /*  grid_odd[x][y] = (char*) calloc(N, sizeof(char));
+        for (y = 0; y < N; y++){
+			if(x < max){			
+				flag++;
+				grid_even[x][y] = (char*) calloc(max, sizeof(char));
+				if(grid_even[x][y] == NULL) {
+					printf("Failed to allocate matrix6\n");
+					exit(1);
+				}
+			}else{
+				flag--;
+			}
+		} /*  grid_odd[x][y] = (char*) calloc(N, sizeof(char));
             if(grid_odd[x][y] == NULL) {
                 printf("Failed to allocate matrix6\n");
                 exit(1);
             }*/
-            for (z = 0; z < max; z++)
+            for (z = 0; z < N; z++)
                 if(r4_uni() < density){
 					aux++;
 					//printf("celula: %d",aux);
 					// preenchimento initial do grid_even dependendo da seed
 					prov = (int)(r4_uni() * N_SPECIES) + 1; // preenchimento initial do grid_even dependendo da seed
 					count_species[grid_even[x][y][z]]++;
-					grid_even[x][y][z] = prov;	
-						
-					/*
-					 if (aux >= min) {
-						grid_even[x][y][z] = prov;	
-					} */
+
+
+					 if (flag == 2) {
+						grid_even[x][y][z] = prov;
+					} 
 				}
         }     
     }
