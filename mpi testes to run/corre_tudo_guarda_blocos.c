@@ -169,6 +169,10 @@ char ***gen_initial_bloco(int max, int min ,int N, float density, int input_seed
         }     
     }
 
+	x = 0;
+	y = 0;
+	z = 0;
+
 	for(aux = 0; aux <64; aux++){
 		if(r4_uni() < density){
 			prov = (int)(r4_uni() * N_SPECIES) + 1; // preenchimento initial do grid_even dependendo da seed
