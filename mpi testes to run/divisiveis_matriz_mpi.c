@@ -497,10 +497,12 @@ if(rank == 0){
 	//scanf("%lf %lf", &N_double, &x_double);
     //double = (double)N;
 	
-	printf("Você digitou: %.2lf e %.2lf\n", N_double, x_double);
 	
 	x_double = (double)size;
 	n_double = (double)NX;
+	
+	printf("Você digitou: %.2lf e %.2lf\n", N_double, x_double);
+	
 
 	printf("x = %2.f \n", x_double);
 	double raiz_cubica_x = raiz_cubica_funcao(x_double);
