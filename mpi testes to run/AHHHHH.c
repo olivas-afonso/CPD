@@ -96,7 +96,7 @@ int main(int argc, char *argv[]) {
     }
 
     int **data_recv_dir = (int **)malloc((TAMANHO_GRID) * sizeof(int *));
-    for (int i = 0; i < (TAMANHO_GRID); ++i) {
+    for (int i = 0; i < (TAMANHO_GRID+2); ++i) {
         data_recv_dir[i] = (int *)malloc((TAMANHO_GRID+2) * sizeof(int));
         for (int j = 0; j < (TAMANHO_GRID+2); ++j) {
              data_recv_dir[i][j]=0;
@@ -156,7 +156,7 @@ int main(int argc, char *argv[]) {
         //MPI_Sendrecv(&data_send[0][aux_z][0], dims[2], MPI_INT, esq_baixo_rank, 0, &data_recv_dir[aux_z][TAMANHO_GRID+1], dims[2], MPI_INT, dir_cima_rank, 0, cart_comm, MPI_STATUS_IGNORE); // AR dir cima
         //MPI_Sendrecv(&data_send[TAMANHO_GRID-1][aux_z][0], dims[2], MPI_INT, esq_cima_rank, 0, &data_recv_dir[aux_z][0], dims[2], MPI_INT, dir_baixo_rank, 0, cart_comm, MPI_STATUS_IGNORE); // AR dir baixo
 
-        MPI_Sendrecv(&data_send[aux_z][0][0], dims[2], MPI_INT, esq_tras_rank, 0, data_recv_dir[aux_z], dims[2], MPI_INT, dir_frente_rank, 0, cart_comm, MPI_STATUS_IGNORE); // AR dir cima
+        MPI_Sendrecv(&data_send[aux_z][0][0], dims[2], MPI_INT, esq_tras_rank, 0, &data_recv_dir[aux_z][0], dims[2], MPI_INT, dir_frente_rank, 0, cart_comm, MPI_STATUS_IGNORE); // AR dir cima
         //MPI_Sendrecv(&data_send[aux_z][TAMANHO_GRID-1][0], dims[2], MPI_INT, esq_frente_rank, 0, &data_recv_dir[aux_z][0], dims[2], MPI_INT, dir_tras_rank, 0, cart_comm, MPI_STATUS_IGNORE); // AR dir baixo
 
         //FACE ESQUERDA DIAGS
