@@ -120,53 +120,54 @@ char ***gen_initial_bloco(int max, int min ,int N, float density, int input_seed
     init_r4uni(input_seed);
     
 //alocacao da memeoria dinamica, alocando primeiro um apontador triplo o que corresponde a uma dimensao do cubo  ~
-    grid_even = (char ***) malloc(N * sizeof(char **));
+    grid_even = (char ***) malloc(max* sizeof(char **));
     if(grid_even == NULL) {
         printf("Failed to allocate matrix1\n");
         exit(1);
     }
 	
 //aloca a dimensao x atraves de um apontador de um apontador    
-    grid_odd = (char ***) malloc(N * sizeof(char **));
+    /*grid_odd = (char ***) malloc(N * sizeof(char **));
     if(grid_odd == NULL) {
         printf("Failed to allocate matrix2\n");
         exit(1);
-    }
+    }*/
 // aloca o eixo final, ataves de um apontador de arrays
-    for(x = 0; x < N; x++) {
-        grid_even[x] = (char **) malloc(N * sizeof(char *));
+    for(x = 0; x < max; x++) {
+        grid_even[x] = (char **) malloc(max * sizeof(char *));
         if(grid_even[x] == NULL) {
             printf("Failed to allocate matrix3\n");
             exit(1);
         }
 
-        grid_odd[x] = (char **) malloc(N * sizeof(char *));
+        /*grid_odd[x] = (char **) malloc(N * sizeof(char *));
         if(grid_odd[x] == NULL) {
             printf("Failed to allocate matrix5\n");
             exit(1);
-        }
+        }*/
 
-        for (y = 0; y < N; y++){
-            grid_even[x][y] = (char*) calloc(N, sizeof(char));
+        for (y = 0; y < max; y++){
+            grid_even[x][y] = (char*) calloc(max, sizeof(char));
             if(grid_even[x][y] == NULL) {
                 printf("Failed to allocate matrix6\n");
                 exit(1);
             }
-            grid_odd[x][y] = (char*) calloc(N, sizeof(char));
+          /*  grid_odd[x][y] = (char*) calloc(N, sizeof(char));
             if(grid_odd[x][y] == NULL) {
                 printf("Failed to allocate matrix6\n");
                 exit(1);
-            }
-            for (z = 0; z < N; z++)
+            }*/
+            for (z = 0; z < max; z++)
                 if(r4_uni() < density){
 					aux++;
 					//printf("celula: %d",aux);
 					// preenchimento initial do grid_even dependendo da seed
 					prov = (int)(r4_uni() * N_SPECIES) + 1; // preenchimento initial do grid_even dependendo da seed
 					count_species[grid_even[x][y][z]]++;
-					 if (aux >= min && aux <= max) {
+					 /*
+					 if (aux >= min) {
 						grid_even[x][y][z] = prov;	
-					} 
+					} */
 				}
         }     
     }
@@ -477,6 +478,22 @@ for (int i = 0; i < size; i++) {
 		printf("valores: %d %d \n", min ,max);	
 		
 		grid = gen_initial_bloco(max, min,number_of_cells, density, seed);
+		
+		
+		
+		printf("Rank %d: Layer %d\n", rank, rank);	
+			for(int merda_z= 0; merda_z < max; merda_z++){
+				for(int merda_y = 0; merda_y < max; merda_y++){
+					for(int merda_x = 0; merda_x < max; merda_x++){
+						printf("%d ", grid[merda_z][merda_y][merda_x]);
+					}			
+						printf("\n");			
+				}
+				printf("\n\n");
+			}
+		
+		
+		
 		
 		//exec_time = -omp_get_wtime();
 
