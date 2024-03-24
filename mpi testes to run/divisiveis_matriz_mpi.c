@@ -330,6 +330,24 @@ void freeMatrix(int N) {
     free(grid_odd);
 }
 
+
+
+
+
+
+double raiz_cubica_funcao(double num) {
+    double x0 = num / 3; // Estimativa inicial
+    double x1 = (2 * x0 + num / (x0 * x0)) / 3; // Melhor estimativa
+
+    // Continuar refinando até convergência
+    while (fabs(x1 - x0) >= 0.00001) {
+        x0 = x1;
+        x1 = (2 * x0 + num / (x0 * x0)) / 3;
+    }
+
+    return x1;
+
+
 /************************************************************************************************
 * Nome:main
 * funcao: corre as funcoes pela ordem de execução correta
@@ -481,7 +499,7 @@ if(rank == 0){
 	
 	//x_double = (double)x;
 	printf("x = %2.f \n", x_double);
-	//double raiz_cubica_x = cbrt(x_double);
+	double raiz_cubica_x = raiz_dubica_funcao(x_double);
 
 	printf("raiz = %2.f \n", raiz_cubica_x);
 
