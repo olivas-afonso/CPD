@@ -164,12 +164,17 @@ char ***gen_initial_bloco(int max, int min ,int N, float density, int input_seed
 					// preenchimento initial do grid_even dependendo da seed
 					prov = (int)(r4_uni() * N_SPECIES) + 1; // preenchimento initial do grid_even dependendo da seed
 					count_species[grid_even[x][y][z]]++;
-					grid_even[x][y][z] = prov;	
+					//grid_even[x][y][z] = prov;	
 						
-					/*
-					 if (aux >= min) {
-						grid_even[x][y][z] = prov;	
-					} */
+					
+					if (x >= max) {
+						if(y >= max){
+							if(z>= max){
+								grid_even[x][y][z] = prov;	
+							}
+						}
+					}
+					
 				}
         }     
     }
@@ -470,13 +475,21 @@ for (int i = 0; i < size; i++) {
 		char *** grid;
 		int min = 0;
 		int max = 0;
-		/*
+		int inicio = 0;
+		
 		min = ((int)n_double)*rank;
 		max = min + (((int)n_double));
-		*/
+
+/*		
+		inicio = ((int)n_double)*rank; 
 		
-		min = ((int)n_double)*rank; 
-		max = ((int)n_double); 
+		*x = inicio % 4;
+		*y = (inicio / 4) % 4;
+		*z = inicio / 16;
+		
+		min = x + y * 4 + z * 16;
+		max = x + y * 4 + z * 16; 
+*/
 		printf("valores: %d %d \n", min ,max);	
 		
 		grid = gen_initial_bloco(max, min,number_of_cells, density, seed);
