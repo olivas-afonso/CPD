@@ -494,10 +494,14 @@ if(rank == 0){
 	
     // Calcular a raiz cúbica de x
  
-	scanf("%lf %lf", &N_double, &x_double);
-    printf("Você digitou: %.2lf e %.2lf\n", N_double, x_double);
+	//scanf("%lf %lf", &N_double, &x_double);
+    //double = (double)N;
 	
-	//x_double = (double)x;
+	printf("Você digitou: %.2lf e %.2lf\n", N_double, x_double);
+	
+	x_double = (double)size;
+	n_double = (double)NX;
+
 	printf("x = %2.f \n", x_double);
 	double raiz_cubica_x = raiz_cubica_funcao(x_double);
 
