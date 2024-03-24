@@ -169,7 +169,7 @@ int main(int argc, char *argv[]) {
     MPI_Sendrecv(&data_send[0][0][TAMANHO_GRID-1], 1, MPI_INT, dir_baixo_tras_rank, 0, &vert_esq_cima_frente, 1, MPI_INT, esq_cima_frente_rank, 0, cart_comm, MPI_STATUS_IGNORE); // AR dir cima
     MPI_Sendrecv(&data_send[TAMANHO_GRID-1][TAMANHO_GRID-1][0], 1, MPI_INT, esq_cima_frente_rank, 0, &vert_dir_baixo_tras, 1, MPI_INT, dir_baixo_tras_rank, 0, cart_comm, MPI_STATUS_IGNORE);
     MPI_Sendrecv(&data_send[TAMANHO_GRID-1][TAMANHO_GRID-1][TAMANHO_GRID-1], 1, MPI_INT, dir_cima_frente_rank, 0, &vert_esq_baixo_tras, 1, MPI_INT, esq_baixo_tras_rank, 0, cart_comm, MPI_STATUS_IGNORE);
-
+    MPI_Sendrecv(&data_send[0][0][0], 1, MPI_INT, esq_baixo_tras_rank, 0, &vert_dir_cima_frente, 1, MPI_INT, dir_cima_frente_rank, 0, cart_comm, MPI_STATUS_IGNORE);
 
     for( aux_z=0; aux_z < TAMANHO_GRID; aux_z++)
     {
@@ -333,6 +333,9 @@ int main(int argc, char *argv[]) {
 
         printf("\n");
         printf("rank: %d, SUPPOSED TO RECEIVE VERT ESQ BAIXO TRAS  %d\n",rank, vert_esq_baixo_tras);
+
+        printf("\n");
+        printf("rank: %d, SUPPOSED TO RECEIVE VERT DIR CIMA FRENTE  %d\n",rank, vert_dir_cima_frente);
     }
 
    
