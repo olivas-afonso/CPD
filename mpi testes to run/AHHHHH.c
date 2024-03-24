@@ -51,6 +51,7 @@ int main(int argc, char *argv[]) {
     int dir_cima_rank, esq_baixo_rank,dir_baixo_rank, esq_cima_rank, frente_cima_rank, tras_baixo_rank;
     int frente_baixo_rank, tras_cima_rank, dir_frente_rank, esq_tras_rank, dir_tras_rank, esq_frente_rank;
     int esq_cima_frente_rank, dir_baixo_tras_rank, dir_cima_frente_rank, esq_baixo_tras_rank;
+    int esq_cima_tras_rank, dir_baixo_frente_rank, dir_cima_tras_rank, esq_baixo_frente_rank;
 
     //MPI_Cart_shift(cart_comm, 0, 1, &up_rank, &down_rank);  
     //MPI_Cart_shift(cart_comm, 1, 1, &left_rank, &right_rank);
@@ -146,6 +147,7 @@ int main(int argc, char *argv[]) {
     }
 
     int vert_esq_cima_frente, vert_dir_baixo_tras, vert_dir_cima_frente, vert_esq_baixo_tras;
+    int vert_esq_cima_tras, vert_dir_baixo_frente, vert_dir_cima_tras, vert_esq_baixo_frente;
 
     int aux_x, aux_y, aux_z;
     int data_recv_up, data_recv_left, data_recv_right, data_recv_forward, data_recv_backward;
@@ -161,6 +163,10 @@ int main(int argc, char *argv[]) {
     My_MPI_Cart_Shift(cart_comm, 2, 1, 0, 0, 1, 0, &frente_rank, &tras_rank); // FACE TRAS/CIMA
     My_MPI_Cart_Shift(cart_comm, 2, 1, 0, -1, -1, 1, &dir_baixo_tras_rank, &esq_cima_frente_rank); // FACE TRAS/CIMA
     My_MPI_Cart_Shift(cart_comm, 2, 1, 0, 1, -1, 1, &esq_baixo_tras_rank, &dir_cima_frente_rank); // FACE TRAS/CIMA
+    My_MPI_Cart_Shift(cart_comm, 2, 1, 0, -1, 1, 1, &dir_baixo_frente_rank, &esq_cima_tras_rank); // FACE TRAS/CIMA
+    My_MPI_Cart_Shift(cart_comm, 2, 1, 0, 1, 1, 1, &esq_baixo_frente_rank, &dir_cima_tras_rank); // FACE TRAS/CIMA
+
+    
 
 
 
@@ -170,6 +176,11 @@ int main(int argc, char *argv[]) {
     MPI_Sendrecv(&data_send[TAMANHO_GRID-1][TAMANHO_GRID-1][0], 1, MPI_INT, esq_cima_frente_rank, 0, &vert_dir_baixo_tras, 1, MPI_INT, dir_baixo_tras_rank, 0, cart_comm, MPI_STATUS_IGNORE);
     MPI_Sendrecv(&data_send[TAMANHO_GRID-1][TAMANHO_GRID-1][TAMANHO_GRID-1], 1, MPI_INT, dir_cima_frente_rank, 0, &vert_esq_baixo_tras, 1, MPI_INT, esq_baixo_tras_rank, 0, cart_comm, MPI_STATUS_IGNORE);
     MPI_Sendrecv(&data_send[0][0][0], 1, MPI_INT, esq_baixo_tras_rank, 0, &vert_dir_cima_frente, 1, MPI_INT, dir_cima_frente_rank, 0, cart_comm, MPI_STATUS_IGNORE);
+    
+    MPI_Sendrecv(&data_send[0][TAMANHO_GRID-1][TAMANHO_GRID-1], 1, MPI_INT, dir_baixo_frente_rank, 0, &vert_esq_cima_tras, 1, MPI_INT, esq_cima_tras_rank, 0, cart_comm, MPI_STATUS_IGNORE); // AR dir cima
+    MPI_Sendrecv(&data_send[TAMANHO_GRID-1][0][0], 1, MPI_INT, esq_cima_tras_rank, 0, &vert_dir_baixo_frente, 1, MPI_INT, dir_baixo_frente_rank, 0, cart_comm, MPI_STATUS_IGNORE);
+    MPI_Sendrecv(&data_send[TAMANHO_GRID-1][TAMANHO_GRID-1][0], 1, MPI_INT, dir_cima_tras_rank, 0, &vert_esq_baixo_frente, 1, MPI_INT, esq_baixo_frente_rank, 0, cart_comm, MPI_STATUS_IGNORE);
+    MPI_Sendrecv(&data_send[0][TAMANHO_GRID-1][0], 1, MPI_INT, esq_baixo_frente_rank, 0, &vert_dir_cima_tras, 1, MPI_INT, dir_cima_tras_rank, 0, cart_comm, MPI_STATUS_IGNORE);
 
     for( aux_z=0; aux_z < TAMANHO_GRID; aux_z++)
     {
@@ -336,6 +347,18 @@ int main(int argc, char *argv[]) {
 
         printf("\n");
         printf("rank: %d, SUPPOSED TO RECEIVE VERT DIR CIMA FRENTE  %d\n",rank, vert_dir_cima_frente);
+
+        printf("\n");
+        printf("rank: %d, SUPPOSED TO RECEIVE VERT ESQ CIMA TRAS  %d\n",rank, vert_esq_cima_tras);
+
+        printf("\n");
+        printf("rank: %d, SUPPOSED TO RECEIVE VERT DIR BAIXO FRENTE  %d\n",rank, vert_dir_baixo_frente);
+
+        printf("\n");
+        printf("rank: %d, SUPPOSED TO RECEIVE VERT ESQ BAIXO FRENTE  %d\n",rank, vert_esq_baixo_frente);
+
+        printf("\n");
+        printf("rank: %d, SUPPOSED TO RECEIVE VERT DIR CIMA TRAS  %d\n",rank, vert_dir_cima_tras);
     }
 
    
