@@ -114,6 +114,7 @@ char ***gen_initial_grid(int N, float density, int input_seed)
 char ***gen_initial_bloco(int max, int min ,int N, float density, int input_seed)
 {
     int x, y, z;
+	int x1, y1, z1;
 	int prov = 0;
     int aux = 0;
 	int flag=0;
@@ -139,8 +140,8 @@ char ***gen_initial_bloco(int max, int min ,int N, float density, int input_seed
         if(x <= max){
 			printf("vai alocar x\n");
 			flag++;
-			grid_even[x] = (char **) malloc(max * sizeof(char *));
-			if(grid_even[x] == NULL) {
+			grid_even[x1] = (char **) malloc(max * sizeof(char *));
+			if(grid_even[x1] == NULL) {
 				printf("Failed to allocate matrix3\n");
 				exit(1);
 			}	
@@ -155,8 +156,8 @@ char ***gen_initial_bloco(int max, int min ,int N, float density, int input_seed
 			if(y <= max){	
 				printf("vai alocar y\n");
 				flag++;
-				grid_even[x][y] = (char*) calloc(max, sizeof(char));
-				if(grid_even[x][y] == NULL) {
+				grid_even[x1][y1] = (char*) calloc(max, sizeof(char));
+				if(grid_even[x1][y1] == NULL) {
 					printf("Failed to allocate matrix6\n");
 					exit(1);
 				}
@@ -169,17 +170,19 @@ char ***gen_initial_bloco(int max, int min ,int N, float density, int input_seed
                 exit(1);
             }*/
             for (z = 0; z < N; z++)
-                if(r4_uni() < density){
-					aux++;
-					//printf("celula: %d",aux);
-					// preenchimento initial do grid_even dependendo da seed
-					prov = (int)(r4_uni() * N_SPECIES) + 1; // preenchimento initial do grid_even dependendo da seed
-					count_species[grid_even[x][y][z]]++;
+                if(z <= max){
+					if(r4_uni() < density){
+						aux++;
+						//printf("celula: %d",aux);
+						// preenchimento initial do grid_even dependendo da seed
+						prov = (int)(r4_uni() * N_SPECIES) + 1; // preenchimento initial do grid_even dependendo da seed
+						count_species[grid_even[x1][y1][z1]]++;
 
 
-					 if (flag == 2) {
-						grid_even[x][y][z] = prov;
-					} 
+						 if (flag == 2) {
+							grid_even[x][y][z] = prov;
+						} 
+					}
 				}
         }     
     }
