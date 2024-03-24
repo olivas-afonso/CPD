@@ -33,6 +33,7 @@ float r4_uni()
     return 0.5 + 0.2328306e-09 * (seed_in + (int) seed);
 }
 
+
 /************************************************************************************************
 * Nome: gen_initial_grid
 * funcao: gera as duas matrizes, a inicial e a auxiliar; ao longo das geracoes as celulas iram
@@ -85,10 +86,16 @@ char ***gen_initial_grid(int N, float density, int input_seed)
             for (z = 0; z < N; z++)
                 if(r4_uni() < density)
                     {
+						
 						// preenchimento initial do grid_even dependendo da seed
                         grid_even[x][y][z] = (int)(r4_uni() * N_SPECIES) + 1; // preenchimento initial do grid_even dependendo da seed
                         count_species[grid_even[x][y][z]]++;
-                    }
+						
+						//preenchimento_da_grid(grid_even[x][y][z]);
+						
+					
+					
+					}
         }     
     }
 
@@ -158,21 +165,19 @@ char ***gen_initial_bloco(int max, int min ,int N, float density, int input_seed
                 exit(1);
             }*/
             for (z = 0; z < max; z++)
-                if(r4_uni() < density){
-					aux++;
-					//printf("celula: %d",aux);
-					// preenchimento initial do grid_even dependendo da seed
-					prov = (int)(r4_uni() * N_SPECIES) + 1; // preenchimento initial do grid_even dependendo da seed
-					count_species[grid_even[x][y][z]]++;
-						
-					grid_even[x][y][z] = prov;
-					
-						
-					
-				}
-				
+				grid_even[x][y][z] = 0;
         }     
     }
+
+	for(aux = 0; aux <64){
+		if(r4_uni() < density){
+			prov = (int)(r4_uni() * N_SPECIES) + 1; // preenchimento initial do grid_even dependendo da seed
+			//count_species[grid_even[x][y][z]]++;
+			printf("numero: %d\n",prov);
+		}	
+	}
+
+
 
 	// conta as especies da geracao 0
     for(x=1; x < 10; x++)
