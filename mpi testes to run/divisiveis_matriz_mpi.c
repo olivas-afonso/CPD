@@ -157,24 +157,24 @@ char ***gen_initial_bloco(int max, int min ,int N, float density, int input_seed
                 printf("Failed to allocate matrix6\n");
                 exit(1);
             }*/
-            for (z = 0; z < N; z++)
+            for (z = 0; z < max; z++)
                 if(r4_uni() < density){
 					aux++;
 					//printf("celula: %d",aux);
 					// preenchimento initial do grid_even dependendo da seed
 					prov = (int)(r4_uni() * N_SPECIES) + 1; // preenchimento initial do grid_even dependendo da seed
 					count_species[grid_even[x][y][z]]++;
-					//grid_even[x][y][z] = prov;	
+					grid_even[x][y][z] = prov;	
 						
 					
-					if (x >= max) {
+					/*if (x >= max) {
 						if(y >= max){
 							if(z>= max){
 								grid_even[x][y][z] = prov;	
 							}
 						}
 					}
-					
+					*/
 				}
         }     
     }
