@@ -48,7 +48,9 @@ int main(int argc, char *argv[]) {
     //IMPORTANTE: FALTA 2 DIAGONAIS EM CADA FACE.... COMO FAZER?? TENHO DE PENSAR!!!! AH!!!
     // Get neighbors
     int cima_rank, baixo_rank, esq_rank, dir_rank, frente_rank, tras_rank;
-    int dir_cima_rank, esq_baixo_rank,dir_baixo_rank, esq_cima_rank, frente_cima_rank, tras_baixo_rank, frente_baixo_rank, tras_cima_rank, dir_frente_rank, esq_tras_rank, dir_tras_rank, esq_frente_rank;
+    int dir_cima_rank, esq_baixo_rank,dir_baixo_rank, esq_cima_rank, frente_cima_rank, tras_baixo_rank;
+    int frente_baixo_rank, tras_cima_rank, dir_frente_rank, esq_tras_rank, dir_tras_rank, esq_frente_rank;
+    int esq_cima_frente_rank, dir_baixo_tras_rank;
 
     //MPI_Cart_shift(cart_comm, 0, 1, &up_rank, &down_rank);  
     //MPI_Cart_shift(cart_comm, 1, 1, &left_rank, &right_rank);
@@ -143,6 +145,7 @@ int main(int argc, char *argv[]) {
         }
     }
 
+    int vert_esq_cima_frente, vert_dir_baixo_tras;
 
     int aux_x, aux_y, aux_z;
     int data_recv_up, data_recv_left, data_recv_right, data_recv_forward, data_recv_backward;
@@ -156,6 +159,12 @@ int main(int argc, char *argv[]) {
     My_MPI_Cart_Shift(cart_comm, 2, 1, 0, 1, 0, 0, &esq_rank, &dir_rank); // FACE DIR/ESQ
     My_MPI_Cart_Shift(cart_comm, 2, 1, 0, 0, 0, 1, &baixo_rank, &cima_rank); // FACE CIMA/BAIXO
     My_MPI_Cart_Shift(cart_comm, 2, 1, 0, 0, 1, 0, &frente_rank, &tras_rank); // FACE TRAS/CIMA
+    My_MPI_Cart_Shift(cart_comm, 2, 1, 0, -1, -1, 1, &dir_baixo_tras_rank, &esq_cima_frente_rank); // FACE TRAS/CIMA
+
+
+
+    //VERT ESQ CIMA FRENTE
+     MPI_Sendrecv(&data_send[TAMANHO_GRID-1][TAMANHO_GRID-1][0], dims[2], MPI_INT, dir_baixo_tras_rank, 0, &vert_esq_cima_frente, dims[2], MPI_INT, esq_cima_frente_rank, 0, cart_comm, MPI_STATUS_IGNORE); // AR dir cima
     
     for( aux_z=0; aux_z < TAMANHO_GRID; aux_z++)
     {
@@ -183,6 +192,8 @@ int main(int argc, char *argv[]) {
         //FACE TRAS DIAGS
         MPI_Sendrecv(&data_send[TAMANHO_GRID-1][TAMANHO_GRID-1][aux_z], dims[2], MPI_INT, frente_cima_rank, 0, &data_recv_tras[0][aux_z], dims[2], MPI_INT, tras_baixo_rank, 0, cart_comm, MPI_STATUS_IGNORE); // AR esq baixo
         MPI_Sendrecv(&data_send[0][TAMANHO_GRID-1][aux_z], dims[2], MPI_INT, frente_baixo_rank, 0, &data_recv_tras[TAMANHO_GRID+1][aux_z], dims[2], MPI_INT, tras_cima_rank, 0, cart_comm, MPI_STATUS_IGNORE); // AR dir cima
+
+        
 
         for (aux_y=0; aux_y<TAMANHO_GRID; aux_y++)
         {
@@ -310,6 +321,8 @@ int main(int argc, char *argv[]) {
             }
         }
     }
+
+    printf("rank: %d, SUPPOSED TO RECEIVE VERT ESQ CIMA FRENTE  %d\n",rank, vert_esq_cima_frente);
 
     MPI_Finalize();
     return 0;
