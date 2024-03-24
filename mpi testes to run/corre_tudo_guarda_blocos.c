@@ -169,12 +169,36 @@ char ***gen_initial_bloco(int max, int min ,int N, float density, int input_seed
         }     
     }
 
+	x = 0;
+	y = 0;
+	z = 0;	
+
 	for(aux = 0; aux <64; aux++){
 		if(r4_uni() < density){
 			prov = (int)(r4_uni() * N_SPECIES) + 1; // preenchimento initial do grid_even dependendo da seed
 			//count_species[grid_even[x][y][z]]++;
-			printf("numero: %d\n",prov);
+			printf("numero: %d\n",prov);	
 		}	
+		if(aux < 2){
+				grid_even[x][y][z] = prov;
+				x++;	
+			}
+			y++;
+			
+			if(aux>3 && aux < 6){
+				grid_even[x][y][z] = prov;
+			}
+			z++;
+			x = 0;
+			y = 0;
+			
+			if(aux>15 && aux < 18){
+				grid_even[x][y][z] = prov;
+			}
+			x++;
+			if(aux>19 && aux < 23){
+				grid_even[x][y][z] = prov;
+			}
 	}
 
 
