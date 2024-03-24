@@ -188,10 +188,11 @@ char ***gen_initial_bloco(int max, int min ,int N, float density, int input_seed
 					}
 					
 				
-			}
+				}
 				
-        }     
-    }
+			}     
+		}
+	}
 
 	// conta as especies da geracao 0
     for(x=1; x < 10; x++)
