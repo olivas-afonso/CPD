@@ -402,7 +402,7 @@ int main(int argc, char *argv[]) {
 	
 	
     // Create a 3D array to hold the layer of the grid for each process
-	int layer[NX][NY][NZ];
+	//int layer[NX][NY][NZ];
 	
 	/*************************************************************************
 	* codigo do MPI
@@ -537,13 +537,13 @@ if(rank == 0){
 	
 	//cria a grid aleatoria atraves dos inputs (funcao fornecida)
 for (int i = 0; i < size; i++) {
-	/*if (rank == 1) {
+	if (rank == 1) {
 		char *** grid;
 		int min = 0;
 		int max = 0;
 		
-		min = 16*rank;
-		max = min + 15;
+		min = ((int)n_double)*rank;
+		max = min + ((int)n_double);
 				
 		grid = gen_initial_bloco(max, min,number_of_cells, density, seed);
 		
@@ -575,7 +575,7 @@ for (int i = 0; i < size; i++) {
 		
 		freeMatrix(16);
 		MPI_Barrier(MPI_COMM_WORLD);
-	}*/    
+	}  
 }	
 	
 	
