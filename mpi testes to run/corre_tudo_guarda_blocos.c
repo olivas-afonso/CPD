@@ -114,11 +114,8 @@ char ***gen_initial_grid(int N, float density, int input_seed)
 char ***gen_initial_bloco(int max, int min ,int N, float density, int input_seed)
 {
     int x, y, z;
-	int x1, y1, z1;
 	int prov = 0;
     int aux = 0;
-	int flag=0;
-	int flag_cond = 0;
 	
     init_r4uni(input_seed);
     
@@ -136,46 +133,79 @@ char ***gen_initial_bloco(int max, int min ,int N, float density, int input_seed
         exit(1);
     }*/
 // aloca o eixo final, ataves de um apontador de arrays
-    for(x = 0; x < N; x++) {
-        if(x <= max){
-			printf("vai alocar x\n");
-			flag++;
-			grid_even[x1] = (char **) malloc(max * sizeof(char *));
-			if(grid_even[x1] == NULL) {
-				printf("Failed to allocate matrix3\n");
-				exit(1);
-			}	
-		
-			for (y = 0; y < N; y++){
-				if(y <= max){	
-					printf("vai alocar y\n");
-					flag++;
-					grid_even[x1][y1] = (char*) calloc(max, sizeof(char));
-					if(grid_even[x1][y1] == NULL) {
-						printf("Failed to allocate matrix6\n");
-						exit(1);
-					}
-				}else{
-					flag--;
-				}
-				for (z = 0; z < N; z++)
-					if(z <= max){
-						if(r4_uni() < density){
-							aux++;
-							//printf("celula: %d",aux);
-							// preenchimento initial do grid_even dependendo da seed
-							prov = (int)(r4_uni() * N_SPECIES) + 1; // preenchimento initial do grid_even dependendo da seed
-							count_species[grid_even[x1][y1][z1]]++;
-							if (flag == 2) {
-								grid_even[x][y][z] = prov;
-							} 
-						}
-					}
-			}     
-		}
-	}	
+    for(x = 0; x < max; x++) {
+        grid_even[x] = (char **) malloc(max * sizeof(char *));
+        if(grid_even[x] == NULL) {
+            printf("Failed to allocate matrix3\n");
+            exit(1);
+        }
 
-	/*// conta as especies da geracao 0
+        /*grid_odd[x] = (char **) malloc(N * sizeof(char *));
+        if(grid_odd[x] == NULL) {
+            printf("Failed to allocate matrix5\n");
+            exit(1);
+        }*/
+
+        for (y = 0; y < max; y++){
+            grid_even[x][y] = (char*) calloc(max, sizeof(char));
+            if(grid_even[x][y] == NULL) {
+                printf("Failed to allocate matrix6\n");
+                exit(1);
+            }
+          /*  grid_odd[x][y] = (char*) calloc(N, sizeof(char));
+            if(grid_odd[x][y] == NULL) {
+                printf("Failed to allocate matrix6\n");
+                exit(1);
+            }*/
+            /*for (z = 0; z < max; z++)
+                if(r4_uni() < density){
+					aux++;
+					//printf("celula: %d",aux);
+					// preenchimento initial do grid_even dependendo da seed
+					prov = (int)(r4_uni() * N_SPECIES) + 1; // preenchimento initial do grid_even dependendo da seed
+					count_species[grid_even[x][y][z]]++;
+						
+					grid_even[x][y][z] = prov;
+					
+						
+					
+				}
+			*/	
+        }     
+    }
+	
+	for(int merdoca = 0; merdoca < 64; merdoca++){
+					aux++;
+					//printf("celula: %d",aux);
+					// preenchimento initial do grid_even dependendo da seed
+					prov = (int)(r4_uni() * N_SPECIES) + 1; // preenchimento initial do grid_even dependendo da seed
+					//count_species[grid_even[x][y][z]]++;
+					
+					if(merdoca < 2){
+						grid_even[x][y][z] = prov;
+						x++;	
+					}
+					y++;
+					
+					if(merdoca>3 && merdoca < 6){
+						grid_even[x][y][z] = prov;
+					}
+					z++;
+					x = 0;
+					y = 0;
+					
+					if(merdoca>15 && merdoca < 18){
+						grid_even[x][y][z] = prov;
+					}
+					x++;
+					if(merdoca>19 && merdoca < 23){
+						grid_even[x][y][z] = prov;
+					}
+	}
+	
+	/*
+
+	// conta as especies da geracao 0
     for(x=1; x < 10; x++)
     {
         if(count_species[x] > max_count[x])
@@ -471,13 +501,21 @@ for (int i = 0; i < size; i++) {
 		char *** grid;
 		int min = 0;
 		int max = 0;
-		/*
+		int inicio = 0;
+		
 		min = ((int)n_double)*rank;
 		max = min + (((int)n_double));
-		*/
+
+/*		
+		inicio = ((int)n_double)*rank; 
 		
-		min = ((int)n_double)*rank; 
-		max = ((int)n_double); 
+		*x = inicio % 4;
+		*y = (inicio / 4) % 4;
+		*z = inicio / 16;
+		
+		min = x + y * 4 + z * 16;
+		max = x + y * 4 + z * 16; 
+*/
 		printf("valores: %d %d \n", min ,max);	
 		
 		grid = gen_initial_bloco(max, min,number_of_cells, density, seed);
