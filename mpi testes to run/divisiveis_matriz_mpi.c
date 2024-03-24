@@ -499,7 +499,7 @@ if(rank == 0){
 	
 	//x_double = (double)x;
 	printf("x = %2.f \n", x_double);
-	double raiz_cubica_x = raiz_dubica_funcao(x_double);
+	double raiz_cubica_x = raiz_cubica_funcao(x_double);
 
 	printf("raiz = %2.f \n", raiz_cubica_x);
 
