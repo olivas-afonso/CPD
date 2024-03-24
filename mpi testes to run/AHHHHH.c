@@ -320,9 +320,10 @@ int main(int argc, char *argv[]) {
                 printf("rank: %d, SUPPOSED TO RECEIVE FACE TRAS (aux %d / %d) %d\n",rank,aux_z, aux_y, data_recv_tras[aux_z][aux_y]);
             }
         }
+         printf("rank: %d, SUPPOSED TO RECEIVE VERT ESQ CIMA FRENTE  %d\n",rank, vert_esq_cima_frente);
     }
 
-    printf("rank: %d, SUPPOSED TO RECEIVE VERT ESQ CIMA FRENTE  %d\n",rank, vert_esq_cima_frente);
+   
 
     MPI_Finalize();
     return 0;
