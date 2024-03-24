@@ -136,7 +136,7 @@ char ***gen_initial_bloco(int max, int min ,int N, float density, int input_seed
     }*/
 // aloca o eixo final, ataves de um apontador de arrays
     for(x = 0; x < N; x++) {
-        if(x < max){
+        if(x <= max){
 			printf("vai alocar x\n");
 			flag++;
 			grid_even[x] = (char **) malloc(max * sizeof(char *));
@@ -152,7 +152,7 @@ char ***gen_initial_bloco(int max, int min ,int N, float density, int input_seed
         }*/
 
         for (y = 0; y < N; y++){
-			if(y < max){	
+			if(y <= max){	
 				printf("vai alocar y\n");
 				flag++;
 				grid_even[x][y] = (char*) calloc(max, sizeof(char));
