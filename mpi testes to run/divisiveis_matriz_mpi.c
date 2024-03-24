@@ -549,7 +549,7 @@ for (int i = 0; i < size; i++) {
 		
 		//exec_time = -omp_get_wtime();
 
-		// corre todas as celulas da grid 
+		/*// corre todas as celulas da grid 
 		for(aux_x=0; aux_x< NX; aux_x ++)
 		{
 			for(aux_y=0; aux_y<NY; aux_y++)
@@ -575,6 +575,7 @@ for (int i = 0; i < size; i++) {
 		
 		freeMatrix(16);
 		MPI_Barrier(MPI_COMM_WORLD);
+	*/
 	}  
 }	
 	
