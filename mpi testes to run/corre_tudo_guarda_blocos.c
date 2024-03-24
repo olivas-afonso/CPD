@@ -138,7 +138,6 @@ char ***gen_initial_bloco(int max, int min ,int N, float density, int input_seed
 // aloca o eixo final, ataves de um apontador de arrays
     for(x = 0; x < N; x++) {
         if(x <= max){
-			x1++;
 			printf("vai alocar x\n");
 			flag++;
 			grid_even[x1] = (char **) malloc(max * sizeof(char *));
@@ -146,6 +145,7 @@ char ***gen_initial_bloco(int max, int min ,int N, float density, int input_seed
 				printf("Failed to allocate matrix3\n");
 				exit(1);
 			}	
+		x1++;
 		}
         /*grid_odd[x] = (char **) malloc(N * sizeof(char *));
         if(grid_odd[x] == NULL) {
@@ -155,7 +155,6 @@ char ***gen_initial_bloco(int max, int min ,int N, float density, int input_seed
 
         for (y = 0; y < N; y++){
 			if(y <= max){	
-				y1++;
 				printf("vai alocar y\n");
 				flag++;
 				grid_even[x1][y1] = (char*) calloc(max, sizeof(char));
@@ -163,6 +162,7 @@ char ***gen_initial_bloco(int max, int min ,int N, float density, int input_seed
 					printf("Failed to allocate matrix6\n");
 					exit(1);
 				}
+				y1++;
 			}else{
 				flag--;
 			}
@@ -172,8 +172,7 @@ char ***gen_initial_bloco(int max, int min ,int N, float density, int input_seed
                 exit(1);
             }*/
             for (z = 0; z < N; z++)
-                if(z <= max){
-					z1++;
+                if(z <= max){	
 					if(r4_uni() < density){
 						aux++;
 						//printf("celula: %d",aux);
@@ -186,6 +185,7 @@ char ***gen_initial_bloco(int max, int min ,int N, float density, int input_seed
 							grid_even[x][y][z] = prov;
 						} 
 					}
+					z1++;
 				}
         }     
     }
