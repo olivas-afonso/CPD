@@ -135,6 +135,14 @@ int main(int argc, char *argv[]) {
         }
     }
 
+    int **data_recv_tras = (int **)malloc((TAMANHO_GRID+2) * sizeof(int *));
+    for (int i = 0; i < (TAMANHO_GRID+2); ++i) {
+        data_recv_tras[i] = (int *)malloc((TAMANHO_GRID) * sizeof(int));
+        for (int j = 0; j < (TAMANHO_GRID+2); ++j) {
+             data_recv_tras[i][j]=0;
+        }
+    }
+
 
     int aux_x, aux_y, aux_z;
     int data_recv_up, data_recv_left, data_recv_right, data_recv_forward, data_recv_backward;
@@ -187,11 +195,14 @@ int main(int argc, char *argv[]) {
             MPI_Sendrecv(&data_send[0][aux_y][aux_z], dims[2], MPI_INT, baixo_rank, 0, &data_recv_cima[aux_z+1][aux_y], dims[2], MPI_INT, cima_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir  
             
             //FACE BAIXO
-            MPI_Sendrecv(&data_send[TAMANHO_GRID-1][aux_z][aux_y], dims[2], MPI_INT, cima_rank, 0, &data_recv_baixo[aux_z+1][aux_y], dims[2], MPI_INT, baixo_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir                      
+            MPI_Sendrecv(&data_send[TAMANHO_GRID-1][aux_y][aux_z], dims[2], MPI_INT, cima_rank, 0, &data_recv_baixo[aux_z+1][aux_y], dims[2], MPI_INT, baixo_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir                      
 
             //FACE FRENTE
             MPI_Sendrecv(&data_send[aux_z][0][aux_y], dims[2], MPI_INT, tras_rank, 0, &data_recv_frente[aux_z+1][aux_y], dims[2], MPI_INT, frente_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir   
             
+            //FACE TRAS
+            MPI_Sendrecv(&data_send[aux_z][TAMANHO_GRID-1][aux_y], dims[2], MPI_INT, frente_rank, 0, &data_recv_tras[aux_z+1][aux_y], dims[2], MPI_INT, tras_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir   
+
             for(aux_x=0;aux_x<TAMANHO_GRID; aux_x++)
             {
                 //FACE CIMA
@@ -286,6 +297,15 @@ int main(int argc, char *argv[]) {
             for(aux_y=0;aux_y<TAMANHO_GRID;aux_y++)
             {
                 printf("rank: %d, SUPPOSED TO RECEIVE FACE FRENTE (aux %d / %d) %d\n",rank,aux_z, aux_y, data_recv_frente[aux_z][aux_y]);
+            }
+        }
+
+        printf("\n");
+        for(aux_z=0;aux_z<(TAMANHO_GRID+2);aux_z++)
+        {
+            for(aux_y=0;aux_y<TAMANHO_GRID;aux_y++)
+            {
+                printf("rank: %d, SUPPOSED TO RECEIVE FACE TRAS (aux %d / %d) %d\n",rank,aux_z, aux_y, data_recv_tras[aux_z][aux_y]);
             }
         }
     }
