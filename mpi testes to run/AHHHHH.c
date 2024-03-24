@@ -181,7 +181,7 @@ int main(int argc, char *argv[]) {
             MPI_Sendrecv(&data_send[aux_z][aux_y][0], dims[2], MPI_INT, esq_rank, 0, &data_recv_dir[aux_z+1][aux_y], dims[2], MPI_INT, dir_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir
 
             //FACE ESQUERDA
-            MPI_Sendrecv(&data_send[aux_z][aux_y][TAMANHO_GRID-1], dims[2], MPI_INT, dir_rank, 0, &data_recv_esq[aux_z+1][aux_y], dims[2], MPI_INT, esq_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir
+            MPI_Sendrecv(&data_send[aux_y][aux_z][TAMANHO_GRID-1], dims[2], MPI_INT, dir_rank, 0, &data_recv_esq[aux_z+1][aux_y], dims[2], MPI_INT, esq_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir
             
             //FACE CIMA
             MPI_Sendrecv(&data_send[0][aux_z][aux_y], dims[2], MPI_INT, baixo_rank, 0, &data_recv_cima[aux_z+1][aux_y], dims[2], MPI_INT, cima_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir  
