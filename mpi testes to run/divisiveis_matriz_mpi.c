@@ -472,7 +472,7 @@ for (int i = 0; i < size; i++) {
 		max = min + (((int)n_double));
 		*/
 		
-		min = ((int)n_double); 
+		min = ((int)n_double)*rank; 
 		max = ((int)n_double); 
 		printf("valores: %d %d \n", min ,max);	
 		
