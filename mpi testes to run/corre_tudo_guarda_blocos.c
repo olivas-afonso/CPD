@@ -145,52 +145,37 @@ char ***gen_initial_bloco(int max, int min ,int N, float density, int input_seed
 				printf("Failed to allocate matrix3\n");
 				exit(1);
 			}	
-		x1++;
-		}
-        /*grid_odd[x] = (char **) malloc(N * sizeof(char *));
-        if(grid_odd[x] == NULL) {
-            printf("Failed to allocate matrix5\n");
-            exit(1);
-        }*/
-
-        for (y = 0; y < N; y++){
-			if(y <= max){	
-				printf("vai alocar y\n");
-				flag++;
-				grid_even[x1][y1] = (char*) calloc(max, sizeof(char));
-				if(grid_even[x1][y1] == NULL) {
-					printf("Failed to allocate matrix6\n");
-					exit(1);
-				}
-				y1++;
-			}else{
-				flag--;
-			}
-		/*  grid_odd[x][y] = (char*) calloc(N, sizeof(char));
-            if(grid_odd[x][y] == NULL) {
-                printf("Failed to allocate matrix6\n");
-                exit(1);
-            }*/
-            for (z = 0; z < N; z++)
-                if(z <= max){	
-					if(r4_uni() < density){
-						aux++;
-						//printf("celula: %d",aux);
-						// preenchimento initial do grid_even dependendo da seed
-						prov = (int)(r4_uni() * N_SPECIES) + 1; // preenchimento initial do grid_even dependendo da seed
-						count_species[grid_even[x1][y1][z1]]++;
-
-
-						 if (flag == 2) {
-							grid_even[x][y][z] = prov;
-						} 
+		
+			for (y = 0; y < N; y++){
+				if(y <= max){	
+					printf("vai alocar y\n");
+					flag++;
+					grid_even[x1][y1] = (char*) calloc(max, sizeof(char));
+					if(grid_even[x1][y1] == NULL) {
+						printf("Failed to allocate matrix6\n");
+						exit(1);
 					}
-					z1++;
+				}else{
+					flag--;
 				}
-        }     
-    }
+				for (z = 0; z < N; z++)
+					if(z <= max){
+						if(r4_uni() < density){
+							aux++;
+							//printf("celula: %d",aux);
+							// preenchimento initial do grid_even dependendo da seed
+							prov = (int)(r4_uni() * N_SPECIES) + 1; // preenchimento initial do grid_even dependendo da seed
+							count_species[grid_even[x1][y1][z1]]++;
+							if (flag == 2) {
+								grid_even[x][y][z] = prov;
+							} 
+						}
+					}
+			}     
+		}
+	}	
 
-	// conta as especies da geracao 0
+	/*// conta as especies da geracao 0
     for(x=1; x < 10; x++)
     {
         if(count_species[x] > max_count[x])
@@ -199,7 +184,7 @@ char ***gen_initial_bloco(int max, int min ,int N, float density, int input_seed
             max_gen[x]=0;
         }
     } 
-                    
+      */              
 
     return grid_even;
 }
