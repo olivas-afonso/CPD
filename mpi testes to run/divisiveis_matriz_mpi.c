@@ -161,7 +161,7 @@ char ***gen_initial_bloco(int max, int min ,int N, float density, int input_seed
 			}else{
 				flag--;
 			}
-		} /*  grid_odd[x][y] = (char*) calloc(N, sizeof(char));
+		/*  grid_odd[x][y] = (char*) calloc(N, sizeof(char));
             if(grid_odd[x][y] == NULL) {
                 printf("Failed to allocate matrix6\n");
                 exit(1);
