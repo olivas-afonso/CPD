@@ -433,71 +433,6 @@ int main(int argc, char *argv[]) {
 	***************************************************************************/
 	
 if(rank == 0){
-	/*if (argc < 2) {
-        printf("Usage: %s <N>\n", argv[0]);
-        return 1;
-    }
-
-    int N = atoi(argv[1]);
-    printf("x = %d \n", N);
-	if (N <= 0) {
-        printf("N must be a positive integer.\n");
-        return 1;
-    }
-	
-	int x = atoi(argv[2]);
-    printf("x = %d \n", x);
-	if (x <= 0) {
-        printf("x must be a positive integer.\n");
-        return 1;
-    }
-
-
-    // Calcular o total de células
-    int total_celulas = N * N * N;
-
-    // Alocar espaço para o cubo tridimensional
-    int ***cubo = (int ***)malloc(N * sizeof(int **));
-    for (int i = 0; i < N; i++) {
-        cubo[i] = (int **)malloc(N * sizeof(int *));
-        for (int j = 0; j < N; j++) {
-            cubo[i][j] = (int *)malloc(N * sizeof(int));
-        }
-    }
-
-    // Preencher o cubo com valores naturais crescentes
-    int valor = 1;
-    for (int i = 0; i < N; i++) {
-        for (int j = 0; j < N; j++) {
-            for (int k = 0; k < N; k++) {
-                cubo[i][j][k] = valor++;
-            }
-        }
-    }
-
-    // Exibir o cubo
-    printf("Cubo preenchido com valores naturais crescentes:\n");
-    for (int i = 0; i < N; i++) {
-        for (int j = 0; j < N; j++) {
-            for (int k = 0; k < N; k++) {
-                printf("%4d ", cubo[i][j][k]);
-            }
-            printf("\n");
-        }
-        printf("\n");
-    }
-*/
-	//divisao_matematica(N, x);
-	
-	//printf("Digite o valor de x: ");
-    //scanf("%d", &x);
-	
-    // Calcular a raiz cúbica de x
- 
-	//scanf("%lf %lf", &N_double, &x_double);
-    //double = (double)N;
-	
-	
 	x_double = (double)size;
 	N_double = (double)NX;
 	
@@ -521,30 +456,26 @@ if(rank == 0){
 	double comprimento_cubo_pequeno = N_double / raiz_cubica_x;
 	
 	printf("valor de n=%f\n", comprimento_cubo_pequeno);
-/*
-    // Liberar memória alocada para o cubo
-    for (int i = 0; i < N; i++) {
-        for (int j = 0; j < N; j++) {
-            free(cubo[i][j]);
-        }
-        free(cubo[i]);
-    }
-    free(cubo);
-*/	
+
 }
 
 	
 	
 	//cria a grid aleatoria atraves dos inputs (funcao fornecida)
 for (int i = 0; i < size; i++) {
-	if (rank == 1) {
+	if (rank == 0) {
 		char *** grid;
 		int min = 0;
 		int max = 0;
-		
+		/*
 		min = ((int)n_double)*rank;
-		max = min + ((int)n_double);
-				
+		max = min + (((int)n_double));
+		*/
+		
+		min = ((int)n_double); 
+		max = ((int)n_double); 
+		printf("valores: %d %d \n", min ,max);	
+		
 		grid = gen_initial_bloco(max, min,number_of_cells, density, seed);
 		
 		//exec_time = -omp_get_wtime();
