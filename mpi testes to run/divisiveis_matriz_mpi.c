@@ -370,6 +370,12 @@ int main(int argc, char *argv[]) {
     density = atof (argv[3]);
     seed = atoi (argv[4]);
 	
+	
+	double N_double;
+	double n_double;
+	double x_double;
+    
+	
 	int NX = number_of_cells;
 	int NY = NX;
 	int NZ = NX;
@@ -409,10 +415,6 @@ int main(int argc, char *argv[]) {
 	***************************************************************************/
 	
 if(rank == 0){
-	double N_double;
-	double n_double;
-	double x_double;
-    
 	/*if (argc < 2) {
         printf("Usage: %s <N>\n", argv[0]);
         return 1;
