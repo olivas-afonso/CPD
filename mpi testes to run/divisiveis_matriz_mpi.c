@@ -499,7 +499,7 @@ if(rank == 0){
 	
 	
 	x_double = (double)size;
-	n_double = (double)NX;
+	N_double = (double)NX;
 	
 	printf("Você digitou: %.2lf e %.2lf\n", N_double, x_double);
 	
