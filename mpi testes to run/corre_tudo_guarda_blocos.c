@@ -225,21 +225,21 @@ char ***gen_initial_bloco(int max, int min ,int n,int N, float density, int inpu
 					if (x>= min && y>= min && z>= min) {
 						if (x<max && y<max && z<max) {
 							grid_even[x1][y1][z1] = prov;
-							printf("numero: %d\n",prov);
-							x1 ++;
-							if(x1 == n){
-								x1 =0;
+							printf("numero: %d\n",prov);	 	
+						}	
+						z1 ++;
+							if(z1 == n){
+								z1 =0;
 								y1++;
 							}
 							if(y1 == n){
-								x1 =0;
+								z1 =0;
 								y1 =0;
-								z1++;
+								x1++;
 							} 	
-							if(z1 == n){
+							if(x1 == n){
 								return grid_even;
-							} 	
-						}	
+							}
 					}
 				}		
 			}
