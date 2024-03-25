@@ -59,7 +59,7 @@ int main(int argc, char *argv[]) {
 
 
     int ***data_send = (int ***)malloc((sub_z+2) * sizeof(int **));
-    for (int i = 0; i < (sub_z)+2); ++i) {
+    for (int i = 0; i < (sub_z+2); ++i) {
         data_send[i] = (int **)malloc((sub_y+2) * sizeof(int *));
         for (int j = 0; j < (sub_y+2); ++j) {
             data_send[i][j] = (int *)malloc((sub_x+2) * sizeof(int));
