@@ -302,6 +302,7 @@ int main(int argc, char *argv[]) {
     {
         for(aux_z=0;aux_z<(TAMANHO_GRID+2);aux_z++)
         {
+            printf("\n");
             for(aux_y=0;aux_y<(TAMANHO_GRID+2);aux_y++)
             {
                 printf("rank: %d, SUPPOSED TO RECEIVE FACE DIR (aux %d / %d) %d\n",rank,aux_y, aux_z, data_send[aux_z][aux_y][TAMANHO_GRID+1]);
