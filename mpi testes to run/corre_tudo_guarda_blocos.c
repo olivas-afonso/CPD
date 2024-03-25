@@ -483,7 +483,7 @@ int main(int argc, char *argv[]) {
 	* codigo do serial 
 	***************************************************************************/
 	
-if(rank == 0){
+if(rank == 1){
 	x_double = (double)size;
 	N_double = (double)NX;
 	
