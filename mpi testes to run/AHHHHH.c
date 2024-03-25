@@ -233,7 +233,7 @@ int main(int argc, char *argv[]) {
         MPI_Sendrecv(&data_send[1][1][aux_z+1], 1, MPI_INT, tras_baixo_rank, 0, &data_recv_frente[TAMANHO_GRID+1][aux_z], 1, MPI_INT, frente_cima_rank, 0, cart_comm, MPI_STATUS_IGNORE); // AR dir cima
 
         //FACE TRAS DIAGS
-        MPI_Sendrecv(&data_send[TAMANHO_GRID][TAMANHO_GRID-1][aux_z+1], 1, MPI_INT, frente_cima_rank, 0, &data_recv_tras[0][aux_z], 1, MPI_INT, tras_baixo_rank, 0, cart_comm, MPI_STATUS_IGNORE); // AR esq baixo
+        MPI_Sendrecv(&data_send[TAMANHO_GRID][TAMANHO_GRID][aux_z+1], 1, MPI_INT, frente_cima_rank, 0, &data_recv_tras[0][aux_z], 1, MPI_INT, tras_baixo_rank, 0, cart_comm, MPI_STATUS_IGNORE); // AR esq baixo
         MPI_Sendrecv(&data_send[1][TAMANHO_GRID][aux_z+1], 1, MPI_INT, frente_baixo_rank, 0, &data_recv_tras[TAMANHO_GRID+1][aux_z], 1, MPI_INT, tras_cima_rank, 0, cart_comm, MPI_STATUS_IGNORE); // AR dir cima
 
         
