@@ -563,11 +563,11 @@ for (int i = 0; i < size; i++) {
 		min_z = ((int)n_double)*rank;
 		if(min_z <= number_of_cells){
 			printf("entrou\n");
-			max_z = min_z + (((int)n_double));
+			max_z = min_z + n);
 			min_y = 0;
 			min_x = 0;
 			max_y = n;
-			max_z = n;
+			max_x = n;
 		}
 		
 
