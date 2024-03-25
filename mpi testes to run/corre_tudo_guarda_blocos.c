@@ -127,7 +127,7 @@ char ***gen_initial_bloco(int max, int min ,int n,int N, float density, int inpu
     init_r4uni(input_seed);
     
 //alocacao da memeoria dinamica, alocando primeiro um apontador triplo o que corresponde a uma dimensao do cubo  ~
-    grid_even = (char ***) malloc(max* sizeof(char **));
+    grid_even = (char ***) malloc(n* sizeof(char **));
     if(grid_even == NULL) {
         printf("Failed to allocate matrix1\n");
         exit(1);
