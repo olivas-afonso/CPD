@@ -220,14 +220,15 @@ char ***gen_initial_bloco(int max, int min ,int n,int N, float density, int inpu
 		for(y=0; y < N; y++){
 			for(z=0; z<N; z++){
 				printf("celula lida\n");
-				if(r4_uni() < density){
-					prov = (int)(r4_uni() * N_SPECIES) + 1; // preenchimento initial do grid_even dependendo da seed
-					//count_species[grid_even[x][y][z]]++;
-					if (x>= min && y>= min && z>= min) {
-						if (x<max && y<max && z<max) {
+				if (x>= min && y>= min && z>= min) {
+					if (x<max && y<max && z<max) {
+						if(r4_uni() < density){
+							prov = (int)(r4_uni() * N_SPECIES) + 1; // preenchimento initial do grid_even dependendo da seed
+							//count_species[grid_even[x][y][z]]++;
 							grid_even[x1][y1][z1] = prov;
 							printf("numero: %d\n",prov);	 	
-							z1 ++;
+						}
+						z1 ++;
 							if(z1 == n){
 								z1 =0;
 								y1++;
@@ -239,10 +240,9 @@ char ***gen_initial_bloco(int max, int min ,int n,int N, float density, int inpu
 							} 	
 							if(x1 == n){
 								return grid_even;
-							}	
-						}	
+							}		
 					}	
-				}		
+				}			
 			}
 		}
 		
