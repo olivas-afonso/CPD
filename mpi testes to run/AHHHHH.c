@@ -200,15 +200,15 @@ int main(int argc, char *argv[]) {
 
     //VERT ESQ CIMA FRENTE
     if (rank==13) printf("START\n");
-    MPI_Sendrecv(&data_send[1][1][TAMANHO_GRID], 1, MPI_INT, dir_baixo_tras_rank, 0, &vert_esq_cima_frente, 1, MPI_INT, esq_cima_frente_rank, 0, cart_comm, MPI_STATUS_IGNORE); // AR dir cima
-    MPI_Sendrecv(&data_send[TAMANHO_GRID][TAMANHO_GRID][1], 1, MPI_INT, esq_cima_frente_rank, 0, &vert_dir_baixo_tras, 1, MPI_INT, dir_baixo_tras_rank, 0, cart_comm, MPI_STATUS_IGNORE);
-    MPI_Sendrecv(&data_send[TAMANHO_GRID][TAMANHO_GRID][TAMANHO_GRID], 1, MPI_INT, dir_cima_frente_rank, 0, &vert_esq_baixo_tras, 1, MPI_INT, esq_baixo_tras_rank, 0, cart_comm, MPI_STATUS_IGNORE);
-    MPI_Sendrecv(&data_send[1][1][1], 1, MPI_INT, esq_baixo_tras_rank, 0, &vert_dir_cima_frente, 1, MPI_INT, dir_cima_frente_rank, 0, cart_comm, MPI_STATUS_IGNORE);
+    MPI_Sendrecv(&data_send[1][1][TAMANHO_GRID], 1, MPI_INT, dir_baixo_tras_rank, 0, &data_send[TAMANHO_GRID+1][TAMANHO_GRID+1][0], 1, MPI_INT, esq_cima_frente_rank, 0, cart_comm, MPI_STATUS_IGNORE); // AR dir cima
+    MPI_Sendrecv(&data_send[TAMANHO_GRID][TAMANHO_GRID][1], 1, MPI_INT, esq_cima_frente_rank, 0, &data_send[0][0][TAMANHO_GRID+1], 1, MPI_INT, dir_baixo_tras_rank, 0, cart_comm, MPI_STATUS_IGNORE);
+    MPI_Sendrecv(&data_send[TAMANHO_GRID][TAMANHO_GRID][TAMANHO_GRID], 1, MPI_INT, dir_cima_frente_rank, 0, &data_send[0][0][0], 1, MPI_INT, esq_baixo_tras_rank, 0, cart_comm, MPI_STATUS_IGNORE);
+    MPI_Sendrecv(&data_send[1][1][1], 1, MPI_INT, esq_baixo_tras_rank, 0, &data_send[TAMANHO_GRID+1][TAMANHO_GRID+1][TAMANHO_GRID+1], 1, MPI_INT, dir_cima_frente_rank, 0, cart_comm, MPI_STATUS_IGNORE);
     
-    MPI_Sendrecv(&data_send[1][TAMANHO_GRID][TAMANHO_GRID], 1, MPI_INT, dir_baixo_frente_rank, 0, &vert_esq_cima_tras, 1, MPI_INT, esq_cima_tras_rank, 0, cart_comm, MPI_STATUS_IGNORE); // AR dir cima
-    MPI_Sendrecv(&data_send[TAMANHO_GRID][1][1], 1, MPI_INT, esq_cima_tras_rank, 0, &vert_dir_baixo_frente, 1, MPI_INT, dir_baixo_frente_rank, 0, cart_comm, MPI_STATUS_IGNORE);
-    MPI_Sendrecv(&data_send[TAMANHO_GRID][1][TAMANHO_GRID], 1, MPI_INT, dir_cima_tras_rank, 0, &vert_esq_baixo_frente, 1, MPI_INT, esq_baixo_frente_rank, 0, cart_comm, MPI_STATUS_IGNORE);
-    MPI_Sendrecv(&data_send[1][TAMANHO_GRID][1], 1, MPI_INT, esq_baixo_frente_rank, 0, &vert_dir_cima_tras, 1, MPI_INT, dir_cima_tras_rank, 0, cart_comm, MPI_STATUS_IGNORE);
+    MPI_Sendrecv(&data_send[1][TAMANHO_GRID][TAMANHO_GRID], 1, MPI_INT, dir_baixo_frente_rank, 0, &data_send[TAMANHO_GRID+1][0][0], 1, MPI_INT, esq_cima_tras_rank, 0, cart_comm, MPI_STATUS_IGNORE); // AR dir cima
+    MPI_Sendrecv(&data_send[TAMANHO_GRID][1][1], 1, MPI_INT, esq_cima_tras_rank, 0, &data_send[0][TAMANHO_GRID+1][TAMANHO_GRID+1], 1, MPI_INT, dir_baixo_frente_rank, 0, cart_comm, MPI_STATUS_IGNORE);
+    MPI_Sendrecv(&data_send[TAMANHO_GRID][1][TAMANHO_GRID], 1, MPI_INT, dir_cima_tras_rank, 0, &data_send[0][TAMANHO_GRID+1][0], 1, MPI_INT, esq_baixo_frente_rank, 0, cart_comm, MPI_STATUS_IGNORE);
+    MPI_Sendrecv(&data_send[1][TAMANHO_GRID][1], 1, MPI_INT, esq_baixo_frente_rank, 0, &data_send[TAMANHO_GRID+1][0][TAMANHO_GRID+1], 1, MPI_INT, dir_cima_tras_rank, 0, cart_comm, MPI_STATUS_IGNORE);
 
     for( aux_z=0; aux_z < TAMANHO_GRID; aux_z++)
     {
@@ -300,58 +300,19 @@ int main(int argc, char *argv[]) {
 
     if(rank==13)
     {
+        
         for(aux_z=0;aux_z<(TAMANHO_GRID+2);aux_z++)
         {
-            printf("\n");
+            printf(" CAMADA\n");
             for(aux_y=0;aux_y<(TAMANHO_GRID+2);aux_y++)
             {
-                printf("rank: %d, SUPPOSED TO RECEIVE FACE DIR (aux %d / %d) %d\n",rank,aux_y, aux_z, data_send[aux_z][aux_y][TAMANHO_GRID+1]);
+                for(aux_x=0;aux_x<(TAMANHO_GRID+2); aux_x++)
+                {
+                     printf("%d ",data_send[aux_z][aux_y][aux_x]);
+                }
+                printf("\n");       
             }
-        }
 
-        for(aux_z=0;aux_z<(TAMANHO_GRID+2);aux_z++)
-        {
-            printf("\n");
-            for(aux_y=0;aux_y<(TAMANHO_GRID+2);aux_y++)
-            {
-                printf("rank: %d, SUPPOSED TO RECEIVE FACE ESQ (aux %d / %d) %d\n",rank,aux_y, aux_z, data_send[aux_z][aux_y][0]);
-            }
-        }
-
-         for(aux_z=0;aux_z<(TAMANHO_GRID+2);aux_z++)
-        {
-            printf("\n");
-            for(aux_y=0;aux_y<(TAMANHO_GRID+2);aux_y++)
-            {
-                printf("rank: %d, SUPPOSED TO RECEIVE FACE CIMA (aux %d / %d) %d\n",rank,aux_y, aux_z, data_send[TAMANHO_GRID+1][aux_z][aux_y]);
-            }
-        }
-
-         for(aux_z=0;aux_z<(TAMANHO_GRID+2);aux_z++)
-        {
-            printf("\n");
-            for(aux_y=0;aux_y<(TAMANHO_GRID+2);aux_y++)
-            {
-                printf("rank: %d, SUPPOSED TO RECEIVE FACE BAIXO (aux %d / %d) %d\n",rank,aux_y, aux_z, data_send[0][aux_z][aux_y]);
-            }
-        }
-
-         for(aux_z=0;aux_z<(TAMANHO_GRID+2);aux_z++)
-        {
-            printf("\n");
-            for(aux_y=0;aux_y<(TAMANHO_GRID+2);aux_y++)
-            {
-                printf("rank: %d, SUPPOSED TO RECEIVE FACE FRENTE (aux %d / %d) %d\n",rank,aux_y, aux_z, data_send[aux_z][TAMANHO_GRID+1][aux_y]);
-            }
-        }
-
-         for(aux_z=0;aux_z<(TAMANHO_GRID+2);aux_z++)
-        {
-            printf("\n");
-            for(aux_y=0;aux_y<(TAMANHO_GRID+2);aux_y++)
-            {
-                printf("rank: %d, SUPPOSED TO RECEIVE FACE TRAS (aux %d / %d) %d\n",rank,aux_y, aux_z, data_send[aux_z][0][aux_y]);
-            }
         }
             
 
