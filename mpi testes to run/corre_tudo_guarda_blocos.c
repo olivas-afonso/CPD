@@ -535,7 +535,7 @@ for (int i = 0; i < size; i++) {
 		min = x + y * 4 + z * 16;
 		max = x + y * 4 + z * 16; 
 */
-		printf("valores: %d %d \n", min ,max);	
+		printf("valores: %d %d %d\n", min ,max, n);	
 		
 		grid = gen_initial_bloco(max, min,n,number_of_cells, density, seed);
 		
