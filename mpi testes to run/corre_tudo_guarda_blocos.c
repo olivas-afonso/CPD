@@ -227,6 +227,7 @@ char ***gen_initial_bloco(int max, int min ,int n,int N, float density, int inpu
 				printf("celula lida: %d\n", prov);	
 				if (x>= min && y>= min && z>= min) {
 					if (x<max && y<max && z<max) {
+							printf("entrou\n");
 							grid_even[x1][y1][z1] = prov;
 						z1 ++;
 							if(z1 == n){
