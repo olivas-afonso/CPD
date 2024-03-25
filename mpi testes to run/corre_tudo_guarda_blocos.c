@@ -569,9 +569,9 @@ for (int i = 0; i < size; i++) {
 		
 		
 		printf("Rank %d: Layer %d\n", rank, rank);	
-			for(int merda_z= 0; merda_z < max; merda_z++){
-				for(int merda_y = 0; merda_y < max; merda_y++){
-					for(int merda_x = 0; merda_x < max; merda_x++){
+			for(int merda_z= 0; merda_z < n; merda_z++){
+				for(int merda_y = 0; merda_y < n; merda_y++){
+					for(int merda_x = 0; merda_x < n; merda_x++){
 						printf("%d ", grid[merda_z][merda_y][merda_x]);
 					}			
 						printf("\n");			
