@@ -95,7 +95,7 @@ int main(int argc, char *argv[]) {
     {
         for(int k=0; k< TAMANHO_GRID+1;k++)
         {
-            printf("DATA SEND i: %d  k: %d   : %d\n",i, k,  data_send[0][i][k]);
+            printf("DATA SEND i: %d  k: %d   : %d\n",i, k,  data_send[1][i][k]);
         }
         
     }
