@@ -72,13 +72,13 @@ int main(int argc, char *argv[]) {
     // Send and receive data between neighbors
     //int data_send = rank * 10 + my_coords[0] * 100 + my_coords[1] * 1000 + my_coords[2] * 10000;  // Example data
 
-    int ***data_send = (int ***)malloc(TAMANHO_GRID * sizeof(int **));
-    for (int i = 0; i < TAMANHO_GRID; ++i) {
-        data_send[i] = (int **)malloc(TAMANHO_GRID * sizeof(int *));
-        for (int j = 0; j < TAMANHO_GRID; ++j) {
-            data_send[i][j] = (int *)malloc(TAMANHO_GRID * sizeof(int));
+    int ***data_send = (int ***)malloc(TAMANHO_GRID+1 * sizeof(int **));
+    for (int i = 0; i < TAMANHO_GRID+1; ++i) {
+        data_send[i] = (int **)malloc(TAMANHO_GRID+1 * sizeof(int *));
+        for (int j = 0; j < TAMANHO_GRID+1; ++j) {
+            data_send[i][j] = (int *)malloc(TAMANHO_GRID+1 * sizeof(int));
             for (int k = 0; k < TAMANHO_GRID; ++k) {
-                data_send[i][j][k]=rank*1000 +count;
+                data_send[i+1][j+1][k+1]=rank*1000 +count;
                 count++;
                 //data_send[i][j][k] = rank + my_coords[0] * 100 + my_coords[1] * 1000 + my_coords[2] * 10000;  // Example data
             }
