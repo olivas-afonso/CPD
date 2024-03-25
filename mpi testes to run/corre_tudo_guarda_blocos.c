@@ -118,7 +118,7 @@ char ***gen_initial_grid(int N, float density, int input_seed)
 * funcao: gera as duas matrizes, a inicial e a auxiliar; ao longo das geracoes as celulas iram
 *passar de uma para a outra.
 ************************************************************************************************/
-char ***gen_initial_bloco(int max, int min ,int n,int N, float density, int input_seed)
+char ***gen_initial_bloco(int max_x, int min_x ,int max_y, int min_y ,int max_z, int min_z ,int n,int N, float density, int input_seed)
 {
     int x, y, z;
 	int x1,y1,z1;
@@ -227,8 +227,8 @@ char ***gen_initial_bloco(int max, int min ,int n,int N, float density, int inpu
 					prov = 0;
 				}
 				printf("celula lida: %d\n", prov);	
-				if (x>= min && y>= min && z>= min) {
-					if (x<max && y<max && z<max){
+				if (x>= min_x && y>= min_y && z>= min_z) {
+					if (x<max_x && y<max_y && z<max_z){
 							printf("entrou\n");
 							grid_even[x1][y1][z1] = prov;
 						z1 ++;
@@ -547,14 +547,29 @@ if(rank == 1){
 for (int i = 0; i < size; i++) {
 	if (rank == 1) {
 		char *** grid;
-		int min = 0;
-		int max = 0;
+		int min_x = 0;
+		int max_x = 0;
+		
+		int min_y = 0;
+		int max_y = 0;
+		
+		int min_z = 0;
+		int max_z = 0;
+		
 		int inicio = 0;
 		int n = 0;
 		
 		n = (int)n_double;
-		min = ((int)n_double)*rank;
-		max = min + (((int)n_double));
+		min_z = ((int)n_double)*rank;
+		if(min_z <= number_of_cells){
+			max_z = min + (((int)n_double));
+			min_y = 0;
+			min_x = 0;
+			max_y = (int)n_double;
+			max_z = (int)n_double;
+		}
+		
+
 
 /*		
 		inicio = ((int)n_double)*rank; 
@@ -566,9 +581,9 @@ for (int i = 0; i < size; i++) {
 		min = x + y * 4 + z * 16;
 		max = x + y * 4 + z * 16; 
 */
-		printf("valores: %d %d %d\n", min ,max, n);	
+		printf("valores: x %d %d y %d %d z %d %d n %d\n",  min_x ,max_x ,min_y ,max_y, min_z ,max_z, n);	
 		
-		grid = gen_initial_bloco(max, min,n,number_of_cells, density, seed);
+		grid = gen_initial_bloco(max_x, min_x,max_y, min_y,max_z, min_z,n,number_of_cells, density, seed);
 		
 		
 		
