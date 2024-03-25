@@ -203,7 +203,7 @@ char ***gen_initial_bloco(int max, int min ,int n,int N, float density, int inpu
 			}
 	}
 */
-	printf("vai preencher\n");
+	printf("vai preencher cubos de %d na aresta\n", n);
 	for(x = 0; x < N; x++){
 		for(y=0; y < N; y++){
 			for(z=0; z<N; z++){
