@@ -298,7 +298,7 @@ int main(int argc, char *argv[]) {
     // Print received data
 
 
-    if(rank==13)
+    if(rank==15)
     {
         
         for(aux_z=0;aux_z<(TAMANHO_GRID+2);aux_z++)
