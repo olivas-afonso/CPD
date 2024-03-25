@@ -78,7 +78,7 @@ int main(int argc, char *argv[]) {
         for (int j = 0; j < (TAMANHO_GRID+2); ++j) {
             data_send[i][j] = (int *)malloc((TAMANHO_GRID+2) * sizeof(int));
             for (int k = 0; k < (TAMANHO_GRID+2); ++k) {
-                if(k!=0 && i!=0 && j!= 0 && k!= (TAMANHO_GRID) && i!= (TAMANHO_GRID) && j!= (TAMANHO_GRID)) 
+                if(k!=0 && i!=0 && j!= 0 && k!= (TAMANHO_GRID+1) && i!= (TAMANHO_GRID+1) && j!= (TAMANHO_GRID+1)) 
                 {
                     data_send[i][j][k]=rank*1000 +count;
                     count++;
