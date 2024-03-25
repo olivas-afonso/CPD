@@ -152,7 +152,7 @@ int main(int argc, char *argv[]) {
         
     }
 
-    if(rank==4)
+    if(rank==5)
     {
         
         for(aux_z=0;aux_z<(TAMANHO_GRID+2);aux_z++)
