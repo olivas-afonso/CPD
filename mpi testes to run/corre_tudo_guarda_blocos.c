@@ -514,7 +514,7 @@ int main(int argc, char *argv[]) {
 	* codigo do serial 
 	***************************************************************************/
 	
-if(rank == 1){
+if(rank == 0){
 	x_double = (double)size;
 	N_double = (double)NX;
 	
@@ -545,7 +545,7 @@ if(rank == 1){
 	
 	//cria a grid aleatoria atraves dos inputs (funcao fornecida)
 for (int i = 0; i < size; i++) {
-	if (rank == 1) {
+	if (rank == 0) {
 		char *** grid;
 		int min_x = 0;
 		int max_x = 0;
