@@ -91,14 +91,18 @@ int main(int argc, char *argv[]) {
             }
         }
     }
-    for(int i=0; i< TAMANHO_GRID+1;i++)
+    for(int j=0; j< TAMANHO_GRID+1;j++)
     {
-        for(int k=0; k< TAMANHO_GRID+1;k++)
-        {
-            printf("DATA SEND i: %d  k: %d   : %d\n",i, k,  data_send[1][i][k]);
-        }
+        for(int i=0; i< TAMANHO_GRID+1;i++)
+    {
+            for(int k=0; k< TAMANHO_GRID+1;k++)
+            {
+                printf("DATA SEND i: %d  k: %d   : %d\n",i, k,  data_send[j][i][k]);
+            }
         
     }
+    }
+
 
     int ***data_recv_down = (int ***)malloc(TAMANHO_GRID * sizeof(int **));
     for (int i = 0; i < TAMANHO_GRID; ++i) {
