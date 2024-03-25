@@ -91,7 +91,7 @@ int main(int argc, char *argv[]) {
             }
         }
     }
-    
+    /*
     MPI_Barrier(MPI_COMM_WORLD);
     if(rank==13)
     {
@@ -108,6 +108,7 @@ int main(int argc, char *argv[]) {
         }
 
     }
+    */
     
 
 
@@ -241,7 +242,7 @@ int main(int argc, char *argv[]) {
         for (aux_y=0; aux_y<TAMANHO_GRID; aux_y++)
         {
             //FACE DIREITA 
-            MPI_Sendrecv(&data_send[aux_y+1][aux_z+1][1], 1, MPI_INT, esq_rank, 0, &data_recv_dir[aux_z+1][aux_y], 1, MPI_INT, dir_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir
+            MPI_Sendrecv(&data_send[aux_y+1][aux_z+1][1], 1, MPI_INT, esq_rank, 0, &data_send[aux_z+1][aux_y+1][TAMANHO_GRID+1], 1, MPI_INT, dir_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir
 
             //FACE ESQUERDA
             MPI_Sendrecv(&data_send[aux_y+1][aux_z+1][TAMANHO_GRID], 1, MPI_INT, dir_rank, 0, &data_recv_esq[aux_z+1][aux_y], 1, MPI_INT, esq_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir
@@ -301,9 +302,9 @@ int main(int argc, char *argv[]) {
     {
         for(aux_z=0;aux_z<(TAMANHO_GRID+2);aux_z++)
         {
-            for(aux_y=0;aux_y<(TAMANHO_GRID);aux_y++)
+            for(aux_y=0;aux_y<(TAMANHO_GRID+2);aux_y++)
             {
-                printf("rank: %d, SUPPOSED TO RECEIVE FACE DIR (aux %d / %d) %d\n",rank,aux_z, aux_y, data_recv_dir[aux_z][aux_y]);
+                printf("rank: %d, SUPPOSED TO RECEIVE FACE DIR (aux %d / %d) %d\n",rank,aux_z, aux_y, data_send[aux_z][aux_y][TAMANHO_GRID+1]);
             }
 
             //printf("rank: %d, SUPPOSED TO RECEIVE FRENTE CIMA (aux %d) %d\n",rank,aux, data_recv_down[0][0][aux]);
@@ -311,7 +312,7 @@ int main(int argc, char *argv[]) {
 
             //printf("rank: %d, SUPPOSED TO RECEIVE DIR CIMA (aux %d) %d\n",rank,aux, data_recv_down[0][aux][0]);
             //printf("rank: %d, SUPPOSED TO RECEIVE ESQ BAIXO (aux %d) %d\n",rank,aux, data_recv_down[TAMANHO_GRID-1][aux][TAMANHO_GRID-1]);
-
+/*
         }
         printf("\n");
         for(aux_z=0;aux_z<(TAMANHO_GRID+2);aux_z++)
@@ -386,6 +387,7 @@ int main(int argc, char *argv[]) {
 
         printf("\n");
         printf("rank: %d, SUPPOSED TO RECEIVE VERT DIR CIMA TRAS  %d\n",rank, vert_dir_cima_tras);
+*/
     }
 
    
