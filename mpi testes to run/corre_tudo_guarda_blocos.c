@@ -118,7 +118,7 @@ char ***gen_initial_grid(int N, float density, int input_seed)
 * funcao: gera as duas matrizes, a inicial e a auxiliar; ao longo das geracoes as celulas iram
 *passar de uma para a outra.
 ************************************************************************************************/
-char ***gen_initial_bloco(int max, int min ,int N, float density, int input_seed)
+char ***gen_initial_bloco(int max, int min ,int n,int N, float density, int input_seed)
 {
     int x, y, z;
 	int prov = 0;
@@ -140,8 +140,8 @@ char ***gen_initial_bloco(int max, int min ,int N, float density, int input_seed
         exit(1);
     }*/
 // aloca o eixo final, ataves de um apontador de arrays
-    for(x = 0; x < max; x++) {
-        grid_even[x] = (char **) malloc(max * sizeof(char *));
+    for(x = 0; x < n; x++) {
+        grid_even[x] = (char **) malloc(n * sizeof(char *));
         if(grid_even[x] == NULL) {
             printf("Failed to allocate matrix3\n");
             exit(1);
@@ -153,8 +153,8 @@ char ***gen_initial_bloco(int max, int min ,int N, float density, int input_seed
             exit(1);
         }*/
 
-        for (y = 0; y < max; y++){
-            grid_even[x][y] = (char*) calloc(max, sizeof(char));
+        for (y = 0; y < n; y++){
+            grid_even[x][y] = (char*) calloc(n, sizeof(char));
             if(grid_even[x][y] == NULL) {
                 printf("Failed to allocate matrix6\n");
                 exit(1);
@@ -164,7 +164,7 @@ char ***gen_initial_bloco(int max, int min ,int N, float density, int input_seed
                 printf("Failed to allocate matrix6\n");
                 exit(1);
             }*/
-            for (z = 0; z < max; z++)
+            for (z = 0; z < n; z++)
 				grid_even[x][y][z] = 0;
         }     
     }
@@ -518,6 +518,7 @@ for (int i = 0; i < size; i++) {
 		int max = 0;
 		int inicio = 0;
 		
+		n = (int)n_double;
 		min = ((int)n_double)*rank;
 		max = min + (((int)n_double));
 
@@ -533,7 +534,7 @@ for (int i = 0; i < size; i++) {
 */
 		printf("valores: %d %d \n", min ,max);	
 		
-		grid = gen_initial_bloco(max, min,number_of_cells, density, seed);
+		grid = gen_initial_bloco(max, min,n,number_of_cells, density, seed);
 		
 		
 		
