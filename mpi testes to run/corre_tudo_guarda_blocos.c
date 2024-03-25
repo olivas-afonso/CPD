@@ -227,10 +227,7 @@ char ***gen_initial_bloco(int max, int min ,int n,int N, float density, int inpu
 						if (x<max && y<max && z<max) {
 							grid_even[x1][y1][z1] = prov;
 							printf("numero: %d\n",prov);	 	
-						}	
-					}	
-				}	
-				z1 ++;
+							z1 ++;
 							if(z1 == n){
 								z1 =0;
 								y1++;
@@ -242,7 +239,10 @@ char ***gen_initial_bloco(int max, int min ,int n,int N, float density, int inpu
 							} 	
 							if(x1 == n){
 								return grid_even;
-							}		
+							}	
+						}	
+					}	
+				}		
 			}
 		}
 		
