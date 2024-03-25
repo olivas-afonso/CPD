@@ -517,6 +517,7 @@ for (int i = 0; i < size; i++) {
 		int min = 0;
 		int max = 0;
 		int inicio = 0;
+		int n = 0;
 		
 		n = (int)n_double;
 		min = ((int)n_double)*rank;
