@@ -242,7 +242,7 @@ int main(int argc, char *argv[]) {
         for (aux_y=0; aux_y<TAMANHO_GRID; aux_y++)
         {
             //FACE DIREITA 
-            MPI_Sendrecv(&data_send[aux_z+1][aux_z+1][1], 1, MPI_INT, esq_rank, 0, &data_send[aux_z+1][aux_y+1][TAMANHO_GRID+1], 1, MPI_INT, dir_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir
+            MPI_Sendrecv(&data_send[aux_z+1][aux_y+1][1], 1, MPI_INT, esq_rank, 0, &data_send[aux_z+1][aux_y+1][TAMANHO_GRID+1], 1, MPI_INT, dir_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir
 
             //FACE ESQUERDA
             MPI_Sendrecv(&data_send[aux_y+1][aux_z+1][TAMANHO_GRID], 1, MPI_INT, dir_rank, 0, &data_recv_esq[aux_z+1][aux_y], 1, MPI_INT, esq_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir
