@@ -91,7 +91,7 @@ int main(int argc, char *argv[]) {
             }
         }
     }
-    /*
+    
     MPI_Barrier(MPI_COMM_WORLD);
     if(rank==13)
     {
@@ -108,7 +108,7 @@ int main(int argc, char *argv[]) {
         }
 
     }
-    */
+    
 
 
 
