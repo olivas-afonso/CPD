@@ -566,8 +566,8 @@ for (int i = 0; i < size; i++) {
 			max_z = min_z + (((int)n_double));
 			min_y = 0;
 			min_x = 0;
-			max_y = (int)n_double;
-			max_z = (int)n_double;
+			max_y = n;
+			max_z = n;
 		}
 		
 
