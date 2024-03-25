@@ -219,6 +219,7 @@ char ***gen_initial_bloco(int max, int min ,int n,int N, float density, int inpu
 	for(x = 0; x < N; x++){
 		for(y=0; y < N; y++){
 			for(z=0; z<N; z++){
+				printf("celula lida\n");
 				if(r4_uni() < density){
 					prov = (int)(r4_uni() * N_SPECIES) + 1; // preenchimento initial do grid_even dependendo da seed
 					//count_species[grid_even[x][y][z]]++;
