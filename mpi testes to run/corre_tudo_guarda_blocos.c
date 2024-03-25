@@ -121,6 +121,7 @@ char ***gen_initial_grid(int N, float density, int input_seed)
 char ***gen_initial_bloco(int max, int min ,int n,int N, float density, int input_seed)
 {
     int x, y, z;
+	int x1,y1,z1;
 	int prov = 0;
     int aux = 0;
 	
@@ -210,8 +211,21 @@ char ***gen_initial_bloco(int max, int min ,int n,int N, float density, int inpu
 					//count_species[grid_even[x][y][z]]++;
 					if (x>= min && y>= min && z>= min) {
 						if (x<max && y<max && z<max) {
-							grid_even[x][y][z] = prov;
+							grid_even[x1][y1][z1] = prov;
 							printf("numero: %d\n",prov);
+							x1 ++;
+							if(x1 == n){
+								x1 =0;
+								y1++;
+							}
+							if(y1 == n){
+								x1 =0;
+								y1 =0;
+								z1++;
+							} 	
+							if(z1 == n){
+								return grid_even;
+							} 	
 						}	
 					}
 				}		
