@@ -513,7 +513,7 @@ int main(int argc, char *argv[]) {
 	/*************************************************************************
 	* codigo do serial 
 	***************************************************************************/
-	
+/*	
 if(rank == 0){
 	x_double = (double)size;
 	N_double = (double)NX;
@@ -540,7 +540,7 @@ if(rank == 0){
 	printf("valor de n=%f\n", comprimento_cubo_pequeno);
 
 }
-
+*/
 	
 	
 	//cria a grid aleatoria atraves dos inputs (funcao fornecida)
@@ -558,6 +558,31 @@ for (int i = 0; i < size; i++) {
 		
 		int inicio = 0;
 		int n = 0;
+		
+		x_double = (double)size;
+	N_double = (double)NX;
+	
+	printf("Você digitou: %.2lf e %.2lf\n", N_double, x_double);
+	
+
+	printf("x = %2.f \n", x_double);
+	double raiz_cubica_x = raiz_cubica_funcao(x_double);
+
+	printf("raiz = %2.f \n", raiz_cubica_x);
+
+    // Calcular n
+	//double = (double)N;
+	printf("N = %2.f \n", N_double);
+	
+    n_double = N_double / raiz_cubica_x;
+
+    // Exibir o resultado
+    printf("O tamanho dos cubos pequenos (n) é: %.2f %.2f\n ", n_double, N_double);
+	
+	double comprimento_cubo_pequeno = N_double / raiz_cubica_x;
+	
+	printf("valor de n=%f\n", comprimento_cubo_pequeno);
+
 		
 		n = (int)n_double;
 		min_z = ((int)n_double)*rank;
