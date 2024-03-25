@@ -545,7 +545,7 @@ if(rank == 0){
 	
 	//cria a grid aleatoria atraves dos inputs (funcao fornecida)
 for (int i = 0; i < size; i++) {
-	if (rank == 0) {
+	if (rank == i) {
 		char *** grid;
 		int min_x = 0;
 		int max_x = 0;
