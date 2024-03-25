@@ -208,10 +208,12 @@ char ***gen_initial_bloco(int max, int min ,int n,int N, float density, int inpu
 				if(r4_uni() < density){
 					prov = (int)(r4_uni() * N_SPECIES) + 1; // preenchimento initial do grid_even dependendo da seed
 					//count_species[grid_even[x][y][z]]++;
-					if (x<max && y<max && z<max) {
-						grid_even[x][y][z] = prov;
-						printf("numero: %d\n",prov);
-					}	
+					if (x>min && y>min && z>min) {
+						if (x<max && y<max && z<max) {
+							grid_even[x][y][z] = prov;
+							printf("numero: %d\n",prov);
+						}	
+					}
 				}		
 			}
 		}
