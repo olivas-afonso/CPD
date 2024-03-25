@@ -72,12 +72,12 @@ int main(int argc, char *argv[]) {
     // Send and receive data between neighbors
     //int data_send = rank * 10 + my_coords[0] * 100 + my_coords[1] * 1000 + my_coords[2] * 10000;  // Example data
 
-    int ***data_send = (int ***)malloc(TAMANHO_GRID+1 * sizeof(int **));
-    for (int i = 0; i < TAMANHO_GRID+1; ++i) {
-        data_send[i] = (int **)malloc(TAMANHO_GRID+1 * sizeof(int *));
-        for (int j = 0; j < TAMANHO_GRID+1; ++j) {
-            data_send[i][j] = (int *)malloc(TAMANHO_GRID+1 * sizeof(int));
-            for (int k = 0; k < TAMANHO_GRID+1; ++k) {
+    int ***data_send = (int ***)malloc(TAMANHO_GRID+2 * sizeof(int **));
+    for (int i = 0; i < TAMANHO_GRID+2; ++i) {
+        data_send[i] = (int **)malloc(TAMANHO_GRID+2 * sizeof(int *));
+        for (int j = 0; j < TAMANHO_GRID+2; ++j) {
+            data_send[i][j] = (int *)malloc(TAMANHO_GRID+2 * sizeof(int));
+            for (int k = 0; k < TAMANHO_GRID+2; ++k) {
                 if(k!=0 && i!=0 && j!= 0 && k!= (TAMANHO_GRID) && i!= (TAMANHO_GRID) && j!= (TAMANHO_GRID)) 
                 {
                     data_send[i][j][k]=rank*1000 +count;
@@ -94,13 +94,13 @@ int main(int argc, char *argv[]) {
     MPI_Barrier(MPI_COMM_WORLD);
     if(rank==13)
     {
-        for(int j=0; j< TAMANHO_GRID+1;j++)
+        for(int j=0; j< TAMANHO_GRID+2;j++)
         {
-            for(int i=0; i< TAMANHO_GRID+1;i++)
+            for(int i=0; i< TAMANHO_GRID+2;i++)
             {
-                for(int k=0; k< TAMANHO_GRID+1;k++)
+                for(int k=0; k< TAMANHO_GRID+2;k++)
                 {
-                    printf("DATA SEND i: %d  k: %d   : %d\n",i, k,  data_send[j][i][k]);
+                    printf("DATA SEND j: %d i: %d  k: %d   : %d\n",j, i, k,  data_send[j][i][k]);
                 }
             
             }
