@@ -387,8 +387,8 @@ int main(int argc, char *argv[]) {
 
         printf("\n");
         printf("rank: %d, SUPPOSED TO RECEIVE VERT DIR CIMA TRAS  %d\n",rank, vert_dir_cima_tras);
-*/
-    }
+*/}
+}
 
    
 
