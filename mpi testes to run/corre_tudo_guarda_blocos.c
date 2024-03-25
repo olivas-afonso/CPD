@@ -562,6 +562,7 @@ for (int i = 0; i < size; i++) {
 		n = (int)n_double;
 		min_z = ((int)n_double)*rank;
 		if(min_z <= number_of_cells){
+			printf("entrou\n");
 			max_z = min_z + (((int)n_double));
 			min_y = 0;
 			min_x = 0;
