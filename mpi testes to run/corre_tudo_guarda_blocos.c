@@ -173,6 +173,7 @@ char ***gen_initial_bloco(int max, int min ,int N, float density, int input_seed
 	y = 0;
 	z = 0;	
 
+/*
 	for(aux = 0; aux <64; aux++){
 		if(r4_uni() < density){
 			prov = (int)(r4_uni() * N_SPECIES) + 1; // preenchimento initial do grid_even dependendo da seed
@@ -199,6 +200,22 @@ char ***gen_initial_bloco(int max, int min ,int N, float density, int input_seed
 			if(aux>19 && aux < 23){
 				grid_even[x][y][z] = prov;
 			}
+	}
+*/
+	for(x = 0; x < N; x++){
+		for(y=0; y < N; y++){
+			for(z=0; z<N; z++){
+				if(r4_uni() < density){
+					prov = (int)(r4_uni() * N_SPECIES) + 1; // preenchimento initial do grid_even dependendo da seed
+					//count_species[grid_even[x][y][z]]++;
+					if (x<max && y<max && z<max) {
+						grid_even[x][y][z] = prov;
+						printf("numero: %d\n",prov);
+					}	
+				}		
+			}
+		}
+		
 	}
 
 
