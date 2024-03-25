@@ -4,7 +4,7 @@
 
 int rank, size;
 int my_coords[3];
-#define TAMANHO_GRID 4
+#define TAMANHO_GRID 2
 
 void My_MPI_Cart_Shift(MPI_Comm cart_comm, int pos_x, int pos_y,int pos_z, int dist_x, int dist_y,int dist_z, int *source, int*dest)
 {
