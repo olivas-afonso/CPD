@@ -323,7 +323,7 @@ int main(int argc, char *argv[]) {
             printf("\n");
             for(aux_y=0;aux_y<(TAMANHO_GRID+2);aux_y++)
             {
-                printf("rank: %d, SUPPOSED TO RECEIVE FACE CIMA (aux %d / %d) %d\n",rank,aux_y, aux_z, &data_send[TAMANHO_GRID+1][aux_z][aux_y]);
+                printf("rank: %d, SUPPOSED TO RECEIVE FACE CIMA (aux %d / %d) %d\n",rank,aux_y, aux_z, data_send[TAMANHO_GRID+1][aux_z][aux_y]);
             }
         }
 
@@ -341,7 +341,7 @@ int main(int argc, char *argv[]) {
             printf("\n");
             for(aux_y=0;aux_y<(TAMANHO_GRID+2);aux_y++)
             {
-                printf("rank: %d, SUPPOSED TO RECEIVE FACE FRENTE (aux %d / %d) %d\n",rank,aux_y, aux_z, &data_send[aux_z][TAMANHO_GRID+1][aux_y]);
+                printf("rank: %d, SUPPOSED TO RECEIVE FACE FRENTE (aux %d / %d) %d\n",rank,aux_y, aux_z, data_send[aux_z][TAMANHO_GRID+1][aux_y]);
             }
         }
 
@@ -350,7 +350,7 @@ int main(int argc, char *argv[]) {
             printf("\n");
             for(aux_y=0;aux_y<(TAMANHO_GRID+2);aux_y++)
             {
-                printf("rank: %d, SUPPOSED TO RECEIVE FACE TRAS (aux %d / %d) %d\n",rank,aux_y, aux_z, &data_send[aux_z][0][aux_y]);
+                printf("rank: %d, SUPPOSED TO RECEIVE FACE TRAS (aux %d / %d) %d\n",rank,aux_y, aux_z, data_send[aux_z][0][aux_y]);
             }
         }
             
