@@ -91,17 +91,23 @@ int main(int argc, char *argv[]) {
             }
         }
     }
-    for(int j=0; j< TAMANHO_GRID+1;j++)
+    MPI_Barrier(MPI_COMM_WORLD);
+    if(rank==13)
     {
-        for(int i=0; i< TAMANHO_GRID+1;i++)
-    {
-            for(int k=0; k< TAMANHO_GRID+1;k++)
+        for(int j=0; j< TAMANHO_GRID+1;j++)
+        {
+            for(int i=0; i< TAMANHO_GRID+1;i++)
             {
-                printf("DATA SEND i: %d  k: %d   : %d\n",i, k,  data_send[j][i][k]);
+                for(int k=0; k< TAMANHO_GRID+1;k++)
+                {
+                    printf("DATA SEND i: %d  k: %d   : %d\n",i, k,  data_send[j][i][k]);
+                }
+            
             }
-        
+        }
+
     }
-    }
+
 
 
     int ***data_recv_down = (int ***)malloc(TAMANHO_GRID * sizeof(int **));
