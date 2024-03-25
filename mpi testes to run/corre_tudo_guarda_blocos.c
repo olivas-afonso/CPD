@@ -204,6 +204,18 @@ char ***gen_initial_bloco(int max, int min ,int n,int N, float density, int inpu
 	}
 */
 	printf("vai preencher cubos de %d na aresta\n", n);
+	
+	for(x = 0; x < N; x++){
+		for(y=0; y < N; y++){
+			for(z=0; z<N; z++){
+				printf(" %d",grid_even[x][y][z]);
+			}
+			printf("\n");
+		}
+		printf("\n\n");
+	}
+	
+	
 	for(x = 0; x < N; x++){
 		for(y=0; y < N; y++){
 			for(z=0; z<N; z++){
@@ -236,7 +248,7 @@ char ***gen_initial_bloco(int max, int min ,int n,int N, float density, int inpu
 	}
 
 
-
+/*
 	// conta as especies da geracao 0
     for(x=1; x < 10; x++)
     {
@@ -247,7 +259,7 @@ char ***gen_initial_bloco(int max, int min ,int n,int N, float density, int inpu
         }
     } 
                     
-
+*/
     return grid_even;
 }
 
