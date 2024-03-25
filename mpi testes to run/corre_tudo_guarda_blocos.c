@@ -170,9 +170,9 @@ char ***gen_initial_bloco(int max, int min ,int n,int N, float density, int inpu
         }     
     }
 
-	x = 0;
-	y = 0;
-	z = 0;	
+	x1 = 0;
+	y1 = 0;
+	z1 = 0;	
 
 /*
 	for(aux = 0; aux <64; aux++){
@@ -203,6 +203,7 @@ char ***gen_initial_bloco(int max, int min ,int n,int N, float density, int inpu
 			}
 	}
 */
+	printf("vai preencher\n");
 	for(x = 0; x < N; x++){
 		for(y=0; y < N; y++){
 			for(z=0; z<N; z++){
