@@ -93,7 +93,7 @@ int main(int argc, char *argv[]) {
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
     MPI_Comm_size(MPI_COMM_WORLD, &size);
 
-    printf("SIZE %d\n", size);
+    //printf("SIZE %d\n", size);
     int count=0;
     //Cartesiano : 
     int dims[3] = {2, 2, 3};  // ISTO TEM DE VIR DOS INTEIROS QUE MULTIPLICAM O Nº PROCESSO
