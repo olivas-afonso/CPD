@@ -5,10 +5,7 @@
 int rank, size;
 int my_coords[3];
 
-#define NUM_LINHAS 7
-#define SUB_DIV_X 3 // ISTO SAO OS INTEIROS DA MULT
-#define SUB_DIV_Y 2
-#define SUB_DIV_Z 2
+//#define NUM_LINHAS 7
 
 
 int *sub_divz_z;
@@ -57,8 +54,11 @@ void My_MPI_Cart_Shift(MPI_Comm cart_comm, int pos_x, int pos_y,int pos_z, int d
 }
 
 int main(int argc, char *argv[]) {
+
+    int NUM_LINHAS;
+    NUM_LINHAS= atoi (argv[1]);
     
-   
+    // FALTA A DIVISAO DOS PROCESSADORES
     sub_divz_z= (int *)malloc(2 * sizeof(int)); 
     /*
     for(int k=0; k<2; k++)
