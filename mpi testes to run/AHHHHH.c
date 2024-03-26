@@ -67,7 +67,7 @@ int main(int argc, char *argv[]) {
                 if(k!=0 && i!=0 && j!= 0 && k!= (sub_x+1) && i!= (sub_z+1) && j!= (sub_y+1)) 
                 {
                     data_send[i][j][k]=rank*1000; 
-                    data_send[i][j][k] =+ count;
+                    data_send[i][j][k] = data_send[i][j][k] + count;
                     count++;
                 }
                 else
