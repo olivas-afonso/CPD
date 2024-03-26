@@ -59,7 +59,7 @@ void My_MPI_Cart_Shift(MPI_Comm cart_comm, int pos_x, int pos_y,int pos_z, int d
 int main(int argc, char *argv[]) {
     
    
-    *sub_divz_z= (int *)malloc(2 * sizeof(int)); 
+    sub_divz_z= (int *)malloc(2 * sizeof(int)); 
     /*
     for(int k=0; k<2; k++)
     {
@@ -67,7 +67,7 @@ int main(int argc, char *argv[]) {
     }
     */
 
-    *sub_divz_y= (int *)malloc(2 * sizeof(int)); 
+    sub_divz_y= (int *)malloc(2 * sizeof(int)); 
 
     /*
     for(int k=0; k<2; k++)
@@ -76,7 +76,7 @@ int main(int argc, char *argv[]) {
     }
     */
 
-    *sub_divz_x= (int *)malloc(3* sizeof(int)); 
+    sub_divz_x= (int *)malloc(3* sizeof(int)); 
 
     /*
     for(int k=0; k<3; k++)
