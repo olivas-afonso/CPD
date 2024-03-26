@@ -121,16 +121,6 @@ int main(int argc, char *argv[]) {
         MPI_Sendrecv(&data_send[aux_z+1][1][sub_x], 1, MPI_INT, dir_tras_rank, 0, &data_send[aux_z+1][sub_y+1][0], 1, MPI_INT, esq_frente_rank, 0, cart_comm, MPI_STATUS_IGNORE); // AR esq baixo
         MPI_Sendrecv(&data_send[aux_z+1][sub_y][sub_x], 1, MPI_INT, dir_frente_rank, 0, &data_send[aux_z+1][0][0], 1, MPI_INT, esq_tras_rank, 0, cart_comm, MPI_STATUS_IGNORE); // AR esq baixo
 
-        /*
-        //FACE FRENTE DIAGS
-        MPI_Sendrecv(&data_send[NUM_LINHAS][1][aux_z+1], 1, MPI_INT, tras_cima_rank, 0, &data_send[0][NUM_LINHAS+1][aux_z+1], 1, MPI_INT, frente_baixo_rank, 0, cart_comm, MPI_STATUS_IGNORE); // AR esq baixo
-        MPI_Sendrecv(&data_send[1][1][aux_z+1], 1, MPI_INT, tras_baixo_rank, 0, &data_send[NUM_LINHAS+1][NUM_LINHAS+1][aux_z+1], 1, MPI_INT, frente_cima_rank, 0, cart_comm, MPI_STATUS_IGNORE); // AR dir cima
-
-        //FACE TRAS DIAGS
-        MPI_Sendrecv(&data_send[NUM_LINHAS][NUM_LINHAS][aux_z+1], 1, MPI_INT, frente_cima_rank, 0, &data_send[0][0][aux_z+1], 1, MPI_INT, tras_baixo_rank, 0, cart_comm, MPI_STATUS_IGNORE); // AR esq baixo
-        MPI_Sendrecv(&data_send[1][NUM_LINHAS][aux_z+1], 1, MPI_INT, frente_baixo_rank, 0, &data_send[NUM_LINHAS+1][0][aux_z+1], 1, MPI_INT, tras_cima_rank, 0, cart_comm, MPI_STATUS_IGNORE); // AR dir cima
-
-        */
         
         for (aux_y=0; aux_y<sub_y; aux_y++)
         {
@@ -139,20 +129,6 @@ int main(int argc, char *argv[]) {
             
             //FACE ESQUERDA
             MPI_Sendrecv(&data_send[aux_z+1][aux_y+1][sub_x], 1, MPI_INT, dir_rank, 0, &data_send[aux_z+1][aux_y+1][0], 1, MPI_INT, esq_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir
-            /*
-            //FACE CIMA
-            MPI_Sendrecv(&data_send[1][aux_z+1][aux_y+1], 1, MPI_INT, baixo_rank, 0, &data_send[NUM_LINHAS+1][aux_z+1][aux_y+1], 1, MPI_INT, cima_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir  
-            
-            //FACE BAIXO
-            MPI_Sendrecv(&data_send[NUM_LINHAS][aux_z+1][aux_y+1], 1, MPI_INT, cima_rank, 0, &data_send[0][aux_z+1][aux_y+1], 1, MPI_INT, baixo_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir                      
-
-            //FACE FRENTE
-            MPI_Sendrecv(&data_send[aux_z+1][1][aux_y+1], 1, MPI_INT, tras_rank, 0, &data_send[aux_z+1][NUM_LINHAS+1][aux_y+1], 1, MPI_INT, frente_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir   
-            
-            //FACE TRAS
-            MPI_Sendrecv(&data_send[aux_z+1][NUM_LINHAS][aux_y+1], 1, MPI_INT, frente_rank, 0, &data_send[aux_z+1][0][aux_y+1], 1, MPI_INT, tras_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir   
-            */
-
 
         }
         for(aux_x=0; aux_x<sub_x; aux_x++)
@@ -176,6 +152,26 @@ int main(int argc, char *argv[]) {
         //FACE BAIXO DIAGS
         MPI_Sendrecv(&data_send[sub_z][aux_y+1][sub_x], 1, MPI_INT, dir_cima_rank, 0, &data_send[0][aux_y+1][0], 1, MPI_INT, esq_baixo_rank, 0, cart_comm, MPI_STATUS_IGNORE); // AR esq baixo
         MPI_Sendrecv(&data_send[sub_x][aux_y+1][1], 1, MPI_INT, esq_cima_rank, 0, &data_send[0][aux_y+1][sub_x+1], 1, MPI_INT, dir_baixo_rank, 0, cart_comm, MPI_STATUS_IGNORE); // AR dir cima
+
+        for(aux_x=0; aux_x<sub_x; aux_x++)
+        {
+            //FACE CIMA
+            MPI_Sendrecv(&data_send[1][aux_y+1][aux_x+1], 1, MPI_INT, baixo_rank, 0, &data_send[sub_z+1][aux_y+1][aux_x+1], 1, MPI_INT, cima_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir  
+            
+            //FACE BAIXO
+            MPI_Sendrecv(&data_send[sub_z][aux_y+1][aux_x+1], 1, MPI_INT, cima_rank, 0, &data_send[0][aux_y+1][aux_x+1], 1, MPI_INT, baixo_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir                      
+        }
+    }
+
+    for(aux_x=0; aux_x<sub_x; aux_x++)
+    {
+        //FACE FRENTE DIAGS
+        MPI_Sendrecv(&data_send[sub_y][1][aux_x+1], 1, MPI_INT, tras_cima_rank, 0, &data_send[0][sub_y+1][aux_x+1], 1, MPI_INT, frente_baixo_rank, 0, cart_comm, MPI_STATUS_IGNORE); // AR esq baixo
+        MPI_Sendrecv(&data_send[1][1][aux_x+1], 1, MPI_INT, tras_baixo_rank, 0, &data_send[sub_z+1][sub_y+1][aux_x+1], 1, MPI_INT, frente_cima_rank, 0, cart_comm, MPI_STATUS_IGNORE); // AR dir cima
+
+        //FACE TRAS DIAGS
+        MPI_Sendrecv(&data_send[sub_z][sub_y][aux_x+1], 1, MPI_INT, frente_cima_rank, 0, &data_send[0][0][aux_x+1], 1, MPI_INT, tras_baixo_rank, 0, cart_comm, MPI_STATUS_IGNORE); // AR esq baixo
+        MPI_Sendrecv(&data_send[1][sub_y][aux_x+1], 1, MPI_INT, frente_baixo_rank, 0, &data_send[sub_z+1][0][aux_x+1], 1, MPI_INT, tras_cima_rank, 0, cart_comm, MPI_STATUS_IGNORE); // AR dir cima
     }
 
     if(rank==5)
