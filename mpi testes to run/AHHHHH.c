@@ -5,7 +5,7 @@
 int rank, size;
 int my_coords[3];
 
-#define NUM_LINHAS 6
+#define NUM_LINHAS 7
 #define SUB_DIV_X 3
 #define SUB_DIV_Y 2
 #define SUB_DIV_Z 2
@@ -31,9 +31,9 @@ void My_MPI_Cart_Shift(MPI_Comm cart_comm, int pos_x, int pos_y,int pos_z, int d
 
 int main(int argc, char *argv[]) {
     
-    int aux_z_size[2]={3,3};
-    int aux_y_size[2]={3,3};
-    int aux_x_size[3]={2,2,2};
+    int aux_z_size[2]={4,3};
+    int aux_y_size[2]={4,3};
+    int aux_x_size[3]={3,2,2};
     int *sub_divz_z= (int *)malloc(2 * sizeof(int)); 
     for(int k=0; k<2; k++)
     {
