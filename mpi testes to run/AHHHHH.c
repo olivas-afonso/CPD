@@ -6,9 +6,9 @@ int rank, size;
 int my_coords[3];
 
 #define NUM_LINHAS 6
-#define SUB_DIV_X 2
-#define SUB_DIV_Y 3
-#define SUB_DIV_Z 3
+#define SUB_DIV_X 3
+#define SUB_DIV_Y 2
+#define SUB_DIV_Z 2
 
 
 
@@ -35,20 +35,20 @@ int main(int argc, char *argv[]) {
     int aux_y_size[3]={2,2,2};
     int aux_x_size[3]={3,3,3};
     int *sub_divz_z, *sub_divz_y, *sub_divz_x;
-    sub_divz_z = (int *)malloc((SUB_DIV_Z) * sizeof(int));
-    for(int k=0; k<SUB_DIV_Z; k++)
+    sub_divz_z = (int *)malloc((NUM_LINHAS/SUB_DIV_Z) * sizeof(int));
+    for(int k=0; k<(NUM_LINHAS/SUB_DIV_Z); k++)
     {
         sub_divz_z[k]=aux_z_size[k];
     }
 
-    sub_divz_y = (int *)malloc((SUB_DIV_Y) * sizeof(int));
-    for(int k=0; k<SUB_DIV_Z; k++)
+    sub_divz_y = (int *)malloc((NUM_LINHAS/SUB_DIV_Y) * sizeof(int));
+    for(int k=0; k<(NUM_LINHAS/SUB_DIV_Y); k++)
     {
         sub_divz_y[k]=aux_y_size[k];
     }
 
-    sub_divz_x = (int *)malloc((SUB_DIV_Z) * sizeof(int));
-    for(int k=0; k<SUB_DIV_Z; k++)
+    sub_divz_x = (int *)malloc((NUM_LINHAS/SUB_DIV_X) * sizeof(int));
+    for(int k=0; k<(NUM_LINHAS/SUB_DIV_X); k++)
     {
         sub_divz_x[k]=aux_x_size[k];
     }
@@ -60,7 +60,7 @@ int main(int argc, char *argv[]) {
 
     int count=0;
     //Cartesiano : 
-    int dims[3] = {2, 2, 3};  // ISTO TEM DE VIR DE CALCULO DOS PROCESSOS 
+    int dims[3] = {SUB_DIV_Z, SUB_DIV_Y, SUB_DIV_X};  // ISTO TEM DE VIR DE CALCULO DOS PROCESSOS 
     //ACHO QUE TEM DE SER SEMPRE OS MESMOS 3 EIXOS ^^, O QUE PODE MUDAR E O TAMANHO DE CADA UM DOS CUBOS?
     int periods[3] = {1, 1, 1};  // Enable wraparound
     MPI_Comm cart_comm;
