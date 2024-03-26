@@ -33,7 +33,7 @@ int main(int argc, char *argv[]) {
     
     int aux_z_size[3]={2,2,2};
     int aux_y_size[3]={2,2,2};
-    int aux_x_size[3]={3,3,3};
+    int aux_x_size[2]={3,3};
     int *sub_divz_z= (int *)malloc((NUM_LINHAS/SUB_DIV_Z) * sizeof(int)); 
     for(int k=0; k<(NUM_LINHAS/SUB_DIV_Z); k++)
     {
@@ -59,7 +59,7 @@ int main(int argc, char *argv[]) {
 
     int count=0;
     //Cartesiano : 
-    int dims[3] = {(NUM_LINHAS/SUB_DIV_Z), (NUM_LINHAS/SUB_DIV_Y), (NUM_LINHAS/SUB_DIV_X)};  // ISTO TEM DE VIR DE CALCULO DOS PROCESSOS 
+    int dims[3] = {2, 2, 3};  // ISTO TEM DE VIR DE CALCULO DOS PROCESSOS 
     //ACHO QUE TEM DE SER SEMPRE OS MESMOS 3 EIXOS ^^, O QUE PODE MUDAR E O TAMANHO DE CADA UM DOS CUBOS?
     int periods[3] = {1, 1, 1};  // Enable wraparound
     MPI_Comm cart_comm;
