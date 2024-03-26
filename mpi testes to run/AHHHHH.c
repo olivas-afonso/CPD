@@ -66,7 +66,6 @@ int main(int argc, char *argv[]) {
     MPI_Cart_create(MPI_COMM_WORLD, 3, dims, periods, 0, &cart_comm);
 
     
-    MPI_Cart_coords(cart_comm, rank, 3, my_coords);
 
     int cima_rank, baixo_rank, esq_rank, dir_rank, frente_rank, tras_rank;
     int dir_cima_rank, esq_baixo_rank,dir_baixo_rank, esq_cima_rank, frente_cima_rank, tras_baixo_rank;
@@ -77,7 +76,8 @@ int main(int argc, char *argv[]) {
     //int sub_divz_z[my_coords[0]] = NUM_LINHAS/SUB_DIV_Z;
     //int sub_divz_y[my_coords[1]] = SUB_DIV_Y;
     //int sub_divz_x[my_coords[2]] = SUB_DIV_X;
-    
+
+    MPI_Cart_coords(cart_comm, rank, 3, my_coords);
     int sub_z = NUM_LINHAS/sub_divz_z[my_coords[0]];
     int sub_y = NUM_LINHAS/sub_divz_y[my_coords[1]];
     int sub_x = NUM_LINHAS/sub_divz_x[my_coords[2]];
@@ -89,7 +89,7 @@ int main(int argc, char *argv[]) {
         for (int j = 0; j < (sub_y+2); ++j) {
             data_send[i][j] = (int *)malloc(((sub_x+2)) * sizeof(int));
             for (int k = 0; k < (sub_x+2); ++k) {
-                if((k!=0) && (i!=0) && (j!= 0) && (k!= (sub_x+1)) && (i!= (sub_x+1)) && (j!= (sub_y+1)) )
+                if((k!=0) && (i!=0) && (j!= 0) && (k!= (sub_x+1)) && (i!= (sub_z+1)) && (j!= (sub_y+1)) )
                 {
                     data_send[i][j][k]=rank*1000; 
                     data_send[i][j][k] = data_send[i][j][k] + count;
