@@ -60,7 +60,7 @@ int main(int argc, char *argv[]) {
 
     int count=0;
     //Cartesiano : 
-    int dims[3] = {SUB_DIV_Z, SUB_DIV_Y, SUB_DIV_X};  // ISTO TEM DE VIR DE CALCULO DOS PROCESSOS 
+    int dims[3] = {2, 2, 3};  // ISTO TEM DE VIR DE CALCULO DOS PROCESSOS 
     //ACHO QUE TEM DE SER SEMPRE OS MESMOS 3 EIXOS ^^, O QUE PODE MUDAR E O TAMANHO DE CADA UM DOS CUBOS?
     int periods[3] = {1, 1, 1};  // Enable wraparound
     MPI_Comm cart_comm;
