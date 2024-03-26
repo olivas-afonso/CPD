@@ -201,7 +201,7 @@ int main(int argc, char *argv[]) {
     
     if(rank==5)
     {
-        
+            MPI_Cart_coords(cart_comm, rank, 3, my_coords);
         for(aux_z=0;aux_z<((sub_divz_z[my_coords[0]])+2);aux_z++)
         {
             printf("CAMADA %d\n", aux_z);
