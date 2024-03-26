@@ -6,9 +6,36 @@ int rank, size;
 int my_coords[3];
 
 #define NUM_LINHAS 7
-#define SUB_DIV_X 3
+#define SUB_DIV_X 3 // ISTO SAO OS INTEIROS DA MULT
 #define SUB_DIV_Y 2
 #define SUB_DIV_Z 2
+
+
+int *sub_divz_z;
+int *sub_divz_y;
+int *sub_divz_x;
+
+
+void divide_number_parts(int number, int divide, int * sub_div) {
+
+    int part_size, remainder;
+    int start_index, end_index;
+    int i;
+
+    part_size = number / divide;
+    remainder = number % divide;
+
+    start_index = 0;
+
+    for (i = 0; i < divide; i++) {
+        end_index = start_index + part_size + (i < remainder ? 1 : 0);
+
+        //printf("Part %d: ", i + 1);
+        sub_div[i]=end_index-start_index;
+        start_index = end_index;
+    }
+}
+
 
 
 
@@ -31,36 +58,43 @@ void My_MPI_Cart_Shift(MPI_Comm cart_comm, int pos_x, int pos_y,int pos_z, int d
 
 int main(int argc, char *argv[]) {
     
-    int aux_z_size[2]={3,4};
-    int aux_y_size[2]={3,4};
-    int aux_x_size[3]={2,2,3};
-    int *sub_divz_z= (int *)malloc(2 * sizeof(int)); 
+   
+    *sub_divz_z= (int *)malloc(2 * sizeof(int)); 
+    /*
     for(int k=0; k<2; k++)
     {
         sub_divz_z[k]=aux_z_size[k];
     }
+    */
 
-    int *sub_divz_y= (int *)malloc(2 * sizeof(int)); 
+    *sub_divz_y= (int *)malloc(2 * sizeof(int)); 
+
+    /*
     for(int k=0; k<2; k++)
     {
         sub_divz_y[k]=aux_y_size[k];
     }
+    */
 
-    int *sub_divz_x= (int *)malloc(3* sizeof(int)); 
+    *sub_divz_x= (int *)malloc(3* sizeof(int)); 
+
+    /*
     for(int k=0; k<3; k++)
     {
         sub_divz_x[k]=aux_x_size[k];
     }
+    */
 
 
     MPI_Init(&argc, &argv);
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
     MPI_Comm_size(MPI_COMM_WORLD, &size);
 
+    printf("SIZE %d\n", size);
     int count=0;
     //Cartesiano : 
-    int dims[3] = {2, 2, 3};  // ISTO TEM DE VIR DE CALCULO DOS PROCESSOS 
-    //ACHO QUE TEM DE SER SEMPRE OS MESMOS 3 EIXOS ^^, O QUE PODE MUDAR E O TAMANHO DE CADA UM DOS CUBOS?
+    int dims[3] = {2, 2, 3};  // ISTO TEM DE VIR DOS INTEIROS QUE MULTIPLICAM O Nº PROCESSO
+    //ACHO QUE TEM DE SER SEMPRE OS MESMOS 3 EIXOS ^^
     int periods[3] = {1, 1, 1};  // Enable wraparound
     MPI_Comm cart_comm;
     MPI_Cart_create(MPI_COMM_WORLD, 3, dims, periods, 0, &cart_comm);
