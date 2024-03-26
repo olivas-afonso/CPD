@@ -34,20 +34,20 @@ int main(int argc, char *argv[]) {
     int aux_z_size[3]={2,2,2};
     int aux_y_size[3]={2,2,2};
     int aux_x_size[2]={3,3};
-    int *sub_divz_z= (int *)malloc((NUM_LINHAS/SUB_DIV_Z) * sizeof(int)); 
-    for(int k=0; k<(NUM_LINHAS/SUB_DIV_Z); k++)
+    int *sub_divz_z= (int *)malloc(2 * sizeof(int)); 
+    for(int k=0; k<2; k++)
     {
         sub_divz_z[k]=aux_z_size[k];
     }
 
-    int *sub_divz_y= (int *)malloc((NUM_LINHAS/SUB_DIV_Y) * sizeof(int)); 
-    for(int k=0; k<(NUM_LINHAS/SUB_DIV_Y); k++)
+    int *sub_divz_y= (int *)malloc(2 * sizeof(int)); 
+    for(int k=0; k<2; k++)
     {
         sub_divz_y[k]=aux_y_size[k];
     }
 
-    int *sub_divz_x= (int *)malloc((NUM_LINHAS/SUB_DIV_X) * sizeof(int)); 
-    for(int k=0; k<(NUM_LINHAS/SUB_DIV_X); k++)
+    int *sub_divz_x= (int *)malloc(3* sizeof(int)); 
+    for(int k=0; k<3; k++)
     {
         sub_divz_x[k]=aux_x_size[k];
     }
