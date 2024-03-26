@@ -80,13 +80,13 @@ int main(int argc, char *argv[]) {
     
 
     printf("SUB_DIV_Z :%d   SUB_DIV_Y :%d   SUB_DIV_X :%d\n   ",sub_divz_z[my_coords[0]],sub_divz_y[my_coords[1]],sub_divz_x[my_coords[2]] );
-    int ***data_send = (int ***)malloc((sub_divz_z[my_coords[0]]+2) * sizeof(int **));
-    for (int i = 0; i < (sub_divz_z[my_coords[0]]+2); ++i) {
-        data_send[i] = (int **)malloc((sub_divz_y[my_coords[1]]+2) * sizeof(int *));
-        for (int j = 0; j < (sub_divz_y[my_coords[1]]+2); ++j) {
-            data_send[i][j] = (int *)malloc((sub_divz_x[my_coords[2]]+2) * sizeof(int));
-            for (int k = 0; k < (sub_divz_x[my_coords[2]]+2); ++k) {
-                if((k!=0) && (i!=0) && (j!= 0) && (k!= (sub_divz_x[my_coords[2]]+1)) && (i!= (sub_divz_z[my_coords[0]]+1)) && (j!= (sub_divz_y[my_coords[1]]+1))) 
+    int ***data_send = (int ***)malloc(((NUM_LINHAS/sub_divz_z[my_coords[0]])+2) * sizeof(int **));
+    for (int i = 0; i < ((NUM_LINHAS/sub_divz_z[my_coords[0]])+2); ++i) {
+        data_send[i] = (int **)malloc((NUM_LINHAS/(sub_divz_y[my_coords[1]]+2)) * sizeof(int *));
+        for (int j = 0; j < (NUM_LINHAS/(sub_divz_y[my_coords[1]]+2)); ++j) {
+            data_send[i][j] = (int *)malloc((NUM_LINHAS/(sub_divz_x[my_coords[2]]+2)) * sizeof(int));
+            for (int k = 0; k < (NUM_LINHAS/(sub_divz_x[my_coords[2]]+2)); ++k) {
+                if((k!=0) && (i!=0) && (j!= 0) && (k!= (NUM_LINHAS/(sub_divz_x[my_coords[2]]+1))) && (i!= (NUM_LINHAS/(sub_divz_z[my_coords[0]]+1))) && (j!= (NUM_LINHAS/(sub_divz_y[my_coords[1]]+1)))) 
                 {
                     data_send[i][j][k]=rank*1000; 
                     data_send[i][j][k] = data_send[i][j][k] + count;
