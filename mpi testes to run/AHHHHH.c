@@ -121,11 +121,11 @@ int main(int argc, char *argv[]) {
 
     if(rank==0)
     {
-        printf("SUB_DIV_Z :%d   SUB_DIV_Z :%d \n   ",sub_divz_z[0],sub_divz_z[1]  );
-        printf("SUB_DIV_Y :%d   SUB_DIV_Y :%d \n   ",sub_divz_y[0],sub_divz_y[1]  );
-        printf("SUB_DIV_X :%d   SUB_DIV_X :%d   SUB_DIV_X :%d\n   ",sub_divz_x[0],sub_divz_x[1], sub_divz_x[2]  );
+        printf("SUB_DIV_Z :%d   SUB_DIV_Z :%d \n",sub_divz_z[0],sub_divz_z[1]  );
+        printf("SUB_DIV_Y :%d   SUB_DIV_Y :%d \n",sub_divz_y[0],sub_divz_y[1]  );
+        printf("SUB_DIV_X :%d   SUB_DIV_X :%d   SUB_DIV_X :%d\n",sub_divz_x[0],sub_divz_x[1], sub_divz_x[2]  );
     }
-    
+
     int ***data_send = (int ***)malloc((sub_z+2) * sizeof(int **));
     for (int i = 0; i < (sub_z+2); ++i) {
         data_send[i] = (int **)malloc(((sub_y+2)) * sizeof(int *));
