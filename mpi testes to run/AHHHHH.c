@@ -41,14 +41,12 @@ int main(int argc, char *argv[]) {
         sub_divz_z[k]=aux_z_size[k];
     }
 
-    int *sub_divz_y;
     sub_divz_y = (int *)malloc((SUB_DIV_Y) * sizeof(int));
     for(int k=0; k<SUB_DIV_Z; k++)
     {
         sub_divz_y[k]=aux_y_size[k];
     }
 
-    int *sub_divz_x;
     sub_divz_x = (int *)malloc((SUB_DIV_Z) * sizeof(int));
     for(int k=0; k<SUB_DIV_Z; k++)
     {
