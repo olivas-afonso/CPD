@@ -85,6 +85,9 @@ int main(int argc, char *argv[]) {
     }
     */
 
+   divide_number_parts(NUM_LINHAS, 2, sub_divz_z);
+   divide_number_parts(NUM_LINHAS, 2, sub_divz_y);
+   divide_number_parts(NUM_LINHAS, 3, sub_divz_x);
 
     MPI_Init(&argc, &argv);
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
