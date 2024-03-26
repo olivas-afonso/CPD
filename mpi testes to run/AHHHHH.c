@@ -204,7 +204,7 @@ int main(int argc, char *argv[]) {
         
         for(aux_z=0;aux_z<(sub_divz_z[my_coords[0]]+2);aux_z++)
         {
-            printf(" CAMADA\n");
+            printf("CAMADA %d\n", aux_z);
             for(aux_y=0;aux_y<(sub_divz_y[my_coords[1]]+2);aux_y++)
             {
                 for(aux_x=0;aux_x<(sub_divz_x[my_coords[2]]+2); aux_x++)
