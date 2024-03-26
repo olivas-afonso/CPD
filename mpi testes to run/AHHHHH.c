@@ -204,6 +204,7 @@ int main(int argc, char *argv[]) {
     
     if(rank==5)
     {
+        printf("SUB_Z: %d   SUB_Y: %d   SUB_X:  %d\n", sub_z, sub_y, sub_x);
             //MPI_Cart_coords(cart_comm, rank, 3, my_coords);
         for(aux_z=0;aux_z<((sub_z)+2);aux_z++)
         {
