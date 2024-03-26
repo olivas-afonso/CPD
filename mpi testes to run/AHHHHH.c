@@ -66,7 +66,7 @@ int main(int argc, char *argv[]) {
             for (int k = 0; k < (sub_x+2); ++k) {
                 if(k!=0 && i!=0 && j!= 0 && k!= (sub_x+1) && i!= (sub_z+1) && j!= (sub_y+1)) 
                 {
-                    data_send[i][j][k]=rank*1000 +count;
+                    data_send[i][j][k]=rank*1000 + count;
                     count++;
                 }
                 else
@@ -76,18 +76,7 @@ int main(int argc, char *argv[]) {
             }
         }
     }
-    if(rank==0) printf("RANK : %d   COUNT :%d\n",rank, count);
-    if(rank==1) printf("RANK : %d   COUNT :%d\n",rank, count);
-    if(rank==2) printf("RANK : %d   COUNT :%d\n",rank, count);
-    if(rank==3) printf("RANK : %d   COUNT :%d\n",rank, count);
-    if(rank==4) printf("RANK : %d   COUNT :%d\n",rank, count);
-    if(rank==5) printf("RANK : %d   COUNT :%d\n",rank, count);
-    if(rank==6) printf("RANK : %d   COUNT :%d\n",rank, count);
-    if(rank==7) printf("RANK : %d   COUNT :%d\n",rank, count);
-    if(rank==8) printf("RANK : %d   COUNT :%d\n",rank, count);
-    if(rank==9) printf("RANK : %d   COUNT :%d\n",rank, count);
-    if(rank==10) printf("RANK : %d   COUNT :%d\n",rank, count);
-    if(rank==11) printf("RANK : %d   COUNT :%d\n",rank, count);
+    
 
     int vert_esq_cima_frente, vert_dir_baixo_tras, vert_dir_cima_frente, vert_esq_baixo_tras;
     int vert_esq_cima_tras, vert_dir_baixo_frente, vert_dir_cima_tras, vert_esq_baixo_frente;
@@ -186,7 +175,7 @@ int main(int argc, char *argv[]) {
         MPI_Sendrecv(&data_send[1][sub_y][aux_x+1], 1, MPI_INT, frente_baixo_rank, 0, &data_send[sub_z+1][0][aux_x+1], 1, MPI_INT, tras_cima_rank, 0, cart_comm, MPI_STATUS_IGNORE); // AR dir cima
     }
 
-    /*
+    
     if(rank==5)
     {
         
@@ -204,7 +193,7 @@ int main(int argc, char *argv[]) {
 
         }
     }
-    */
+    
 
 
     MPI_Finalize();
