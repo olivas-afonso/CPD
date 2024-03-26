@@ -76,7 +76,7 @@ int main(int argc, char *argv[]) {
             }
         }
     }
-    printf()
+    
     int vert_esq_cima_frente, vert_dir_baixo_tras, vert_dir_cima_frente, vert_esq_baixo_tras;
     int vert_esq_cima_tras, vert_dir_baixo_frente, vert_dir_cima_tras, vert_esq_baixo_frente;
 
