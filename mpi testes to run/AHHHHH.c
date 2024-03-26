@@ -5,7 +5,7 @@
 int rank, size;
 int my_coords[3];
 
-#define NUM_LINHAS 7
+#define NUM_LINHAS 6
 #define SUB_DIV_X 3 // ISTO SAO OS INTEIROS DA MULT
 #define SUB_DIV_Y 2
 #define SUB_DIV_Z 2
