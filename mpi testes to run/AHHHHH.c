@@ -76,7 +76,19 @@ int main(int argc, char *argv[]) {
             }
         }
     }
-    if(rank==0) printf("COUNT :%d\n", count);
+    if(rank==0) printf("RANK : %d   COUNT :%d\n",rank, count);
+    if(rank==1) printf("RANK : %d   COUNT :%d\n",rank, count);
+    if(rank==2) printf("RANK : %d   COUNT :%d\n",rank, count);
+    if(rank==3) printf("RANK : %d   COUNT :%d\n",rank, count);
+    if(rank==4) printf("RANK : %d   COUNT :%d\n",rank, count);
+    if(rank==5) printf("RANK : %d   COUNT :%d\n",rank, count);
+    if(rank==6) printf("RANK : %d   COUNT :%d\n",rank, count);
+    if(rank==7) printf("RANK : %d   COUNT :%d\n",rank, count);
+    if(rank==8) printf("RANK : %d   COUNT :%d\n",rank, count);
+    if(rank==9) printf("RANK : %d   COUNT :%d\n",rank, count);
+    if(rank==10) printf("RANK : %d   COUNT :%d\n",rank, count);
+    if(rank==11) printf("RANK : %d   COUNT :%d\n",rank, count);
+
     int vert_esq_cima_frente, vert_dir_baixo_tras, vert_dir_cima_frente, vert_esq_baixo_tras;
     int vert_esq_cima_tras, vert_dir_baixo_frente, vert_dir_cima_tras, vert_esq_baixo_frente;
 
