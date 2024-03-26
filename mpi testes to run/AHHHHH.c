@@ -33,7 +33,7 @@ int main(int argc, char *argv[]) {
     
     int aux_z_size[3]={2,2,2};
     int aux_y_size[3]={2,2,2};
-    int aux_x_size[2]={3,3};
+    int aux_x_size[3]={3,3,3};
     int *sub_divz_z= (int *)malloc(2 * sizeof(int)); 
     for(int k=0; k<2; k++)
     {
