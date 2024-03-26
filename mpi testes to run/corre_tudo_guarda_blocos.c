@@ -583,7 +583,7 @@ for (int i = 0; i < size; i++) {
 	
 	printf("valor de n=%f\n", comprimento_cubo_pequeno);
 
-		
+		/*
 		n = (int)n_double;
 		min_z = ((int)n_double)*rank;
 		if(min_z <= number_of_cells){
@@ -594,7 +594,7 @@ for (int i = 0; i < size; i++) {
 			max_y = n;
 			max_x = n;
 		}
-		
+		*/
 
 
 /*		
