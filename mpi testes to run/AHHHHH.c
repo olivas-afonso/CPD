@@ -202,7 +202,7 @@ int main(int argc, char *argv[]) {
     if(rank==5)
     {
         
-        for(aux_z=0;aux_z<(sub_divz_z[my_coords[0]]+2);aux_z++)
+        for(aux_z=0;aux_z<((sub_divz_z[my_coords[0]])+2);aux_z++)
         {
             printf("CAMADA %d\n", aux_z);
             for(aux_y=0;aux_y<(sub_divz_y[my_coords[1]]+2);aux_y++)
