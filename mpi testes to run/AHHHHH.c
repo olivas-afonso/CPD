@@ -31,9 +31,9 @@ void My_MPI_Cart_Shift(MPI_Comm cart_comm, int pos_x, int pos_y,int pos_z, int d
 
 int main(int argc, char *argv[]) {
     
-    int aux_z_size[3]={2,2,2};
-    int aux_y_size[3]={2,2,2};
-    int aux_x_size[3]={3,3,3};
+    int aux_z_size[2]={3,3};
+    int aux_y_size[2]={3,3};
+    int aux_x_size[3]={2,2,2};
     int *sub_divz_z= (int *)malloc(2 * sizeof(int)); 
     for(int k=0; k<2; k++)
     {
@@ -78,9 +78,9 @@ int main(int argc, char *argv[]) {
     //int sub_divz_x[my_coords[2]] = SUB_DIV_X;
 
     MPI_Cart_coords(cart_comm, rank, 3, my_coords);
-    int sub_z = NUM_LINHAS/sub_divz_z[my_coords[0]];
-    int sub_y = NUM_LINHAS/sub_divz_y[my_coords[1]];
-    int sub_x = NUM_LINHAS/sub_divz_x[my_coords[2]];
+    int sub_z = sub_divz_z[my_coords[0]];
+    int sub_y = sub_divz_y[my_coords[1]];
+    int sub_x = sub_divz_x[my_coords[2]];
 
     printf("SUB_DIV_Z :%d   SUB_DIV_Y :%d   SUB_DIV_X :%d\n   ",sub_divz_z[my_coords[0]],sub_divz_y[my_coords[1]],sub_divz_x[my_coords[2]] );
     int ***data_send = (int ***)malloc((sub_z+2) * sizeof(int **));
