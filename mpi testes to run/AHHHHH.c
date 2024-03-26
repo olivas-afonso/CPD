@@ -78,15 +78,18 @@ int main(int argc, char *argv[]) {
     //int sub_divz_y[my_coords[1]] = SUB_DIV_Y;
     //int sub_divz_x[my_coords[2]] = SUB_DIV_X;
     
+    int sub_z = NUM_LINHAS/sub_divz_z[my_coords[0]];
+    int sub_y = NUM_LINHAS/sub_divz_y[my_coords[1]];
+    int sub_x = NUM_LINHAS/sub_divz_x[my_coords[2]];
 
     printf("SUB_DIV_Z :%d   SUB_DIV_Y :%d   SUB_DIV_X :%d\n   ",sub_divz_z[my_coords[0]],sub_divz_y[my_coords[1]],sub_divz_x[my_coords[2]] );
-    int ***data_send = (int ***)malloc(((NUM_LINHAS/sub_divz_z[my_coords[0]])+2) * sizeof(int **));
-    for (int i = 0; i < ((NUM_LINHAS/sub_divz_z[my_coords[0]])+2); ++i) {
-        data_send[i] = (int **)malloc((NUM_LINHAS/(sub_divz_y[my_coords[1]]+2)) * sizeof(int *));
-        for (int j = 0; j < (NUM_LINHAS/(sub_divz_y[my_coords[1]]+2)); ++j) {
-            data_send[i][j] = (int *)malloc((NUM_LINHAS/(sub_divz_x[my_coords[2]]+2)) * sizeof(int));
-            for (int k = 0; k < (NUM_LINHAS/(sub_divz_x[my_coords[2]]+2)); ++k) {
-                if((k!=0) && (i!=0) && (j!= 0) && (k!= (NUM_LINHAS/(sub_divz_x[my_coords[2]]+1))) && (i!= (NUM_LINHAS/(sub_divz_z[my_coords[0]]+1))) && (j!= (NUM_LINHAS/(sub_divz_y[my_coords[1]]+1)))) 
+    int ***data_send = (int ***)malloc((sub_z+2) * sizeof(int **));
+    for (int i = 0; i < (sub_z+2); ++i) {
+        data_send[i] = (int **)malloc(((sub_y+2)) * sizeof(int *));
+        for (int j = 0; j < (sub_y+2); ++j) {
+            data_send[i][j] = (int *)malloc(((sub_x+2)) * sizeof(int));
+            for (int k = 0; k < (sub_x+2); ++k) {
+                if((k!=0) && (i!=0) && (j!= 0) && (k!= (sub_x+1)) && (i!= (sub_x+1)) && (j!= (sub_y+1)) )
                 {
                     data_send[i][j][k]=rank*1000; 
                     data_send[i][j][k] = data_send[i][j][k] + count;
@@ -124,90 +127,90 @@ int main(int argc, char *argv[]) {
 
 
     
-    MPI_Sendrecv(&data_send[1][1][sub_divz_x[my_coords[2]]], 1, MPI_INT, dir_baixo_tras_rank, 0, &data_send[sub_divz_z[my_coords[0]]+1][sub_divz_y[my_coords[1]]+1][0], 1, MPI_INT, esq_cima_frente_rank, 0, cart_comm, MPI_STATUS_IGNORE); // AR dir cima
-    MPI_Sendrecv(&data_send[sub_divz_z[my_coords[0]]][sub_divz_y[my_coords[1]]][1], 1, MPI_INT, esq_cima_frente_rank, 0, &data_send[0][0][sub_divz_x[my_coords[2]]+1], 1, MPI_INT, dir_baixo_tras_rank, 0, cart_comm, MPI_STATUS_IGNORE);
-    MPI_Sendrecv(&data_send[sub_divz_z[my_coords[0]]][sub_divz_y[my_coords[1]]][sub_divz_x[my_coords[2]]], 1, MPI_INT, dir_cima_frente_rank, 0, &data_send[0][0][0], 1, MPI_INT, esq_baixo_tras_rank, 0, cart_comm, MPI_STATUS_IGNORE);
-    MPI_Sendrecv(&data_send[1][1][1], 1, MPI_INT, esq_baixo_tras_rank, 0, &data_send[sub_divz_z[my_coords[0]]+1][sub_divz_y[my_coords[1]]+1][sub_divz_x[my_coords[2]]+1], 1, MPI_INT, dir_cima_frente_rank, 0, cart_comm, MPI_STATUS_IGNORE);
+    MPI_Sendrecv(&data_send[1][1][sub_x], 1, MPI_INT, dir_baixo_tras_rank, 0, &data_send[sub_z+1][sub_y+1][0], 1, MPI_INT, esq_cima_frente_rank, 0, cart_comm, MPI_STATUS_IGNORE); // AR dir cima
+    MPI_Sendrecv(&data_send[sub_z][sub_y][1], 1, MPI_INT, esq_cima_frente_rank, 0, &data_send[0][0][sub_x+1], 1, MPI_INT, dir_baixo_tras_rank, 0, cart_comm, MPI_STATUS_IGNORE);
+    MPI_Sendrecv(&data_send[sub_z][sub_y][sub_x], 1, MPI_INT, dir_cima_frente_rank, 0, &data_send[0][0][0], 1, MPI_INT, esq_baixo_tras_rank, 0, cart_comm, MPI_STATUS_IGNORE);
+    MPI_Sendrecv(&data_send[1][1][1], 1, MPI_INT, esq_baixo_tras_rank, 0, &data_send[sub_z+1][sub_y+1][sub_x+1], 1, MPI_INT, dir_cima_frente_rank, 0, cart_comm, MPI_STATUS_IGNORE);
     
-    MPI_Sendrecv(&data_send[1][sub_divz_y[my_coords[1]]][sub_divz_x[my_coords[2]]], 1, MPI_INT, dir_baixo_frente_rank, 0, &data_send[sub_divz_z[my_coords[0]]+1][0][0], 1, MPI_INT, esq_cima_tras_rank, 0, cart_comm, MPI_STATUS_IGNORE); // AR dir cima
-    MPI_Sendrecv(&data_send[sub_divz_z[my_coords[0]]][1][1], 1, MPI_INT, esq_cima_tras_rank, 0, &data_send[0][sub_divz_y[my_coords[1]]+1][sub_divz_x[my_coords[2]]+1], 1, MPI_INT, dir_baixo_frente_rank, 0, cart_comm, MPI_STATUS_IGNORE);
-    MPI_Sendrecv(&data_send[sub_divz_z[my_coords[0]]][1][sub_divz_x[my_coords[2]]], 1, MPI_INT, dir_cima_tras_rank, 0, &data_send[0][sub_divz_y[my_coords[1]]+1][0], 1, MPI_INT, esq_baixo_frente_rank, 0, cart_comm, MPI_STATUS_IGNORE);
-    MPI_Sendrecv(&data_send[1][sub_divz_y[my_coords[1]]][1], 1, MPI_INT, esq_baixo_frente_rank, 0, &data_send[sub_divz_z[my_coords[0]]+1][0][sub_divz_x[my_coords[2]]+1], 1, MPI_INT, dir_cima_tras_rank, 0, cart_comm, MPI_STATUS_IGNORE);
+    MPI_Sendrecv(&data_send[1][sub_y][sub_x], 1, MPI_INT, dir_baixo_frente_rank, 0, &data_send[sub_z+1][0][0], 1, MPI_INT, esq_cima_tras_rank, 0, cart_comm, MPI_STATUS_IGNORE); // AR dir cima
+    MPI_Sendrecv(&data_send[sub_z][1][1], 1, MPI_INT, esq_cima_tras_rank, 0, &data_send[0][sub_y+1][sub_x+1], 1, MPI_INT, dir_baixo_frente_rank, 0, cart_comm, MPI_STATUS_IGNORE);
+    MPI_Sendrecv(&data_send[sub_z][1][sub_x], 1, MPI_INT, dir_cima_tras_rank, 0, &data_send[0][sub_y+1][0], 1, MPI_INT, esq_baixo_frente_rank, 0, cart_comm, MPI_STATUS_IGNORE);
+    MPI_Sendrecv(&data_send[1][sub_y][1], 1, MPI_INT, esq_baixo_frente_rank, 0, &data_send[sub_z+1][0][sub_x+1], 1, MPI_INT, dir_cima_tras_rank, 0, cart_comm, MPI_STATUS_IGNORE);
 
-    for( aux_z=0; aux_z < sub_divz_z[my_coords[0]]; aux_z++)
+    for( aux_z=0; aux_z < sub_z; aux_z++)
     {
         
         //FACE DIREITA DIAGS
-        MPI_Sendrecv(&data_send[aux_z+1][1][1], 1, MPI_INT, esq_tras_rank, 0, &data_send[aux_z+1][sub_divz_y[my_coords[1]]+1][sub_divz_x[my_coords[2]]+1], 1, MPI_INT, dir_frente_rank, 0, cart_comm, MPI_STATUS_IGNORE); // AR dir cima
-        MPI_Sendrecv(&data_send[aux_z+1][sub_divz_y[my_coords[1]]][1], 1, MPI_INT, esq_frente_rank, 0, &data_send[aux_z+1][0][sub_divz_x[my_coords[2]]+1], 1, MPI_INT, dir_tras_rank, 0, cart_comm, MPI_STATUS_IGNORE); // AR dir baixo
+        MPI_Sendrecv(&data_send[aux_z+1][1][1], 1, MPI_INT, esq_tras_rank, 0, &data_send[aux_z+1][sub_y+1][sub_x+1], 1, MPI_INT, dir_frente_rank, 0, cart_comm, MPI_STATUS_IGNORE); // AR dir cima
+        MPI_Sendrecv(&data_send[aux_z+1][sub_y][1], 1, MPI_INT, esq_frente_rank, 0, &data_send[aux_z+1][0][sub_x+1], 1, MPI_INT, dir_tras_rank, 0, cart_comm, MPI_STATUS_IGNORE); // AR dir baixo
 
         //FACE ESQUERDA DIAGS
-        MPI_Sendrecv(&data_send[aux_z+1][1][sub_divz_x[my_coords[2]]], 1, MPI_INT, dir_tras_rank, 0, &data_send[aux_z+1][sub_divz_y[my_coords[1]]+1][0], 1, MPI_INT, esq_frente_rank, 0, cart_comm, MPI_STATUS_IGNORE); // AR esq baixo
-        MPI_Sendrecv(&data_send[aux_z+1][sub_divz_y[my_coords[1]]][sub_divz_x[my_coords[2]]], 1, MPI_INT, dir_frente_rank, 0, &data_send[aux_z+1][0][0], 1, MPI_INT, esq_tras_rank, 0, cart_comm, MPI_STATUS_IGNORE); // AR esq baixo
+        MPI_Sendrecv(&data_send[aux_z+1][1][sub_x], 1, MPI_INT, dir_tras_rank, 0, &data_send[aux_z+1][sub_y+1][0], 1, MPI_INT, esq_frente_rank, 0, cart_comm, MPI_STATUS_IGNORE); // AR esq baixo
+        MPI_Sendrecv(&data_send[aux_z+1][sub_y][sub_x], 1, MPI_INT, dir_frente_rank, 0, &data_send[aux_z+1][0][0], 1, MPI_INT, esq_tras_rank, 0, cart_comm, MPI_STATUS_IGNORE); // AR esq baixo
 
         
-        for (aux_y=0; aux_y<sub_divz_y[my_coords[1]]; aux_y++)
+        for (aux_y=0; aux_y<sub_y; aux_y++)
         {
             //FACE DIREITA 
-            MPI_Sendrecv(&data_send[aux_z+1][aux_y+1][1], 1, MPI_INT, esq_rank, 0, &data_send[aux_z+1][aux_y+1][sub_divz_x[my_coords[2]]+1], 1, MPI_INT, dir_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir
+            MPI_Sendrecv(&data_send[aux_z+1][aux_y+1][1], 1, MPI_INT, esq_rank, 0, &data_send[aux_z+1][aux_y+1][sub_x+1], 1, MPI_INT, dir_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir
             
             //FACE ESQUERDA
-            MPI_Sendrecv(&data_send[aux_z+1][aux_y+1][sub_divz_x[my_coords[2]]], 1, MPI_INT, dir_rank, 0, &data_send[aux_z+1][aux_y+1][0], 1, MPI_INT, esq_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir
+            MPI_Sendrecv(&data_send[aux_z+1][aux_y+1][sub_x], 1, MPI_INT, dir_rank, 0, &data_send[aux_z+1][aux_y+1][0], 1, MPI_INT, esq_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir
 
         }
-        for(aux_x=0; aux_x<sub_divz_x[my_coords[2]]; aux_x++)
+        for(aux_x=0; aux_x<sub_x; aux_x++)
         {
 
             //FACE FRENTE
-            MPI_Sendrecv(&data_send[aux_z+1][1][aux_x+1], 1, MPI_INT, tras_rank, 0, &data_send[aux_z+1][sub_divz_y[my_coords[1]]+1][aux_x+1], 1, MPI_INT, frente_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir   
+            MPI_Sendrecv(&data_send[aux_z+1][1][aux_x+1], 1, MPI_INT, tras_rank, 0, &data_send[aux_z+1][sub_y+1][aux_x+1], 1, MPI_INT, frente_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir   
             
             //FACE TRAS
-            MPI_Sendrecv(&data_send[aux_z+1][sub_divz_y[my_coords[1]]][aux_x+1], 1, MPI_INT, frente_rank, 0, &data_send[aux_z+1][0][aux_x+1], 1, MPI_INT, tras_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir   
+            MPI_Sendrecv(&data_send[aux_z+1][sub_y][aux_x+1], 1, MPI_INT, frente_rank, 0, &data_send[aux_z+1][0][aux_x+1], 1, MPI_INT, tras_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir   
         }
         
     }
 
-    for (aux_y=0; aux_y<sub_divz_y[my_coords[1]]; aux_y++)
+    for (aux_y=0; aux_y<sub_y; aux_y++)
     {
         //FACE CIMA DIAGS
-        MPI_Sendrecv(&data_send[1][aux_y+1][sub_divz_x[my_coords[2]]],1, MPI_INT, dir_baixo_rank, 0, &data_send[sub_divz_z[my_coords[0]]+1][aux_y+1][0], 1, MPI_INT, esq_cima_rank, 0, cart_comm, MPI_STATUS_IGNORE); // AR esq baixo
-        MPI_Sendrecv(&data_send[1][aux_y+1][1], 1, MPI_INT, esq_baixo_rank, 0, &data_send[sub_divz_z[my_coords[0]]+1][aux_y+1][sub_divz_x[my_coords[2]]+1], 1, MPI_INT, dir_cima_rank, 0, cart_comm, MPI_STATUS_IGNORE); // AR dir cima
+        MPI_Sendrecv(&data_send[1][aux_y+1][sub_x],1, MPI_INT, dir_baixo_rank, 0, &data_send[sub_z+1][aux_y+1][0], 1, MPI_INT, esq_cima_rank, 0, cart_comm, MPI_STATUS_IGNORE); // AR esq baixo
+        MPI_Sendrecv(&data_send[1][aux_y+1][1], 1, MPI_INT, esq_baixo_rank, 0, &data_send[sub_z+1][aux_y+1][sub_x+1], 1, MPI_INT, dir_cima_rank, 0, cart_comm, MPI_STATUS_IGNORE); // AR dir cima
     
         //FACE BAIXO DIAGS
-        MPI_Sendrecv(&data_send[sub_divz_z[my_coords[0]]][aux_y+1][sub_divz_x[my_coords[2]]], 1, MPI_INT, dir_cima_rank, 0, &data_send[0][aux_y+1][0], 1, MPI_INT, esq_baixo_rank, 0, cart_comm, MPI_STATUS_IGNORE); // AR esq baixo
-        MPI_Sendrecv(&data_send[sub_divz_z[my_coords[0]]][aux_y+1][1], 1, MPI_INT, esq_cima_rank, 0, &data_send[0][aux_y+1][sub_divz_x[my_coords[2]]+1], 1, MPI_INT, dir_baixo_rank, 0, cart_comm, MPI_STATUS_IGNORE); // AR dir cima
+        MPI_Sendrecv(&data_send[sub_z][aux_y+1][sub_x], 1, MPI_INT, dir_cima_rank, 0, &data_send[0][aux_y+1][0], 1, MPI_INT, esq_baixo_rank, 0, cart_comm, MPI_STATUS_IGNORE); // AR esq baixo
+        MPI_Sendrecv(&data_send[sub_z][aux_y+1][1], 1, MPI_INT, esq_cima_rank, 0, &data_send[0][aux_y+1][sub_x+1], 1, MPI_INT, dir_baixo_rank, 0, cart_comm, MPI_STATUS_IGNORE); // AR dir cima
 
-        for(aux_x=0; aux_x<sub_divz_x[my_coords[2]]; aux_x++)
+        for(aux_x=0; aux_x<sub_x; aux_x++)
         {
             //FACE CIMA
-            MPI_Sendrecv(&data_send[1][aux_y+1][aux_x+1], 1, MPI_INT, baixo_rank, 0, &data_send[sub_divz_z[my_coords[0]]+1][aux_y+1][aux_x+1], 1, MPI_INT, cima_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir  
+            MPI_Sendrecv(&data_send[1][aux_y+1][aux_x+1], 1, MPI_INT, baixo_rank, 0, &data_send[sub_z+1][aux_y+1][aux_x+1], 1, MPI_INT, cima_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir  
             
             //FACE BAIXO
-            MPI_Sendrecv(&data_send[sub_divz_z[my_coords[0]]][aux_y+1][aux_x+1], 1, MPI_INT, cima_rank, 0, &data_send[0][aux_y+1][aux_x+1], 1, MPI_INT, baixo_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir                      
+            MPI_Sendrecv(&data_send[sub_z][aux_y+1][aux_x+1], 1, MPI_INT, cima_rank, 0, &data_send[0][aux_y+1][aux_x+1], 1, MPI_INT, baixo_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir                      
         }
     }
 
-    for(aux_x=0; aux_x<sub_divz_x[my_coords[2]]; aux_x++)
+    for(aux_x=0; aux_x<sub_x; aux_x++)
     {
         //FACE FRENTE DIAGS
-        MPI_Sendrecv(&data_send[sub_divz_z[my_coords[0]]][1][aux_x+1], 1, MPI_INT, tras_cima_rank, 0, &data_send[0][sub_divz_y[my_coords[1]]+1][aux_x+1], 1, MPI_INT, frente_baixo_rank, 0, cart_comm, MPI_STATUS_IGNORE); // AR esq baixo
-        MPI_Sendrecv(&data_send[1][1][aux_x+1], 1, MPI_INT, tras_baixo_rank, 0, &data_send[sub_divz_z[my_coords[0]]+1][sub_divz_y[my_coords[1]]+1][aux_x+1], 1, MPI_INT, frente_cima_rank, 0, cart_comm, MPI_STATUS_IGNORE); // AR dir cima
+        MPI_Sendrecv(&data_send[sub_z][1][aux_x+1], 1, MPI_INT, tras_cima_rank, 0, &data_send[0][sub_y+1][aux_x+1], 1, MPI_INT, frente_baixo_rank, 0, cart_comm, MPI_STATUS_IGNORE); // AR esq baixo
+        MPI_Sendrecv(&data_send[1][1][aux_x+1], 1, MPI_INT, tras_baixo_rank, 0, &data_send[sub_z+1][sub_y+1][aux_x+1], 1, MPI_INT, frente_cima_rank, 0, cart_comm, MPI_STATUS_IGNORE); // AR dir cima
 
         //FACE TRAS DIAGS
-        MPI_Sendrecv(&data_send[sub_divz_z[my_coords[0]]][sub_divz_y[my_coords[1]]][aux_x+1], 1, MPI_INT, frente_cima_rank, 0, &data_send[0][0][aux_x+1], 1, MPI_INT, tras_baixo_rank, 0, cart_comm, MPI_STATUS_IGNORE); // AR esq baixo
-        MPI_Sendrecv(&data_send[1][sub_divz_y[my_coords[1]]][aux_x+1], 1, MPI_INT, frente_baixo_rank, 0, &data_send[sub_divz_z[my_coords[0]]+1][0][aux_x+1], 1, MPI_INT, tras_cima_rank, 0, cart_comm, MPI_STATUS_IGNORE); // AR dir cima
+        MPI_Sendrecv(&data_send[sub_z][sub_y][aux_x+1], 1, MPI_INT, frente_cima_rank, 0, &data_send[0][0][aux_x+1], 1, MPI_INT, tras_baixo_rank, 0, cart_comm, MPI_STATUS_IGNORE); // AR esq baixo
+        MPI_Sendrecv(&data_send[1][sub_y][aux_x+1], 1, MPI_INT, frente_baixo_rank, 0, &data_send[sub_z+1][0][aux_x+1], 1, MPI_INT, tras_cima_rank, 0, cart_comm, MPI_STATUS_IGNORE); // AR dir cima
     }
 
     
     if(rank==5)
     {
             MPI_Cart_coords(cart_comm, rank, 3, my_coords);
-        for(aux_z=0;aux_z<((sub_divz_z[my_coords[0]])+2);aux_z++)
+        for(aux_z=0;aux_z<((sub_z)+2);aux_z++)
         {
             printf("CAMADA %d\n", aux_z);
-            for(aux_y=0;aux_y<(sub_divz_y[my_coords[1]]+2);aux_y++)
+            for(aux_y=0;aux_y<(sub_y+2);aux_y++)
             {
-                for(aux_x=0;aux_x<(sub_divz_x[my_coords[2]]+2); aux_x++)
+                for(aux_x=0;aux_x<(sub_x+2); aux_x++)
                 {
                      printf("%d ",data_send[aux_z][aux_y][aux_x]);
                 }
