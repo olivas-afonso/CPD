@@ -581,7 +581,7 @@ for (int i = 0; i < size; i++) {
 	
 	double comprimento_cubo_pequeno = N_double / raiz_cubica_x;
 	
-	printf("valor de n = %f\n", comprimento_cubo_pequeno);
+	printf("valor de n = %f \n", comprimento_cubo_pequeno);
 
 		/*
 		n = (int)n_double;
