@@ -391,8 +391,8 @@ for (int auxz=0; auxz < (sub_z+2); auxz++)
             MPI_Sendrecv(&data_send[aux_z+1][aux_y+1][1], 1, MPI_INT, esq_rank, 0, &data_send[aux_z+1][aux_y+1][sub_x+1], 1, MPI_INT, dir_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir
             if(rank == 1)
             {
-                printf("VALOR ENVIAR %d \n", data_send[aux_z+1][aux_y+1][1]);
-                printf("VALOR GUARDAR %d \n", data_send[aux_z+1][aux_y+1][sub_x+1]);
+                //printf("VALOR ENVIAR %d \n", data_send[aux_z+1][aux_y+1][1]);
+                //printf("VALOR GUARDAR %d \n", data_send[aux_z+1][aux_y+1][sub_x+1]);
             } 
             //FACE ESQUERDA
             MPI_Sendrecv(&data_send[aux_z+1][aux_y+1][sub_x], 1, MPI_INT, dir_rank, 0, &data_send[aux_z+1][aux_y+1][0], 1, MPI_INT, esq_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir
@@ -442,6 +442,7 @@ for (int auxz=0; auxz < (sub_z+2); auxz++)
     }
 
     //--------------------------------------DEBUG-----------------------------------------------
+    /*
     if(rank==0)
     {
         printf("RANK: %d    SUB_Z: %d   SUB_Y: %d   SUB_X:  %d\n",rank, sub_z, sub_y, sub_x);
@@ -479,7 +480,7 @@ for (int auxz=0; auxz < (sub_z+2); auxz++)
 
         }
     }
-
+    */
     freeMatrix((sub_y+2), (sub_z+2));
 
     free(sub_divz_x);
