@@ -298,14 +298,15 @@ int main(int argc, char *argv[]) {
                 valor_aux = 0;
             }
 
-            if (init_z>=limite_inf_y && init_z<limite_sup_y && flag_x == 1 && flag_y == 1){
+            if (init_z>=limite_inf_y && init_z<limite_sup_y && flag_x == 1 && flag_y == 1 && r4_uni() < density){
+                  
+                  data_send[varrimento_x-1][varrimento_y-1][varrimento_z] = (int)(r4_uni() * N_SPECIES) + 1;
                   printf("VALORES A ENTRAR %d, pos_x = %d, pos_y = %d, pos_z = %d \n", valor_aux, varrimento_x-1, varrimento_y-1, varrimento_z);
-                  data_send[varrimento_x-1][varrimento_y-1][varrimento_z] = valor_aux;
                  ++varrimento_z;
             }
         }
         //printf ("RANK :%d   Varrimento = %d\n",rank, varrimento_z);
-        varrimento_z = 0;
+        varrimento_z = 1;
     }
     
     varrimento_y = 0;
