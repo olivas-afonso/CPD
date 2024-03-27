@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <math.h>
 #include <string.h>
 //#include <omp.h>
 #include <mpi.h>
@@ -31,6 +32,7 @@ float r4_uni()
 
     return 0.5 + 0.2328306e-09 * (seed_in + (int) seed);
 }
+
 
 /************************************************************************************************
 * Nome: gen_initial_grid
@@ -84,10 +86,16 @@ char ***gen_initial_grid(int N, float density, int input_seed)
             for (z = 0; z < N; z++)
                 if(r4_uni() < density)
                     {
+						
 						// preenchimento initial do grid_even dependendo da seed
                         grid_even[x][y][z] = (int)(r4_uni() * N_SPECIES) + 1; // preenchimento initial do grid_even dependendo da seed
                         count_species[grid_even[x][y][z]]++;
-                    }
+						
+						//preenchimento_da_grid(grid_even[x][y][z]);
+						
+					
+					
+					}
         }     
     }
 
@@ -110,64 +118,141 @@ char ***gen_initial_grid(int N, float density, int input_seed)
 * funcao: gera as duas matrizes, a inicial e a auxiliar; ao longo das geracoes as celulas iram
 *passar de uma para a outra.
 ************************************************************************************************/
-char ***gen_initial_bloco(int max, int min ,int N, float density, int input_seed)
+char ***gen_initial_bloco(int max_x, int min_x ,int max_y, int min_y ,int max_z, int min_z ,int n,int N, float density, int input_seed)
 {
     int x, y, z;
+	int x1,y1,z1;
 	int prov = 0;
-    
+    int aux = 0;
+	
     init_r4uni(input_seed);
     
 //alocacao da memeoria dinamica, alocando primeiro um apontador triplo o que corresponde a uma dimensao do cubo  ~
-    grid_even = (char ***) malloc(N * sizeof(char **));
+    grid_even = (char ***) malloc(n* sizeof(char **));
     if(grid_even == NULL) {
         printf("Failed to allocate matrix1\n");
         exit(1);
     }
 	
 //aloca a dimensao x atraves de um apontador de um apontador    
-    grid_odd = (char ***) malloc(N * sizeof(char **));
+    /*grid_odd = (char ***) malloc(N * sizeof(char **));
     if(grid_odd == NULL) {
         printf("Failed to allocate matrix2\n");
         exit(1);
-    }
+    }*/
 // aloca o eixo final, ataves de um apontador de arrays
-    for(x = 0; x < N; x++) {
-        grid_even[x] = (char **) malloc(N * sizeof(char *));
+    for(x = 0; x < n; x++) {
+        grid_even[x] = (char **) malloc(n * sizeof(char *));
         if(grid_even[x] == NULL) {
             printf("Failed to allocate matrix3\n");
             exit(1);
         }
 
-        grid_odd[x] = (char **) malloc(N * sizeof(char *));
+        /*grid_odd[x] = (char **) malloc(N * sizeof(char *));
         if(grid_odd[x] == NULL) {
             printf("Failed to allocate matrix5\n");
             exit(1);
-        }
+        }*/
 
-        for (y = 0; y < N; y++){
-            grid_even[x][y] = (char*) calloc(N, sizeof(char));
+        for (y = 0; y < n; y++){
+            grid_even[x][y] = (char*) calloc(n, sizeof(char));
             if(grid_even[x][y] == NULL) {
                 printf("Failed to allocate matrix6\n");
                 exit(1);
             }
-            grid_odd[x][y] = (char*) calloc(N, sizeof(char));
+          /*  grid_odd[x][y] = (char*) calloc(N, sizeof(char));
             if(grid_odd[x][y] == NULL) {
                 printf("Failed to allocate matrix6\n");
                 exit(1);
-            }
-            for (z = 0; z < N; z++)
-                if(r4_uni() < density)
-                    {
-						// preenchimento initial do grid_even dependendo da seed
-                        prov = (int)(r4_uni() * N_SPECIES) + 1; // preenchimento initial do grid_even dependendo da seed
-                        count_species[grid_even[x][y][z]]++;
-						 if (z >= min && z <= max) {
-							grid_even[x][y][z] = prov;	
-						} 
-					}
+            }*/
+            for (z = 0; z < n; z++)
+				grid_even[x][y][z] = 0;
         }     
     }
 
+	x1 = 0;
+	y1 = 0;
+	z1 = 0;	
+
+/*
+	for(aux = 0; aux <64; aux++){
+		if(r4_uni() < density){
+			prov = (int)(r4_uni() * N_SPECIES) + 1; // preenchimento initial do grid_even dependendo da seed
+			//count_species[grid_even[x][y][z]]++;
+			printf("numero: %d\n",prov);	
+		}	
+		if(aux < 2){
+				grid_even[x][y][z] = prov;
+				x++;	
+			}
+			y++;
+			
+			if(aux>3 && aux < 6){
+				grid_even[x][y][z] = prov;
+			}
+			z++;
+			x = 0;
+			y = 0;
+			
+			if(aux>15 && aux < 18){
+				grid_even[x][y][z] = prov;
+			}
+			x++;
+			if(aux>19 && aux < 23){
+				grid_even[x][y][z] = prov;
+			}
+	}
+*/
+	printf("vai preencher cubos de %d na aresta\n", n);
+	
+	for(x = 0; x < n; x++){
+		for(y=0; y < n; y++){
+			for(z=0; z<n; z++){
+				printf(" %d",grid_even[x][y][z]);
+			}
+			printf("\n");
+		}
+		printf("\n\n");
+	}
+	
+	
+	for(x = 0; x < N; x++){
+		for(y=0; y < N; y++){
+			for(z=0; z<N; z++){
+				if(r4_uni() < density){
+							prov = (int)(r4_uni() * N_SPECIES) + 1; // preenchimento initial do grid_even dependendo da seed
+							//count_species[grid_even[x][y][z]]++;
+							//printf("numero: %d\n",prov);	 	
+				}else{
+					prov = 0;
+				}
+				printf("celula lida: %d\n", prov);	
+				if (x>= min_x && y>= min_y && z>= min_z) {
+					if (x<max_x && y<max_y && z<max_z){
+							printf("entrou\n");
+							grid_even[x1][y1][z1] = prov;
+						z1 ++;
+							if(z1 == n){
+								z1 =0;
+								y1++;
+							}
+							if(y1 == n){
+								z1 =0;
+								y1 =0;
+								x1++;
+							} 	
+							if(x1 == n){
+								return grid_even;
+							}		
+					}	
+				}			
+			}
+		}
+		
+	}
+
+
+/*
 	// conta as especies da geracao 0
     for(x=1; x < 10; x++)
     {
@@ -178,7 +263,7 @@ char ***gen_initial_bloco(int max, int min ,int N, float density, int input_seed
         }
     } 
                     
-
+*/
     return grid_even;
 }
 
@@ -327,6 +412,24 @@ void freeMatrix(int N) {
     free(grid_odd);
 }
 
+
+
+
+
+
+double raiz_cubica_funcao(double num) {
+    double x0 = num / 3; // Estimativa inicial
+    double x1 = (2 * x0 + num / (x0 * x0)) / 3; // Melhor estimativa
+
+    // Continuar refinando até convergência
+    while (fabs(x1 - x0) >= 0.00001) {
+        x0 = x1;
+        x1 = (2 * x0 + num / (x0 * x0)) / 3;
+    }
+
+    return x1;
+}
+
 /************************************************************************************************
 * Nome:main
 * funcao: corre as funcoes pela ordem de execução correta
@@ -367,6 +470,12 @@ int main(int argc, char *argv[]) {
     density = atof (argv[3]);
     seed = atoi (argv[4]);
 	
+	
+	double N_double;
+	double n_double;
+	double x_double;
+    
+	
 	int NX = number_of_cells;
 	int NY = NX;
 	int NZ = NX;
@@ -375,7 +484,7 @@ int main(int argc, char *argv[]) {
 	
 	
     // Create a 3D array to hold the layer of the grid for each process
-	int layer[NX][NY][NZ];
+	//int layer[NX][NY][NZ];
 	
 	/*************************************************************************
 	* codigo do MPI
@@ -404,44 +513,151 @@ int main(int argc, char *argv[]) {
 	/*************************************************************************
 	* codigo do serial 
 	***************************************************************************/
+/*	
+if(rank == 0){
+	x_double = (double)size;
+	N_double = (double)NX;
 	
+	printf("Você digitou: %.2lf e %.2lf\n", N_double, x_double);
+	
+
+	printf("x = %2.f \n", x_double);
+	double raiz_cubica_x = raiz_cubica_funcao(x_double);
+
+	printf("raiz = %2.f \n", raiz_cubica_x);
+
+    // Calcular n
+	//double = (double)N;
+	printf("N = %2.f \n", N_double);
+	
+    n_double = N_double / raiz_cubica_x;
+
+    // Exibir o resultado
+    printf("O tamanho dos cubos pequenos (n) é: %.2f %.2f\n ", n_double, N_double);
+	
+	double comprimento_cubo_pequeno = N_double / raiz_cubica_x;
+	
+	printf("valor de n=%f\n", comprimento_cubo_pequeno);
+
+}
+*/
 	
 	
 	//cria a grid aleatoria atraves dos inputs (funcao fornecida)
 for (int i = 0; i < size; i++) {
 	if (rank == i) {
-  	char *** grid;
-	grid = gen_initial_grid(number_of_cells, density, seed);
+		char *** grid;
+		int min_x = 0;
+		int max_x = 0;
+		
+		int min_y = 0;
+		int max_y = 0;
+		
+		int min_z = 0;
+		int max_z = 0;
+		
+		int inicio = 0;
+		int n = 0;
+		
+		x_double = (double)size;
+	N_double = (double)NX;
 	
-	//exec_time = -omp_get_wtime();
+	printf("Você digitou: %.2lf e %.2lf\n", N_double, x_double);
+	
 
-	// corre todas as celulas da grid 
-    for(aux_x=0; aux_x< NX; aux_x ++)
-    {
-        for(aux_y=0; aux_y<NY; aux_y++)
-        {
-            for(aux_z=0; aux_z<NZ; aux_z++)
-            {
-				 layer[aux_x][aux_y][aux_z] = grid[aux_x][aux_y][aux_z]; 
-            }
-        }
-    
-	}
-		printf("Rank %d: Layer %d\n", rank, rank);	
-		for(int merda_z= 0; merda_z < NX; merda_z++){
-			for(int merda_y = 0; merda_y < NX; merda_y++){
-				for(int merda_x = 0; merda_x < NX; merda_x++){
-					printf("%d ", grid[merda_z][merda_y][merda_x]);
-				}			
-					printf("\n");			
-			}
-			printf("\n\n");
+	printf("x = %2.f \n", x_double);
+	double raiz_cubica_x = raiz_cubica_funcao(x_double);
+
+	printf("raiz = %2.f \n", raiz_cubica_x);
+
+    // Calcular n
+	//double = (double)N;
+	printf("N = %2.f \n", N_double);
+	
+    n_double = N_double / raiz_cubica_x;
+
+    // Exibir o resultado
+    printf("O tamanho dos cubos pequenos (n) é: %.2f %.2f\n ", n_double, N_double);
+	
+	double comprimento_cubo_pequeno = N_double / raiz_cubica_x;
+	
+	printf("valor de n = %f \n", comprimento_cubo_pequeno);
+
+		/*
+		n = (int)n_double;
+		min_z = ((int)n_double)*rank;
+		if(min_z <= number_of_cells){
+			printf("entrou\n");
+			max_z = min_z + n;
+			min_y = 0;
+			min_x = 0;
+			max_y = n;
+			max_x = n;
 		}
-	
-	
-    freeMatrix(number_of_cells);
-	MPI_Barrier(MPI_COMM_WORLD);
-	}    
+		*/
+
+
+/*		
+		inicio = ((int)n_double)*rank; 
+		
+		*x = inicio % 4;
+		*y = (inicio / 4) % 4;
+		*z = inicio / 16;
+		
+		min = x + y * 4 + z * 16;
+		max = x + y * 4 + z * 16; 
+*/
+		printf("valores: x %d %d y %d %d z %d %d n %d N%d\n",  min_x ,max_x ,min_y ,max_y, min_z ,max_z, n, number_of_cells );	
+		
+		
+		grid = gen_initial_bloco(max_x, min_x,max_y, min_y,max_z, min_z,n,number_of_cells, density, seed);
+		
+		
+		
+		printf("Rank %d: Layer %d\n", rank, rank);	
+			for(int merda_z= 0; merda_z < n; merda_z++){
+				for(int merda_y = 0; merda_y < n; merda_y++){
+					for(int merda_x = 0; merda_x < n; merda_x++){
+						printf("%d ", grid[merda_z][merda_y][merda_x]);
+					}			
+						printf("\n");			
+				}
+				printf("\n\n");
+			}
+		
+		
+		
+		
+		//exec_time = -omp_get_wtime();
+
+		/*// corre todas as celulas da grid 
+		for(aux_x=0; aux_x< NX; aux_x ++)
+		{
+			for(aux_y=0; aux_y<NY; aux_y++)
+			{
+				for(aux_z=0; aux_z<NZ; aux_z++)
+				{
+					 layer[aux_x][aux_y][aux_z] = grid[aux_x][aux_y][aux_z]; 
+				}
+			}
+		
+		}
+			printf("Rank %d: Layer %d\n", rank, rank);	
+			for(int merda_z= 0; merda_z < NX; merda_z++){
+				for(int merda_y = 0; merda_y < NX; merda_y++){
+					for(int merda_x = 0; merda_x < NX; merda_x++){
+						printf("%d ", grid[merda_z][merda_y][merda_x]);
+					}			
+						printf("\n");			
+				}
+				printf("\n\n");
+			}
+		
+		
+		freeMatrix(16);
+		MPI_Barrier(MPI_COMM_WORLD);
+	*/
+	}  
 }	
 	
 	
@@ -502,3 +718,5 @@ for (int i = 0; i < size; i++) {
 
     return 0;
 }
+
+
