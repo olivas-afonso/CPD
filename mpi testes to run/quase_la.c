@@ -260,6 +260,7 @@ int main(int argc, char *argv[]) {
         data_send[i] = (char **)malloc(((sub_y+2)) * sizeof(char *));
         for (int j = 0; j < (sub_y+2); ++j) {
             data_send[i][j] = (char *)malloc(((sub_x+2)) * sizeof(char));
+
         }
     }
 
@@ -299,7 +300,7 @@ int main(int argc, char *argv[]) {
 
             if (init_z>=limite_inf_z && init_z<limite_sup_z && flag_x == 1 && flag_y == 1 ){
 
-                data_send[varrimento_x-1][varrimento_y-1][varrimento_z] = valor_aux;
+                data_send[varrimento_z][varrimento_y-1][varrimento_x-1] = valor_aux;
                   //printf("VALORES A ENTRAR %d, pos_x = %d, pos_y = %d, pos_z = %d \n", data_send[varrimento_x-1][varrimento_y-1][varrimento_z], varrimento_x-1, varrimento_y-1, varrimento_z);
                  ++varrimento_z;
             }
