@@ -285,7 +285,7 @@ int main(int argc, char *argv[]) {
 
         for (int init_z=0; init_z < NUM_LINHAS; init_z++){
 
-            if (init_z>=limite_inf_y && init_z<limite_sup_y && flag_x = 1 && flag_y == 1 && r4_uni() < density){
+            if (init_z>=limite_inf_y && init_z<limite_sup_y && flag_x == 1 && flag_y == 1 && r4_uni() < density){
                   data_send[varrimento_x-1][varrimento_y-1][varrimento_z] =(int)(r4_uni() * N_SPECIES) + 1;
                  ++varrimento_z;
             }
