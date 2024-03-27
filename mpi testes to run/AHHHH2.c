@@ -185,7 +185,7 @@ int main(int argc, char *argv[]) {
     */
 	
 	
-   
+   int auxi;
 
     char ***data_send = (char ***)malloc((sub_z+2) * sizeof(char **));
     for (int i = 0; i < (sub_z+2); ++i) {
@@ -195,7 +195,8 @@ int main(int argc, char *argv[]) {
             for (int k = 0; k < (sub_x+2); ++k) {
                 if((k!=0) && (i!=0) && (j!= 0) && (k!= (sub_x+1)) && (i!= (sub_z+1)) && (j!= (sub_y+1)) )
                 {
-                    data_send[i][j][k]=(int)(rank*1000+ count); 
+                    
+                    data_send[i][j][k]=rank*1000+ count; 
                     count++;
                 }
                 else
