@@ -70,7 +70,7 @@ int main(int argc, char *argv[]) {
     scanf("%d", &x);
 	*/ 
 	
-    printf("Todas as combinações possíveis de três inteiros cujo produto é %d:\n", x);
+    //printf("Todas as combinações possíveis de três inteiros cujo produto é %d:\n", x);
 
     int maior_linha = 0, maior_linha_prev = 24 ;
     int a, b, c;
@@ -82,7 +82,7 @@ int main(int argc, char *argv[]) {
             for (b = a; b <= x / a; b++) {
                 if (x % (a * b) == 0) {
                     c = x / (a * b);
-                    printf("%d * %d * %d\n", a, b, c);
+                    //printf("%d * %d * %d\n", a, b, c);
 					
 					if(maior_linha < a){
 						maior_linha = a;
@@ -96,10 +96,10 @@ int main(int argc, char *argv[]) {
 						maior_linha = c;
 					}
 					
-					printf("maior_linha: %d\n", maior_linha);
+					//printf("maior_linha: %d\n", maior_linha);
                     // Atualizar os menores números encontrados até agora
                     if (maior_linha < maior_linha_prev) {
-                        printf("entrou\n");
+                      //  printf("entrou\n");
 						a_final = a;
                         b_final = b;
                         c_final = c;
