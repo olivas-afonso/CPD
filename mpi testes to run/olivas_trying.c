@@ -255,63 +255,25 @@ int main(int argc, char *argv[]) {
     int sub_y = sub_divz_y[my_coords[1]];
     int sub_x = sub_divz_x[my_coords[2]];
 
-    int valor_aux=0;
-
-    char ***data_send = (char ***)malloc((sub_z+2) * sizeof(char **));
+ int ***data_send = (int ***)malloc((sub_z+2) * sizeof(int **));
     for (int i = 0; i < (sub_z+2); ++i) {
-        data_send[i] = (char **)malloc(((sub_y+2)) * sizeof(char *));
+        data_send[i] = (int **)malloc(((sub_y+2)) * sizeof(int *));
         for (int j = 0; j < (sub_y+2); ++j) {
-            data_send[i][j] = (char *)malloc(((sub_x+2)) * sizeof(char));
-            
-        }
-    }
-
-    limites_x ();
-    limites_y ();
-    limites_z();
-
-    //printf("RANK:%d LIMITE_X_SUP:%d LIMITE_Y_SUP:%d, LIMITE_Z_SUP:%d\n", rank, limite_sup_x, limite_sup_y, limite_sup_z );
-    //printf("RANK:%d LIMITE_X_INF:%d LIMITE_Y_INF:%d, LIMITE_Z_INF:%d\n", rank, limite_inf_x, limite_inf_y, limite_inf_z );
-    //printf("RANK:%d SUB_X:%d  SUB_Y:%d, SUB_Z:%d\n", rank, sub_x, sub_y, sub_z);
-
-    for (int init_x=0; init_x < NUM_LINHAS; init_x++){
-    if (init_x >= limite_inf_z && init_x<limite_sup_z){
-        flag_x = 1;
-        ++varrimento_x;
-    }
-    else flag_x=0;
-    
-    for (int init_y=0; init_y < NUM_LINHAS; init_y++){
-        if (init_y>=limite_inf_y && init_y<limite_sup_y){
-            flag_y = 1;
-            ++varrimento_y;
-        }
-        else flag_y=0;
-
-        for (int init_z=0; init_z < NUM_LINHAS; init_z++){
-            
-             if(r4_uni() < density)
-                    {
-                        // preenchimento initial do grid_even dependendo da seed
-                        valor_aux = (int)(r4_uni() * N_SPECIES) + 1; // preenchimento initial do grid_even dependendo da see
-                    }else{
-                        valor_aux = 0;
-                    }
-
-            if (init_z>=limite_inf_x && init_z<limite_sup_x && flag_x == 1 && flag_y == 1 ){
-
-                data_send[varrimento_x-1][varrimento_y-1][varrimento_z] = valor_aux;
-                  //printf("VALORES A ENTRAR %d, pos_x = %d, pos_y = %d, pos_z = %d \n", data_send[varrimento_x-1][varrimento_y-1][varrimento_z], varrimento_x-1, varrimento_y-1, varrimento_z);
-                 ++varrimento_z;
+            data_send[i][j] = (int *)malloc(((sub_x+2)) * sizeof(int));
+            for (int k = 0; k < (sub_x+2); ++k) {
+                if((k!=0) && (i!=0) && (j!= 0) && (k!= (sub_x+1)) && (i!= (sub_z+1)) && (j!= (sub_y+1)) )
+                {
+                    data_send[i][j][k]=rank*1000; 
+                    data_send[i][j][k] = data_send[i][j][k] + count;
+                    count++;
+                }
+                else
+                {
+                   data_send[i][j][k]=0; 
+                } 
             }
         }
-        //printf ("RANK :%d   Varrimento = %d\n",rank, varrimento_z);
-        varrimento_z = 1;
     }
-    
-    varrimento_y = 1;
-}
-
     
     
  
