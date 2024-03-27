@@ -398,10 +398,10 @@ int main(int argc, char *argv[]) {
         for(aux_x=0; aux_x<sub_x; aux_x++)
         {
             //FACE CIMA
-            MPI_Sendrecv(&data_send[aux_x+1][aux_y+1][1], 1, MPI_INT, baixo_rank, 0, &data_send[aux_x+1][aux_y+1][sub_z+1], 1, MPI_INT, cima_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir  
-            
+            MPI_Sendrecv(&data_send[1][aux_y+1][aux_x+1], 1, MPI_INT, baixo_rank, 0, &data_send[sub_z+1][aux_y+1][aux_x+1], 1, MPI_INT, cima_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir  
+            if(rank==0) printf("DATA SEND %d\n", data_send[1][aux_y+1][aux_x+1]);
             //FACE BAIXO
-            MPI_Sendrecv(&data_send[aux_x+1][aux_y+1][sub_z], 1, MPI_INT, cima_rank, 0, &data_send[aux_x+1][aux_y+1][0], 1, MPI_INT, baixo_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir                      
+            MPI_Sendrecv(&data_send[sub_z][aux_y+1][aux_x+1], 1, MPI_INT, cima_rank, 0, &data_send[0][aux_y+1][aux_x+1], 1, MPI_INT, baixo_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir                      
         }
     }
     /*
