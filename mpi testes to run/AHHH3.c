@@ -3,9 +3,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <mpi.h>
+#define N_SPECIES 9
+
 
 int rank, size;
 int my_coords[3];
+
+
 
 unsigned int seed;
 
