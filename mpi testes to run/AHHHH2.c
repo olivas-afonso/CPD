@@ -289,7 +289,7 @@ int main(int argc, char *argv[]) {
             {
                 // preenchimento initial do grid_even dependendo da seed
                 valor_aux = (int)(r4_uni() * N_SPECIES) + 1; // preenchimento initial do grid_even dependendo da seed
-                count_species[grid_even[x][y][z]]++;
+                
             }else{
                 valor_aux = 0;
             }
