@@ -8,6 +8,7 @@ int rank, size;
 int my_coords[3];
 int limite_inf_x, limite_inf_y , limite_inf_z ;
 int limite_sup_x , limite_sup_y , limite_sup_z; 
+float density;
 
 unsigned int seed;
 #define N_SPECIES 9
@@ -136,6 +137,7 @@ int main(int argc, char *argv[]) {
     
 
     seed = 100;
+    density=.1;
     init_r4uni(seed);
 
 	MPI_Init(&argc, &argv);
