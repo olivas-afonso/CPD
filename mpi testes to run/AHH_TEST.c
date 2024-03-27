@@ -1,17 +1,9 @@
 #include <stdio.h>
-
-#include <stdio.h>
 #include <stdlib.h>
 #include <mpi.h>
 
 int rank, size;
 int my_coords[3];
-int limite_inf_x, limite_inf_y , limite_inf_z ;
-int limite_sup_x , limite_sup_y , limite_sup_z; 
-float density;
-
-unsigned int seed;
-#define N_SPECIES 9
 
 //#define NUM_LINHAS 7
 
@@ -19,69 +11,6 @@ unsigned int seed;
 int *sub_divz_z;
 int *sub_divz_y;
 int *sub_divz_x;
-
-void init_r4uni(int input_seed)
-{
-    seed = input_seed + 987654321;
-}
-
-float r4_uni()
-{
-    int seed_in = seed;
-
-    seed ^= (seed << 13);
-    seed ^= (seed >> 17);
-    seed ^= (seed << 5);
-
-    return 0.5 + 0.2328306e-09 * (seed_in + (int) seed);
-}
-
-void limites_x (){
-    if (my_coords[2] == 0){
-        limite_inf_x = 0; 
-    }
-        
-    else{
-        for (int i = 0; i <= my_coords[2] -1; ++ i){
-            limite_inf_x = limite_inf_x + sub_divz_x [i];
-        }
-    }
-
-    for (int i = 0; i<=my_coords[2]; ++i){
-        limite_sup_x = limite_sup_x + sub_divz_x [i];
-    }
-}
-
-void limites_y (){
-    if (my_coords[1] == 0){
-        limite_inf_y = 0; 
-    }
-        
-    else{
-        for (int i = 0; i <= my_coords[1] -1; ++ i){
-            limite_inf_y = limite_inf_y + sub_divz_y [i];
-        }
-    }
-
-    for (int i = 0; i<= my_coords[1]; ++i){
-        limite_sup_y = limite_sup_y + sub_divz_y [i];
-    }
-}
-
-void limites_z (){
-    if (my_coords[0] == 0)
-        limite_inf_z = 0;
-    else{
-        for (int i = 0; i <= my_coords[0] -1; ++ i){
-            limite_inf_z = limite_inf_z + sub_divz_z [i];
-        }
-    }
-
-    for (int i = 0; i<= my_coords[0]; ++i){
-        limite_sup_z = limite_sup_z + sub_divz_z [i];
-    }
-}
-
 
 
 void divide_number_parts(int number, int divide, int * sub_div) {
@@ -128,75 +57,9 @@ int main(int argc, char *argv[]) {
 
     int NUM_LINHAS;
     NUM_LINHAS= atoi (argv[1]);
-
-    int varrimento_x = 1;
-    int varrimento_y = 1;
-    int varrimento_z = 1;
-    int flag_y=0,flag_x=0;
-
     
-
-    seed = 100;
-    density=.4;
-    init_r4uni(seed);
-
-	MPI_Init(&argc, &argv);
-    MPI_Comm_rank(MPI_COMM_WORLD, &rank);
-    MPI_Comm_size(MPI_COMM_WORLD, &size);
-
-
-	int x = size;
-    /*printf("Digite um inteiro x: ");
-    scanf("%d", &x);
-	*/ 
-	
-    //printf("Todas as combinações possíveis de três inteiros cujo produto é %d:\n", x);
-
-    int maior_linha = 0, maior_linha_prev = 24 ;
-    int a, b, c;
-	int a_final, b_final, c_final;
-	
-
-    for (a = 1; a <= x; a++) {
-        if (x % a == 0) {
-            for (b = a; b <= x / a; b++) {
-                if (x % (a * b) == 0) {
-                    c = x / (a * b);
-                    //printf("%d * %d * %d\n", a, b, c);
-					
-					if(maior_linha < a){
-						maior_linha = a;
-					}
-					
-					if(maior_linha < b){
-						maior_linha = b;
-					}
-					
-					if(maior_linha < c){
-						maior_linha = c;
-					}
-					
-					//printf("maior_linha: %d\n", maior_linha);
-                    // Atualizar os menores números encontrados até agora
-                    if (maior_linha < maior_linha_prev) {
-                      //  printf("entrou\n");
-						a_final = a;
-                        b_final = b;
-                        c_final = c;
-						maior_linha_prev = maior_linha;
-                    }
-					maior_linha = 0;
-                }
-            }
-        }
-    }
-
-    //printf("A combinação com o maior menor número é: %d * %d * %d\n", a_final, b_final, c_final);
-
-	
-   
     // FALTA A DIVISAO DOS PROCESSADORES
-    sub_divz_z= (int *)malloc( a_final * sizeof(int)); 
+    sub_divz_z= (int *)malloc(2 * sizeof(int)); 
     /*
     for(int k=0; k<2; k++)
     {
@@ -204,7 +67,7 @@ int main(int argc, char *argv[]) {
     }
     */
 
-    sub_divz_y= (int *)malloc( b_final * sizeof(int)); 
+    sub_divz_y= (int *)malloc(2 * sizeof(int)); 
 
     /*
     for(int k=0; k<2; k++)
@@ -213,7 +76,7 @@ int main(int argc, char *argv[]) {
     }
     */
 
-    sub_divz_x= (int *)malloc( c_final* sizeof(int)); 
+    sub_divz_x= (int *)malloc(3* sizeof(int)); 
 
     /*
     for(int k=0; k<3; k++)
@@ -222,17 +85,18 @@ int main(int argc, char *argv[]) {
     }
     */
 
-	
+   divide_number_parts(NUM_LINHAS, 2, sub_divz_z);
+   divide_number_parts(NUM_LINHAS, 2, sub_divz_y);
+   divide_number_parts(NUM_LINHAS, 3, sub_divz_x);
 
-   divide_number_parts(NUM_LINHAS,  a_final, sub_divz_z);
-   divide_number_parts(NUM_LINHAS,  b_final, sub_divz_y);
-   divide_number_parts(NUM_LINHAS,  c_final, sub_divz_x);
+    MPI_Init(&argc, &argv);
+    MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+    MPI_Comm_size(MPI_COMM_WORLD, &size);
 
-  
     //printf("SIZE %d\n", size);
     int count=0;
     //Cartesiano : 
-    int dims[3] = { a_final, b_final, c_final};  // ISTO TEM DE VIR DOS INTEIROS QUE MULTIPLICAM O Nº PROCESSO
+    int dims[3] = {2, 2, 3};  // ISTO TEM DE VIR DOS INTEIROS QUE MULTIPLICAM O Nº PROCESSO
     //ACHO QUE TEM DE SER SEMPRE OS MESMOS 3 EIXOS ^^
     int periods[3] = {1, 1, 1};  // Enable wraparound
     MPI_Comm cart_comm;
@@ -255,7 +119,14 @@ int main(int argc, char *argv[]) {
     int sub_y = sub_divz_y[my_coords[1]];
     int sub_x = sub_divz_x[my_coords[2]];
 
-    int valor_aux=0;
+    /*
+    if(rank==0)
+    {
+        printf("SUB_DIV_Z :%d   SUB_DIV_Z :%d \n",sub_divz_z[0],sub_divz_z[1]  );
+        printf("SUB_DIV_Y :%d   SUB_DIV_Y :%d \n",sub_divz_y[0],sub_divz_y[1]  );
+        printf("SUB_DIV_X :%d   SUB_DIV_X :%d   SUB_DIV_X :%d\n",sub_divz_x[0],sub_divz_x[1], sub_divz_x[2]  );
+    }
+    */
 
     int ***data_send = (int ***)malloc((sub_z+2) * sizeof(int **));
     for (int i = 0; i < (sub_z+2); ++i) {
@@ -276,9 +147,6 @@ int main(int argc, char *argv[]) {
             }
         }
     }
-
-    
- 
     
 
     int vert_esq_cima_frente, vert_dir_baixo_tras, vert_dir_cima_frente, vert_esq_baixo_tras;
@@ -287,18 +155,18 @@ int main(int argc, char *argv[]) {
     int aux_x, aux_y, aux_z;
     int data_recv_up, data_recv_left, data_recv_right, data_recv_forward, data_recv_backward;
     My_MPI_Cart_Shift(cart_comm, 2, 1, 0, 1, 0, 1, &esq_baixo_rank, &dir_cima_rank); // DIAG DIR CIMA/ ESQ BAIXO
-    My_MPI_Cart_Shift(cart_comm, 2, 1, 0, 1, 1, 0, &esq_tras_rank, &dir_frente_rank); // DIAG DIR CIMA/ ESQ BAIXO
-    My_MPI_Cart_Shift(cart_comm, 2, 1, 0, 1, -1, 0, &esq_frente_rank, &dir_tras_rank); // DIAG DIR CIMA/ ESQ BAIXO
+    My_MPI_Cart_Shift(cart_comm, 2, 1, 0, 1, -1, 0, &esq_tras_rank, &dir_frente_rank); // DIAG DIR CIMA/ ESQ BAIXO
+    My_MPI_Cart_Shift(cart_comm, 2, 1, 0, 1, 1, 0, &esq_frente_rank, &dir_tras_rank); // DIAG DIR CIMA/ ESQ BAIXO
     My_MPI_Cart_Shift(cart_comm, 2, 1, 0, 1, 0, -1, &esq_cima_rank, &dir_baixo_rank); // DIAG DIR BAIXO/ ESQ CIMA
-    My_MPI_Cart_Shift(cart_comm, 2, 1, 0, 0, -(NUM_LINHAS-1), 1, &tras_baixo_rank, &frente_cima_rank); // DIAG FRENTE CIMA / TRAS BAIXO
-    My_MPI_Cart_Shift(cart_comm, 2, 1, 0, 0, -(NUM_LINHAS-1), -1, &tras_cima_rank, &frente_baixo_rank); // DIAG FRENTE CIMA / TRAS BAIXO
+    My_MPI_Cart_Shift(cart_comm, 2, 1, 0, 0, NUM_LINHAS-1, 1, &tras_baixo_rank, &frente_cima_rank); // DIAG FRENTE CIMA / TRAS BAIXO
+    My_MPI_Cart_Shift(cart_comm, 2, 1, 0, 0, NUM_LINHAS-1, -1, &tras_cima_rank, &frente_baixo_rank); // DIAG FRENTE CIMA / TRAS BAIXO
     My_MPI_Cart_Shift(cart_comm, 2, 1, 0, 1, 0, 0, &esq_rank, &dir_rank); // FACE DIR/ESQ
     My_MPI_Cart_Shift(cart_comm, 2, 1, 0, 0, 0, 1, &baixo_rank, &cima_rank); // FACE CIMA/BAIXO
-    My_MPI_Cart_Shift(cart_comm, 2, 1, 0, 0, 1, 0, &tras_rank, &frente_rank); // FACE TRAS/CIMA
-    My_MPI_Cart_Shift(cart_comm, 2, 1, 0, -1, 1, 1, &dir_baixo_tras_rank, &esq_cima_frente_rank); // FACE TRAS/CIMA 
-    My_MPI_Cart_Shift(cart_comm, 2, 1, 0, 1, 1, 1, &esq_baixo_tras_rank, &dir_cima_frente_rank); // FACE TRAS/CIMA
-    My_MPI_Cart_Shift(cart_comm, 2, 1, 0, -1, -1, 1, &dir_baixo_frente_rank, &esq_cima_tras_rank); // FACE TRAS/CIMA
-    My_MPI_Cart_Shift(cart_comm, 2, 1, 0, 1, -1, 1, &esq_baixo_frente_rank, &dir_cima_tras_rank); // FACE TRAS/CIMA
+    My_MPI_Cart_Shift(cart_comm, 2, 1, 0, 0, 1, 0, &frente_rank, &tras_rank); // FACE TRAS/CIMA
+    My_MPI_Cart_Shift(cart_comm, 2, 1, 0, -1, -1, 1, &dir_baixo_tras_rank, &esq_cima_frente_rank); // FACE TRAS/CIMA
+    My_MPI_Cart_Shift(cart_comm, 2, 1, 0, 1, -1, 1, &esq_baixo_tras_rank, &dir_cima_frente_rank); // FACE TRAS/CIMA
+    My_MPI_Cart_Shift(cart_comm, 2, 1, 0, -1, 1, 1, &dir_baixo_frente_rank, &esq_cima_tras_rank); // FACE TRAS/CIMA
+    My_MPI_Cart_Shift(cart_comm, 2, 1, 0, 1, 1, 1, &esq_baixo_frente_rank, &dir_cima_tras_rank); // FACE TRAS/CIMA
 
     
 
@@ -346,7 +214,7 @@ int main(int argc, char *argv[]) {
         }
         
     }
-    
+
     for (aux_y=0; aux_y<sub_y; aux_y++)
     {
         //FACE CIMA DIAGS
@@ -378,12 +246,12 @@ int main(int argc, char *argv[]) {
         MPI_Sendrecv(&data_send[1][sub_y][aux_x+1], 1, MPI_INT, frente_baixo_rank, 0, &data_send[sub_z+1][0][aux_x+1], 1, MPI_INT, tras_cima_rank, 0, cart_comm, MPI_STATUS_IGNORE); // AR dir cima
     }
 
-    //--------------------------------------DEBUG-----------------------------------------------
+    
     if(rank==5)
     {
         //printf("RANK: %d    SUB_Z: %d   SUB_Y: %d   SUB_X:  %d\n",rank, sub_z, sub_y, sub_x);
             //MPI_Cart_coords(cart_comm, rank, 3, my_coords);
-        for(aux_z=0;aux_z<(sub_z+2);aux_z++)
+        for(aux_z=0;aux_z<((sub_z)+2);aux_z++)
         {
             printf("CAMADA %d\n", aux_z);
             for(aux_y=0;aux_y<(sub_y+2);aux_y++)
