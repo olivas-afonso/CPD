@@ -42,12 +42,12 @@ void limites_x (){
     }
         
     else{
-        for (int i = 0; i < my_coords[2] -1; ++ i){
+        for (int i = 0; i <= my_coords[2] -1; ++ i){
             limite_inf_x = limite_inf_x + sub_divz_x [i];
         }
     }
 
-    for (int i = 0; i<my_coords[2]; ++i){
+    for (int i = 0; i<=my_coords[2]; ++i){
         limite_sup_x = limite_sup_x + sub_divz_x [i];
     }
 }
@@ -58,12 +58,12 @@ void limites_y (){
     }
         
     else{
-        for (int i = 0; i < my_coords[1] -1; ++ i){
+        for (int i = 0; i <= my_coords[1] -1; ++ i){
             limite_inf_y = limite_inf_y + sub_divz_y [i];
         }
     }
 
-    for (int i = 0; i< my_coords[1]; ++i){
+    for (int i = 0; i<= my_coords[1]; ++i){
         limite_sup_y = limite_sup_y + sub_divz_y [i];
     }
 }
@@ -72,12 +72,12 @@ void limites_z (){
     if (my_coords[0] == 0)
         limite_inf_z = 0;
     else{
-        for (int i = 0; i < my_coords[0] -1; ++ i){
+        for (int i = 0; i <= my_coords[0] -1; ++ i){
             limite_inf_z = limite_inf_z + sub_divz_z [i];
         }
     }
 
-    for (int i = 0; i< my_coords[0]; ++i){
+    for (int i = 0; i<= my_coords[0]; ++i){
         limite_sup_z = limite_sup_z + sub_divz_z [i];
     }
 }
