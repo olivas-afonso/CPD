@@ -417,10 +417,11 @@ int main(int argc, char *argv[]) {
     }
 */
     //--------------------------------------DEBUG-----------------------------------------------
-    if(rank==3)
+    if(rank==5)
     {
         //printf("RANK: %d    SUB_Z: %d   SUB_Y: %d   SUB_X:  %d\n",rank, sub_z, sub_y, sub_x);
-            //MPI_Cart_coords(cart_comm, rank, 3, my_coords);
+            //MPI_Cart_coords(cart_comm, rank, 3, my_coords)
+            printf("RANK :%d\n", rank);
         for(aux_z=0;aux_z<(sub_z+2);aux_z++)
         {
             printf("CAMADA %d\n", aux_z);
@@ -435,6 +436,104 @@ int main(int argc, char *argv[]) {
 
         }
     }
+    if(rank==0)
+    {
+        //printf("RANK: %d    SUB_Z: %d   SUB_Y: %d   SUB_X:  %d\n",rank, sub_z, sub_y, sub_x);
+            //MPI_Cart_coords(cart_comm, rank, 3, my_coords)
+            printf("RANK :%d\n", rank);
+        for(aux_z=0;aux_z<(sub_z+2);aux_z++)
+        {
+            printf("CAMADA %d\n", aux_z);
+            for(aux_y=0;aux_y<(sub_y+2);aux_y++)
+            {
+                for(aux_x=0;aux_x<(sub_x+2); aux_x++)
+                {
+                     printf("%d ",data_send[aux_z][aux_y][aux_x]);
+                }
+                printf("\n");       
+            }
+
+        }
+    }
+    if(rank==1)
+    {
+        //printf("RANK: %d    SUB_Z: %d   SUB_Y: %d   SUB_X:  %d\n",rank, sub_z, sub_y, sub_x);
+            //MPI_Cart_coords(cart_comm, rank, 3, my_coords)
+            printf("RANK :%d\n", rank);
+        for(aux_z=0;aux_z<(sub_z+2);aux_z++)
+        {
+            printf("CAMADA %d\n", aux_z);
+            for(aux_y=0;aux_y<(sub_y+2);aux_y++)
+            {
+                for(aux_x=0;aux_x<(sub_x+2); aux_x++)
+                {
+                     printf("%d ",data_send[aux_z][aux_y][aux_x]);
+                }
+                printf("\n");       
+            }
+
+        }
+    }
+    if(rank==2)
+    {
+        //printf("RANK: %d    SUB_Z: %d   SUB_Y: %d   SUB_X:  %d\n",rank, sub_z, sub_y, sub_x);
+            //MPI_Cart_coords(cart_comm, rank, 3, my_coords)
+            printf("RANK :%d\n", rank);
+        for(aux_z=0;aux_z<(sub_z+2);aux_z++)
+        {
+            printf("CAMADA %d\n", aux_z);
+            for(aux_y=0;aux_y<(sub_y+2);aux_y++)
+            {
+                for(aux_x=0;aux_x<(sub_x+2); aux_x++)
+                {
+                     printf("%d ",data_send[aux_z][aux_y][aux_x]);
+                }
+                printf("\n");       
+            }
+
+        }
+    }
+    if(rank==3)
+    {
+        //printf("RANK: %d    SUB_Z: %d   SUB_Y: %d   SUB_X:  %d\n",rank, sub_z, sub_y, sub_x);
+            //MPI_Cart_coords(cart_comm, rank, 3, my_coords)
+            printf("RANK :%d\n", rank);
+        for(aux_z=0;aux_z<(sub_z+2);aux_z++)
+        {
+            printf("CAMADA %d\n", aux_z);
+            for(aux_y=0;aux_y<(sub_y+2);aux_y++)
+            {
+                for(aux_x=0;aux_x<(sub_x+2); aux_x++)
+                {
+                     printf("%d ",data_send[aux_z][aux_y][aux_x]);
+                }
+                printf("\n");       
+            }
+
+        }
+    }
+    if(rank==4)
+    {
+        //printf("RANK: %d    SUB_Z: %d   SUB_Y: %d   SUB_X:  %d\n",rank, sub_z, sub_y, sub_x);
+            //MPI_Cart_coords(cart_comm, rank, 3, my_coords)
+            printf("RANK :%d\n", rank);
+        for(aux_z=0;aux_z<(sub_z+2);aux_z++)
+        {
+            printf("CAMADA %d\n", aux_z);
+            for(aux_y=0;aux_y<(sub_y+2);aux_y++)
+            {
+                for(aux_x=0;aux_x<(sub_x+2); aux_x++)
+                {
+                     printf("%d ",data_send[aux_z][aux_y][aux_x]);
+                }
+                printf("\n");       
+            }
+
+        }
+    }
+
+
+    
 
    
     
