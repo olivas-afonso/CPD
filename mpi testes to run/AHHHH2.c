@@ -269,15 +269,17 @@ int main(int argc, char *argv[]) {
     limites_y ();
     limites_z();
 
+    printf("RANK:%d LIMITE_X_SUP:%d LIMITE_Y_SUP:%d, LIMITE_Z_SUP:%d\n", rank, limite_sup_x, limite_sup_y, limite_sup_z );
+    printf("RANK:%d LIMITE_X_INF:%d LIMITE_Y_INF:%d, LIMITE_Z_INF:%d\n", rank, limite_inf_x, limite_inf_y, limite_inf_z );
+    printf("RANK:%d SUB_X:%d  SUB_Y:%d, SUB_Z:%d\n", rank, sub_x, sub_y, sub_z);
+
     for (int init_x=0; init_x < NUM_LINHAS; init_x++){
     if (init_x >= limite_inf_x && init_x<limite_sup_x){
         flag_x = 1;
         ++varrimento_x;
     }
     else flag_x=0;
-    printf("RANK:%d LIMITE_X_SUP:%d LIMITE_Y_SUP:%d, LIMITE_Z_SUP:%d\n", rank, limite_sup_x, limite_sup_y, limite_sup_z );
-    printf("RANK:%d LIMITE_X_INF:%d LIMITE_Y_INF:%d, LIMITE_Z_INF:%d\n", rank, limite_inf_x, limite_inf_y, limite_inf_z );
-    printf("RANK:%d SUB_X:%d  SUB_Y:%d, SUB_Z:%d", rank, sub_x, sub_y, sub_z);
+    
     for (int init_y=0; init_y < NUM_LINHAS; init_y++){
         if (init_y>=limite_inf_y && init_y<limite_sup_y){
             flag_y = 1;
@@ -410,7 +412,7 @@ int main(int argc, char *argv[]) {
     }
 
     //--------------------------------------DEBUG-----------------------------------------------
-    if(rank==0)
+    if(rank==7)
     {
         //printf("RANK: %d    SUB_Z: %d   SUB_Y: %d   SUB_X:  %d\n",rank, sub_z, sub_y, sub_x);
             //MPI_Cart_coords(cart_comm, rank, 3, my_coords);
