@@ -13,12 +13,27 @@ float density;
 unsigned int seed;
 #define N_SPECIES 9
 
+char ***data_send;
+
 //#define NUM_LINHAS 7
 
 
 int *sub_divz_z;
 int *sub_divz_y;
 int *sub_divz_x;
+
+void freeMatrix(int size_y, int size_z) {
+    int i, j;
+
+    for (i = 0; i < size_y; i++) {
+        for (j = 0; j < size_z; j++) {
+            free(data_send[i][j]);
+        }
+        free(data_send[i]);
+    }
+    free(data_send);
+}
+
 
 void init_r4uni(int input_seed)
 {
@@ -88,18 +103,18 @@ void divide_number_parts(int number, int divide, int * sub_div) {
 
     int part_size, remainder;
     int start_index, end_index;
-    int i;
+    int i1;
 
     part_size = number / divide;
     remainder = number % divide;
 
     start_index = 0;
 
-    for (i = 0; i < divide; i++) {
-        end_index = start_index + part_size + (i < remainder ? 1 : 0);
+    for (i1 = 0; i1 < divide; i1++) {
+        end_index = start_index + part_size + (i1 < remainder ? 1 : 0);
 
         //printf("Part %d: ", i + 1);
-        sub_div[i]=end_index-start_index;
+        sub_div[i1]=end_index-start_index;
         start_index = end_index;
     }
 }
@@ -255,29 +270,63 @@ int main(int argc, char *argv[]) {
     int sub_y = sub_divz_y[my_coords[1]];
     int sub_x = sub_divz_x[my_coords[2]];
 
-    int valor_aux=0;
-
-    int ***data_send = (int ***)malloc((sub_z+2) * sizeof(int **));
+    data_send = (char ***)malloc((sub_z+2) * sizeof(char **));
     for (int i = 0; i < (sub_z+2); ++i) {
-        data_send[i] = (int **)malloc(((sub_y+2)) * sizeof(int *));
+        data_send[i] = (char **)malloc(((sub_y+2)) * sizeof(char *));
         for (int j = 0; j < (sub_y+2); ++j) {
-            data_send[i][j] = (int *)malloc(((sub_x+2)) * sizeof(int));
-            for (int k = 0; k < (sub_x+2); ++k) {
-                if((k!=0) && (i!=0) && (j!= 0) && (k!= (sub_x+1)) && (i!= (sub_z+1)) && (j!= (sub_y+1)) )
-                {
-                    data_send[i][j][k]=rank*1000; 
-                    data_send[i][j][k] = data_send[i][j][k] + count;
-                    count++;
-                }
-                else
-                {
-                   data_send[i][j][k]=0; 
-                } 
-            }
+            data_send[i][j] = (char *)malloc(((sub_x+2)) * sizeof(char));
+            
         }
     }
 
+    int valor_aux=0;
+
+    limites_x ();
+    limites_y ();
+    limites_z();
+
+    //printf("RANK:%d LIMITE_X_SUP:%d LIMITE_Y_SUP:%d, LIMITE_Z_SUP:%d\n", rank, limite_sup_x, limite_sup_y, limite_sup_z );
+    //printf("RANK:%d LIMITE_X_INF:%d LIMITE_Y_INF:%d, LIMITE_Z_INF:%d\n", rank, limite_inf_x, limite_inf_y, limite_inf_z );
+    //printf("RANK:%d SUB_X:%d  SUB_Y:%d, SUB_Z:%d\n", rank, sub_x, sub_y, sub_z);
+
+    for (int init_x=0; init_x < NUM_LINHAS; init_x++){
+    if (init_x >= limite_inf_z && init_x<limite_sup_z){
+        flag_x = 1;
+        ++varrimento_x;
+    }
+    else flag_x=0;
     
+    for (int init_y=0; init_y < NUM_LINHAS; init_y++){
+        if (init_y>=limite_inf_y && init_y<limite_sup_y){
+            flag_y = 1;
+            ++varrimento_y;
+        }
+        else flag_y=0;
+
+        for (int init_z=0; init_z < NUM_LINHAS; init_z++){
+            
+             if(r4_uni() < density)
+                    {
+                        // preenchimento initial do grid_even dependendo da seed
+                        valor_aux = (int)(r4_uni() * N_SPECIES) + 1; // preenchimento initial do grid_even dependendo da see
+                    }else{
+                        valor_aux = 0;
+                    }
+
+            if (init_z>=limite_inf_x && init_z<limite_sup_x && flag_x == 1 && flag_y == 1 ){
+
+                data_send[varrimento_x-1][varrimento_y-1][varrimento_z] = valor_aux;
+                  //printf("VALORES A ENTRAR %d, pos_x = %d, pos_y = %d, pos_z = %d \n", data_send[varrimento_x-1][varrimento_y-1][varrimento_z], varrimento_x-1, varrimento_y-1, varrimento_z);
+                 ++varrimento_z;
+            }
+        }
+        //printf ("RANK :%d   Varrimento = %d\n",rank, varrimento_z);
+        varrimento_z = 1;
+    }
+    
+    varrimento_y = 1;
+}
+ 
  
     
 
@@ -294,7 +343,7 @@ int main(int argc, char *argv[]) {
     My_MPI_Cart_Shift(cart_comm, 2, 1, 0, 0, -(NUM_LINHAS-1), -1, &tras_cima_rank, &frente_baixo_rank); // DIAG FRENTE CIMA / TRAS BAIXO
     My_MPI_Cart_Shift(cart_comm, 2, 1, 0, 1, 0, 0, &esq_rank, &dir_rank); // FACE DIR/ESQ
     My_MPI_Cart_Shift(cart_comm, 2, 1, 0, 0, 0, 1, &baixo_rank, &cima_rank); // FACE CIMA/BAIXO
-    My_MPI_Cart_Shift(cart_comm, 2, 1, 0, 0, 1, 0, &tras_rank, &frente_rank); // FACE TRAS/CIMA
+    My_MPI_Cart_Shift(cart_comm, 2, 1, 0, 0, -1, 0, &frente_rank, &tras_rank); // FACE TRAS/CIMA
     My_MPI_Cart_Shift(cart_comm, 2, 1, 0, -1, 1, 1, &dir_baixo_tras_rank, &esq_cima_frente_rank); // FACE TRAS/CIMA 
     My_MPI_Cart_Shift(cart_comm, 2, 1, 0, 1, 1, 1, &esq_baixo_tras_rank, &dir_cima_frente_rank); // FACE TRAS/CIMA
     My_MPI_Cart_Shift(cart_comm, 2, 1, 0, -1, -1, 1, &dir_baixo_frente_rank, &esq_cima_tras_rank); // FACE TRAS/CIMA
@@ -330,7 +379,11 @@ int main(int argc, char *argv[]) {
         {
             //FACE DIREITA 
             MPI_Sendrecv(&data_send[aux_z+1][aux_y+1][1], 1, MPI_INT, esq_rank, 0, &data_send[aux_z+1][aux_y+1][sub_x+1], 1, MPI_INT, dir_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir
-            
+            if(rank == 1)
+            {
+                printf("VALOR ENVIAR %d \n", data_send[aux_z+1][aux_y+1][1]);
+                printf("VALOR GUARDAR %d \n", data_send[aux_z+1][aux_y+1][sub_x+1]);
+            } 
             //FACE ESQUERDA
             MPI_Sendrecv(&data_send[aux_z+1][aux_y+1][sub_x], 1, MPI_INT, dir_rank, 0, &data_send[aux_z+1][aux_y+1][0], 1, MPI_INT, esq_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir
 
@@ -379,9 +432,9 @@ int main(int argc, char *argv[]) {
     }
 
     //--------------------------------------DEBUG-----------------------------------------------
-    if(rank==5)
+    if(rank==0)
     {
-        //printf("RANK: %d    SUB_Z: %d   SUB_Y: %d   SUB_X:  %d\n",rank, sub_z, sub_y, sub_x);
+        printf("RANK: %d    SUB_Z: %d   SUB_Y: %d   SUB_X:  %d\n",rank, sub_z, sub_y, sub_x);
             //MPI_Cart_coords(cart_comm, rank, 3, my_coords);
         for(aux_z=0;aux_z<(sub_z+2);aux_z++)
         {
@@ -397,6 +450,31 @@ int main(int argc, char *argv[]) {
 
         }
     }
+
+    if(rank==1)
+    {
+        printf("RANK: %d    SUB_Z: %d   SUB_Y: %d   SUB_X:  %d\n",rank, sub_z, sub_y, sub_x);
+            //MPI_Cart_coords(cart_comm, rank, 3, my_coords);
+        for(aux_z=0;aux_z<(sub_z+2);aux_z++)
+        {
+            printf("CAMADA %d\n", aux_z);
+            for(aux_y=0;aux_y<(sub_y+2);aux_y++)
+            {
+                for(aux_x=0;aux_x<(sub_x+2); aux_x++)
+                {
+                     printf("%d ",data_send[aux_z][aux_y][aux_x]);
+                }
+                printf("\n");       
+            }
+
+        }
+    }
+
+    freeMatrix((sub_y+2), (sub_z+2));
+
+    free(sub_divz_x);
+    free(sub_divz_y);
+    free(sub_divz_z);
 
    
     
