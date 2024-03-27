@@ -92,15 +92,15 @@ int main(int argc, char *argv[]) {
     NUM_LINHAS = atoi (argv[2]);
     density = atof (argv[3]);
 	seed = atoi (argv[4]);
-	
+	 MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+    MPI_Comm_size(MPI_COMM_WORLD, &size);
+
    
 
   if (rank == 0) {
         // Código para o processo com rank 0
         // Espera até receber uma mensagem do processo com rank 1
-    MPI_Comm_rank(MPI_COMM_WORLD, &rank);
-    MPI_Comm_size(MPI_COMM_WORLD, &size);
-
+   
 
 	int x = size;
     /*printf("Digite um inteiro x: ");
