@@ -330,18 +330,21 @@ int main(int argc, char *argv[]) {
     
     varrimento_y = 1;
 }
- 
-for (int auxz=0; auxz < (sub_z+2); auxz++)
-{
-    for (int auxy=0; auxy < (sub_y+2); auxy++)
+ if(rank == 0)
+ {
+    for (int auxz=0; auxz < (sub_z+2); auxz++)
     {
-        for (int auxx=0; auxx < (sub_x+2); auxx++)
+        for (int auxy=0; auxy < (sub_y+2); auxy++)
         {
-            printf("%d ", data_send[auxz][auxy][auxx]);
+            for (int auxx=0; auxx < (sub_x+2); auxx++)
+            {
+                printf("%d ", data_send[auxz][auxy][auxx]);
+            }
+            printf("\n");
         }
-        printf("\n");
     }
-}
+ }
+
     
 
     int vert_esq_cima_frente, vert_dir_baixo_tras, vert_dir_cima_frente, vert_esq_baixo_tras;
