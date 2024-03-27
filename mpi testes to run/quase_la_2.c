@@ -293,8 +293,8 @@ int main(int argc, char *argv[]) {
              if(r4_uni() < density)
                     {
                         // preenchimento initial do grid_even dependendo da seed
-                        valor_aux = 1000 * rank; // preenchimento initial do grid_even dependendo da see
-                        valor_aux = valor_aux + (int)(r4_uni() * N_SPECIES) + 1; // preenchimento initial do grid_even dependendo da see
+                        valor_aux = (int) (1000 * rank); // preenchimento initial do grid_even dependendo da see
+                        valor_aux = (int) (valor_aux) + (int)(r4_uni() * N_SPECIES) + 1; // preenchimento initial do grid_even dependendo da see
                     }else{
                         valor_aux = 0;
                     }
