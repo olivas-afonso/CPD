@@ -77,7 +77,9 @@ for (x...){
                  ++varrimento_z;
             }
         }
+        varrimento_z = 0;
     }
+    varrimento_y = 0;
 }
     
 
