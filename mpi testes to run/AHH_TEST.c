@@ -149,11 +149,11 @@ int main(int argc, char *argv[]) {
     }
     
 
-    char ***data_send = (char ***)malloc((sub_z+2) * sizeof(char **));
+    int ***data_send = (int ***)malloc((sub_z+2) * sizeof(int **));
     for (int i = 0; i < (sub_z+2); ++i) {
-        data_send[i] = (char **)malloc(((sub_y+2)) * sizeof(char *));
+        data_send[i] = (int **)malloc(((sub_y+2)) * sizeof(int *));
         for (int j = 0; j < (sub_y+2); ++j) {
-            data_send[i][j] = (char *)malloc(((sub_x+2)) * sizeof(char));
+            data_send[i][j] = (int *)malloc(((sub_x+2)) * sizeof(int));
             for (int k = 0; k < (sub_x+2); ++k) {
                 if((k!=0) && (i!=0) && (j!= 0) && (k!= (sub_x+1)) && (i!= (sub_z+1)) && (j!= (sub_y+1)) )
                 {
