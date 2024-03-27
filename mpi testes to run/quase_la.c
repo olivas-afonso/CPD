@@ -130,7 +130,7 @@ int main(int argc, char *argv[]) {
     NUM_LINHAS= atoi (argv[1]);
 
     int varrimento_x = 1;
-    int varrimento_y = 2;
+    int varrimento_y = 1;
     int varrimento_z = 1;
     int flag_y=0,flag_x=0;
 
@@ -281,10 +281,10 @@ int main(int argc, char *argv[]) {
     }
     else flag_x=0;
     
-    for (int init_y=NUM_LINHAS; init_y >0; init_y--){
+    for (int init_y=0; init_y < NUM_LINHAS; init_y++){
         if (init_y>=limite_inf_y && init_y<limite_sup_y){
             flag_y = 1;
-            --varrimento_y;
+            ++varrimento_y;
         }
         else flag_y=0;
 
@@ -300,7 +300,7 @@ int main(int argc, char *argv[]) {
 
             if (init_z>=limite_inf_x && init_z<limite_sup_x && flag_x == 1 && flag_y == 1 ){
 
-                data_send[varrimento_x-1][varrimento_y+1][varrimento_z] = valor_aux;
+                data_send[varrimento_x-1][varrimento_y-1][varrimento_z] = valor_aux;
                   //printf("VALORES A ENTRAR %d, pos_x = %d, pos_y = %d, pos_z = %d \n", data_send[varrimento_x-1][varrimento_y-1][varrimento_z], varrimento_x-1, varrimento_y-1, varrimento_z);
                  ++varrimento_z;
             }
@@ -422,155 +422,21 @@ int main(int argc, char *argv[]) {
         //printf("RANK: %d    SUB_Z: %d   SUB_Y: %d   SUB_X:  %d\n",rank, sub_z, sub_y, sub_x);
             //MPI_Cart_coords(cart_comm, rank, 3, my_coords)
             printf("RANK :%d\n", rank);
-        for(aux_z=0;aux_z<(sub_z);aux_z++)
+        for(aux_z=0;aux_z<(sub_z+2);aux_z++)
         {
             printf("CAMADA %d\n", aux_z);
-            for(aux_y=0;aux_y<(sub_y);aux_y++)
+            for(aux_y=0;aux_y<(sub_y+2);aux_y++)
             {
-                for(aux_x=0;aux_x<(sub_x); aux_x++)
+                for(aux_x=0;aux_x<(sub_x+2); aux_x++)
                 {
-                     printf("%d ",data_send[aux_z+1][aux_y+1][aux_x+1]);
+                     printf("%d ",data_send[aux_z][aux_y][aux_x]);
                 }
                 printf("\n");       
             }
 
         }
     }
-    if(rank==1)
-    {
-        //printf("RANK: %d    SUB_Z: %d   SUB_Y: %d   SUB_X:  %d\n",rank, sub_z, sub_y, sub_x);
-            //MPI_Cart_coords(cart_comm, rank, 3, my_coords)
-            printf("RANK :%d\n", rank);
-        for(aux_z=0;aux_z<(sub_z);aux_z++)
-        {
-            printf("CAMADA %d\n", aux_z);
-            for(aux_y=0;aux_y<(sub_y);aux_y++)
-            {
-                for(aux_x=0;aux_x<(sub_x); aux_x++)
-                {
-                     printf("%d ",data_send[aux_z+1][aux_y+1][aux_x+1]);
-                }
-                printf("\n");       
-            }
-
-        }
-    }
-    if(rank==2)
-    {
-        //printf("RANK: %d    SUB_Z: %d   SUB_Y: %d   SUB_X:  %d\n",rank, sub_z, sub_y, sub_x);
-            //MPI_Cart_coords(cart_comm, rank, 3, my_coords)
-            printf("RANK :%d\n", rank);
-        for(aux_z=0;aux_z<(sub_z);aux_z++)
-        {
-            printf("CAMADA %d\n", aux_z);
-            for(aux_y=0;aux_y<(sub_y);aux_y++)
-            {
-                for(aux_x=0;aux_x<(sub_x); aux_x++)
-                {
-                     printf("%d ",data_send[aux_z+1][aux_y+1][aux_x+1]);
-                }
-                printf("\n");       
-            }
-
-        }
-    }
-    if(rank==3)
-    {
-        //printf("RANK: %d    SUB_Z: %d   SUB_Y: %d   SUB_X:  %d\n",rank, sub_z, sub_y, sub_x);
-            //MPI_Cart_coords(cart_comm, rank, 3, my_coords)
-            printf("RANK :%d\n", rank);
-        for(aux_z=0;aux_z<(sub_z);aux_z++)
-        {
-            printf("CAMADA %d\n", aux_z);
-            for(aux_y=0;aux_y<(sub_y);aux_y++)
-            {
-                for(aux_x=0;aux_x<(sub_x); aux_x++)
-                {
-                     printf("%d ",data_send[aux_z+1][aux_y+1][aux_x+1]);
-                }
-                printf("\n");       
-            }
-
-        }
-    }
-    if(rank==4)
-    {
-        //printf("RANK: %d    SUB_Z: %d   SUB_Y: %d   SUB_X:  %d\n",rank, sub_z, sub_y, sub_x);
-            //MPI_Cart_coords(cart_comm, rank, 3, my_coords)
-            printf("RANK :%d\n", rank);
-        for(aux_z=0;aux_z<(sub_z);aux_z++)
-        {
-            printf("CAMADA %d\n", aux_z);
-            for(aux_y=0;aux_y<(sub_y);aux_y++)
-            {
-                for(aux_x=0;aux_x<(sub_x); aux_x++)
-                {
-                     printf("%d ",data_send[aux_z+1][aux_y+1][aux_x+1]);
-                }
-                printf("\n");       
-            }
-
-        }
-    }
-    if(rank==5)
-    {
-        //printf("RANK: %d    SUB_Z: %d   SUB_Y: %d   SUB_X:  %d\n",rank, sub_z, sub_y, sub_x);
-            //MPI_Cart_coords(cart_comm, rank, 3, my_coords)
-            printf("RANK :%d\n", rank);
-        for(aux_z=0;aux_z<(sub_z);aux_z++)
-        {
-            printf("CAMADA %d\n", aux_z);
-            for(aux_y=0;aux_y<(sub_y);aux_y++)
-            {
-                for(aux_x=0;aux_x<(sub_x); aux_x++)
-                {
-                     printf("%d ",data_send[aux_z+1][aux_y+1][aux_x+1]);
-                }
-                printf("\n");       
-            }
-
-        }
-    }
-
-    if(rank==6)
-    {
-        //printf("RANK: %d    SUB_Z: %d   SUB_Y: %d   SUB_X:  %d\n",rank, sub_z, sub_y, sub_x);
-            //MPI_Cart_coords(cart_comm, rank, 3, my_coords)
-            printf("RANK :%d\n", rank);
-        for(aux_z=0;aux_z<(sub_z);aux_z++)
-        {
-            printf("CAMADA %d\n", aux_z);
-            for(aux_y=0;aux_y<(sub_y);aux_y++)
-            {
-                for(aux_x=0;aux_x<(sub_x); aux_x++)
-                {
-                     printf("%d ",data_send[aux_z+1][aux_y+1][aux_x+1]);
-                }
-                printf("\n");       
-            }
-
-        }
-    }
-
-    if(rank==7)
-    {
-        //printf("RANK: %d    SUB_Z: %d   SUB_Y: %d   SUB_X:  %d\n",rank, sub_z, sub_y, sub_x);
-            //MPI_Cart_coords(cart_comm, rank, 3, my_coords)
-            printf("RANK :%d\n", rank);
-        for(aux_z=0;aux_z<(sub_z);aux_z++)
-        {
-            printf("CAMADA %d\n", aux_z);
-            for(aux_y=0;aux_y<(sub_y);aux_y++)
-            {
-                for(aux_x=0;aux_x<(sub_x); aux_x++)
-                {
-                     printf("%d ",data_send[aux_z+1][aux_y+1][aux_x+1]);
-                }
-                printf("\n");       
-            }
-
-        }
-    }
+    
 
 
     
