@@ -275,6 +275,10 @@ int main(int argc, char *argv[]) {
         data_send[i] = (char **)malloc(((sub_y+2)) * sizeof(char *));
         for (int j = 0; j < (sub_y+2); ++j) {
             data_send[i][j] = (char *)malloc(((sub_x+2)) * sizeof(char));
+            for(int k = 0; k < (sub_x+2); k++)
+            {
+                data_send[i][j][k]=0;
+            }
             
         }
     }
@@ -326,8 +330,22 @@ int main(int argc, char *argv[]) {
     
     varrimento_y = 1;
 }
- 
- 
+/*
+ if(rank == 2)
+ {
+    for (int auxz=0; auxz < (sub_z+2); auxz++)
+    {
+        for (int auxy=0; auxy < (sub_y+2); auxy++)
+        {
+            for (int auxx=0; auxx < (sub_x+2); auxx++)
+            {
+                printf("%d ", data_send[auxz][auxy][auxx]);
+            }
+            printf("\n");
+        }
+    }
+ }
+*/
     
 
     int vert_esq_cima_frente, vert_dir_baixo_tras, vert_dir_cima_frente, vert_esq_baixo_tras;
@@ -432,6 +450,7 @@ int main(int argc, char *argv[]) {
     }
 
     //--------------------------------------DEBUG-----------------------------------------------
+    /*
     if(rank==0)
     {
         printf("RANK: %d    SUB_Z: %d   SUB_Y: %d   SUB_X:  %d\n",rank, sub_z, sub_y, sub_x);
@@ -469,7 +488,7 @@ int main(int argc, char *argv[]) {
 
         }
     }
-
+    */
     freeMatrix((sub_y+2), (sub_z+2));
 
     free(sub_divz_x);
