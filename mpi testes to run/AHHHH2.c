@@ -291,10 +291,17 @@ int main(int argc, char *argv[]) {
             
 
 
-            if (init_z>=limite_inf_y && init_z<limite_sup_y && flag_x == 1 && flag_y == 1 && r4_uni() < density){
+            if (init_z>=limite_inf_y && init_z<limite_sup_y && flag_x == 1 && flag_y == 1 ){
+
+                 if(r4_uni() < density)
+                    {
+                        // preenchimento initial do grid_even dependendo da seed
+                        data_send[varrimento_x-1][varrimento_y-1][varrimento_z] = (int)(r4_uni() * N_SPECIES) + 1; // preenchimento initial do grid_even dependendo da see
+                    }
+                    else 
                   
-                  data_send[varrimento_x-1][varrimento_y-1][varrimento_z] = (int)(r4_uni() * N_SPECIES) + 1;
-                  printf("VALORES A ENTRAR %d, pos_x = %d, pos_y = %d, pos_z = %d \n", valor_aux, varrimento_x-1, varrimento_y-1, varrimento_z);
+                  data_send[varrimento_x-1][varrimento_y-1][varrimento_z] =0;
+                  printf("VALORES A ENTRAR %d, pos_x = %d, pos_y = %d, pos_z = %d \n", data_send[varrimento_x-1][varrimento_y-1][varrimento_z], varrimento_x-1, varrimento_y-1, varrimento_z);
                  ++varrimento_z;
             }
         }
