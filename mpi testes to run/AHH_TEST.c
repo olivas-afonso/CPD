@@ -74,10 +74,10 @@ void My_MPI_Cart_Shift(MPI_Comm cart_comm, int pos_x, int pos_y,int pos_z, int d
 int main(int argc, char *argv[]) {
 
     int NUM_LINHAS, number_of_gens, density;
-    number_of_gens = atoi (argv[1]);
-    NUM_LINHAS = atoi (argv[2]);
-    density = atof (argv[3]);
-    seed = atoi (argv[4]);
+    //number_of_gens = atoi (argv[1]);
+    NUM_LINHAS = atoi (argv[1]);
+    //density = atof (argv[3]);
+    //seed = atoi (argv[4]);
     
     // FALTA A DIVISAO DOS PROCESSADORES
     sub_divz_z= (int *)malloc(2 * sizeof(int)); 
