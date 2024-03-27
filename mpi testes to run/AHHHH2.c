@@ -284,12 +284,22 @@ int main(int argc, char *argv[]) {
         else flag_y=0;
 
         for (int init_z=0; init_z < NUM_LINHAS; init_z++){
+            
+             if(r4_uni() < density)
+            {
+                // preenchimento initial do grid_even dependendo da seed
+                valor_aux = (int)(r4_uni() * N_SPECIES) + 1; // preenchimento initial do grid_even dependendo da seed
+                count_species[grid_even[x][y][z]]++;
+            }else{
+                valor_aux = 0;
+            }
 
             if (init_z>=limite_inf_y && init_z<limite_sup_y && flag_x == 1 && flag_y == 1 && r4_uni() < density){
-                  data_send[varrimento_x-1][varrimento_y-1][varrimento_z] =(int)(r4_uni() * N_SPECIES) + 1;
+                  data_send[varrimento_x-1][varrimento_y-1][varrimento_z] = valor_aux;
                  ++varrimento_z;
             }
         }
+        printf ("Varrimento = %d\n", varrimento_z);
         varrimento_z = 0;
     }
     
