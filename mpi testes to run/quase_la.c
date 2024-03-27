@@ -130,7 +130,7 @@ int main(int argc, char *argv[]) {
     NUM_LINHAS= atoi (argv[1]);
 
     int varrimento_x = 1;
-    int varrimento_y = 5;
+    int varrimento_y = 3;
     int varrimento_z = 1;
     int flag_y=0,flag_x=0;
 
@@ -281,7 +281,7 @@ int main(int argc, char *argv[]) {
     }
     else flag_x=0;
     
-    for (int init_y=NUM_LINHAS-1; init_y > 0; init_y--){
+    for (int init_y=NUM_LINHAS-1; init_y => 0; init_y--){
         if (init_y>=limite_inf_y && init_y<limite_sup_y){
             flag_y = 1;
             --varrimento_y;
@@ -300,7 +300,7 @@ int main(int argc, char *argv[]) {
 
             if (init_z>=limite_inf_x && init_z<limite_sup_x && flag_x == 1 && flag_y == 1 ){
 
-                data_send[varrimento_x-1][varrimento_y][varrimento_z] = valor_aux;
+                data_send[varrimento_x-1][varrimento_y+1][varrimento_z] = valor_aux;
                   //printf("VALORES A ENTRAR %d, pos_x = %d, pos_y = %d, pos_z = %d \n", data_send[varrimento_x-1][varrimento_y-1][varrimento_z], varrimento_x-1, varrimento_y-1, varrimento_z);
                  ++varrimento_z;
             }
