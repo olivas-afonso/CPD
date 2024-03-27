@@ -57,6 +57,7 @@ int main(int argc, char *argv[]) {
 
     int NUM_LINHAS;
     NUM_LINHAS= atoi (argv[1]);
+    printf("OI\n");
     
     // FALTA A DIVISAO DOS PROCESSADORES
     sub_divz_z= (int *)malloc(2 * sizeof(int)); 
@@ -248,7 +249,7 @@ int main(int argc, char *argv[]) {
     }
 */
     
-    if(rank==13)
+    if(rank==5)
     {
         //printf("RANK: %d    SUB_Z: %d   SUB_Y: %d   SUB_X:  %d\n",rank, sub_z, sub_y, sub_x);
             //MPI_Cart_coords(cart_comm, rank, 3, my_coords);
