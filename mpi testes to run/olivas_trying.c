@@ -472,6 +472,10 @@ int main(int argc, char *argv[]) {
 
     freeMatrix((sub_y+2), (sub_z+2));
 
+    free(sub_divz_x);
+    free(sub_divz_y);
+    free(sub_divz_z);
+
    
     
 
