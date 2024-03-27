@@ -28,7 +28,7 @@ float r4_uni()
     seed ^= (seed << 13);
     seed ^= (seed >> 17);
     seed ^= (seed << 5);
-
+    printf("PLEASE\n");
     return 0.5 + 0.2328306e-09 * (seed_in + (int) seed);
 }
 
