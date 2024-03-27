@@ -97,7 +97,7 @@ int main(int argc, char *argv[]) {
     //printf("SIZE %d\n", size);
     int count=0;
     //Cartesiano : 
-    int dims[3] = {2, 2, 3};  // ISTO TEM DE VIR DOS INTEIROS QUE MULTIPLICAM O Nº PROCESSO
+    int dims[3] = {3, 3, 3};  // ISTO TEM DE VIR DOS INTEIROS QUE MULTIPLICAM O Nº PROCESSO
     //ACHO QUE TEM DE SER SEMPRE OS MESMOS 3 EIXOS ^^
     int periods[3] = {1, 1, 1};  // Enable wraparound
     MPI_Comm cart_comm;
@@ -114,7 +114,7 @@ int main(int argc, char *argv[]) {
     //int sub_divz_z[my_coords[0]] = NUM_LINHAS/SUB_DIV_Z;
     //int sub_divz_y[my_coords[1]] = SUB_DIV_Y;
     //int sub_divz_x[my_coords[2]] = SUB_DIV_X;
-
+    if(rank==0) printf("OI\n");
     MPI_Cart_coords(cart_comm, rank, 3, my_coords);
     int sub_z = sub_divz_z[my_coords[0]];
     int sub_y = sub_divz_y[my_coords[1]];
