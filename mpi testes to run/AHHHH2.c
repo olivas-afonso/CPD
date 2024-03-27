@@ -275,7 +275,9 @@ int main(int argc, char *argv[]) {
         ++varrimento_x;
     }
     else flag_x=0;
-    
+    printf("RANK:%d LIMITE_X_SUP:%d LIMITE_Y_SUP:%d, LIMITE_Z_SUP:%d\n", rank, limite_sup_x, limite_sup_y, limite_sup_z );
+    printf("RANK:%d LIMITE_X_INF:%d LIMITE_Y_INF:%d, LIMITE_Z_INF:%d\n", rank, limite_inf_x, limite_inf_y, limite_inf_z );
+    printf("RANK:%d SUB_X, SUB_Y, SUB_Z", rank, sub_x, sub_y, sub_z);
     for (int init_y=0; init_y < NUM_LINHAS; init_y++){
         if (init_y>=limite_inf_y && init_y<limite_sup_y){
             flag_y = 1;
