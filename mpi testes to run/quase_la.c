@@ -273,7 +273,7 @@ int main(int argc, char *argv[]) {
     //printf("RANK:%d LIMITE_X_INF:%d LIMITE_Y_INF:%d, LIMITE_Z_INF:%d\n", rank, limite_inf_x, limite_inf_y, limite_inf_z );
     //printf("RANK:%d SUB_X:%d  SUB_Y:%d, SUB_Z:%d\n", rank, sub_x, sub_y, sub_z);
 
-    for (int init_x=NUM_LINHAS; init_x >0; init_x--){
+    for (int init_x=0; init_x < NUM_LINHAS; init_x++){
     if (init_x >= limite_inf_x && init_x<limite_sup_x){
         flag_x = 1;
         ++varrimento_x;
