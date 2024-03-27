@@ -81,7 +81,7 @@ int main(int argc, char *argv[]) {
 	int number_of_gens = atoi (argv[1]);
     int NUM_LINHAS = atoi (argv[2]);
     int density = atof (argv[3]);
-    int input_seed = atoi (argv[4]);
+	seed = atoi (argv[4]);
 	
    
 	MPI_Init(&argc, &argv);
