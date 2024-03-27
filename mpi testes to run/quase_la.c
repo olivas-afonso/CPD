@@ -300,8 +300,7 @@ int main(int argc, char *argv[]) {
 
             if (init_z>=limite_inf_z && init_z<limite_sup_z && flag_x == 1 && flag_y == 1 ){
 
-                data_send[varrimento_x-1][varrimento_y-1][varrimento_z] = rank*1000 + count;
-                count++;
+                data_send[varrimento_x-1][varrimento_y-1][varrimento_z] = valor_aux;
                   //printf("VALORES A ENTRAR %d, pos_x = %d, pos_y = %d, pos_z = %d \n", data_send[varrimento_x-1][varrimento_y-1][varrimento_z], varrimento_x-1, varrimento_y-1, varrimento_z);
                  ++varrimento_z;
             }
@@ -400,7 +399,7 @@ int main(int argc, char *argv[]) {
         {
             //FACE CIMA
             MPI_Sendrecv(&data_send[1][aux_y+1][aux_x+1], 1, MPI_INT, baixo_rank, 0, &data_send[sub_z+1][aux_y+1][aux_x+1], 1, MPI_INT, cima_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir  
-            if(rank==4) printf("DATA SEND %d\n", data_send[1][aux_y+1][aux_x+1]);
+            //if(rank==4) printf("DATA SEND %d\n", data_send[1][aux_y+1][aux_x+1]);
             //FACE BAIXO
             MPI_Sendrecv(&data_send[sub_z][aux_y+1][aux_x+1], 1, MPI_INT, cima_rank, 0, &data_send[0][aux_y+1][aux_x+1], 1, MPI_INT, baixo_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir                      
         }
