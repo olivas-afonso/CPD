@@ -15,6 +15,23 @@ int *sub_divz_y;
 int *sub_divz_x;
 
 
+void init_r4uni(int input_seed)
+{
+    seed = input_seed + 987654321;
+}
+
+float r4_uni()
+{
+    int seed_in = seed;
+
+    seed ^= (seed << 13);
+    seed ^= (seed >> 17);
+    seed ^= (seed << 5);
+
+    return 0.5 + 0.2328306e-09 * (seed_in + (int) seed);
+}
+
+
 void divide_number_parts(int number, int divide, int * sub_div) {
 
     int part_size, remainder;
@@ -58,7 +75,14 @@ void My_MPI_Cart_Shift(MPI_Comm cart_comm, int pos_x, int pos_y,int pos_z, int d
 int main(int argc, char *argv[]) {
 
     int NUM_LINHAS;
-    NUM_LINHAS= atoi (argv[1]);
+    
+	//NUM_LINHAS= atoi (argv[1]);
+	
+	number_of_gens = atoi (argv[1]);
+    NUM_LINHAS = atoi (argv[2]);
+    density = atof (argv[3]);
+    seed = atoi (argv[4]);
+	
    
 	MPI_Init(&argc, &argv);
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
@@ -325,7 +349,29 @@ int main(int argc, char *argv[]) {
         }
     }
 
-   
+
+
+
+int x_colocar, y_colocar, z_colocar, provisorio;
+
+    init_r4uni(input_seed);
+
+
+   for(x_colocar = 0; x_colocar < NUM_LINHAS; x_colocar++) {
+		for (y_colocar = 0; y_colocar < NUM_LINHAS; y_colocar++){
+            for (z_colocar = 0; z_colocar < NUM_LINHAS; z_colocar++)
+                if(r4_uni() < density)
+                    {
+						// preenchimento initial do grid_even dependendo da seed
+                        provisorio = (int)(r4_uni() * N_SPECIES) + 1; // preenchimento initial do grid_even dependendo da seed
+                        count_species[grid_even[x][y][z]]++;
+						printf(" %d ", provisorio);
+					}
+				printf("\n");		
+        }
+		printf("\n\n");	
+    }
+
     
 
 
