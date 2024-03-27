@@ -267,21 +267,21 @@ int main(int argc, char *argv[]) {
     limites_y ();
     limites_z();
 
-    for (int init_x=0; init_x < NUM_LINHAS; init_x+++){
+    for (int init_x=0; init_x < NUM_LINHAS; init_x++){
     if (init_x>=limite_inf_x && init_x<limite_sup_x){
         flag_x = 1;
         ++varrimento_x;
     }
     else flag_x=0;
     
-    for (int init_y=0; init_y < NUM_LINHAS; init_y+++){
+    for (int init_y=0; init_y < NUM_LINHAS; init_y++){
         if (init_y>=limite_inf_y && init_y<limite_sup_y){
             flag_y = 1;
             ++varrimento_y;
         }
         else flag_y=0;
 
-        for (int init_z=0; init_z < NUM_LINHAS; init_z+++){
+        for (int init_z=0; init_z < NUM_LINHAS; init_z++){
 
             if (init_z>=limite_inf_y && init_z<limite_sup_y && flag_x = 1 && flag_y == 1 && r4_uni() < density){
                   data_send[varrimento_x-1][varrimento_y-1][varrimento_z] =(int)(r4_uni() * N_SPECIES) + 1;
