@@ -6,7 +6,8 @@
 
 int rank, size;
 int my_coords[3];
-unsigned int seed =100;
+
+unsigned int seed;
 #define N_SPECIES 9
 
 //#define NUM_LINHAS 7
@@ -79,8 +80,9 @@ int main(int argc, char *argv[]) {
     int NUM_LINHAS;
     NUM_LINHAS= atoi (argv[1]);
 
+    seed = 100;
     init_r4uni(seed);
-   
+    
 	MPI_Init(&argc, &argv);
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
     MPI_Comm_size(MPI_COMM_WORLD, &size);
