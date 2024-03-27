@@ -29,7 +29,7 @@ float r4_uni()
     seed ^= (seed << 13);
     seed ^= (seed >> 17);
     seed ^= (seed << 5);
-    printf("PLEASE\n");
+
     return 0.5 + 0.2328306e-09 * (seed_in + (int) seed);
 }
 
@@ -82,7 +82,7 @@ int main(int argc, char *argv[]) {
 
     seed = 100;
     init_r4uni(seed);
-    
+
 	MPI_Init(&argc, &argv);
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
     MPI_Comm_size(MPI_COMM_WORLD, &size);
