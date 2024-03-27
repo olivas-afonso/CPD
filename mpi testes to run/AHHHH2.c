@@ -269,9 +269,9 @@ int main(int argc, char *argv[]) {
     limites_y ();
     limites_z();
 
-    printf("RANK:%d LIMITE_X_SUP:%d LIMITE_Y_SUP:%d, LIMITE_Z_SUP:%d\n", rank, limite_sup_x, limite_sup_y, limite_sup_z );
-    printf("RANK:%d LIMITE_X_INF:%d LIMITE_Y_INF:%d, LIMITE_Z_INF:%d\n", rank, limite_inf_x, limite_inf_y, limite_inf_z );
-    printf("RANK:%d SUB_X:%d  SUB_Y:%d, SUB_Z:%d\n", rank, sub_x, sub_y, sub_z);
+    //printf("RANK:%d LIMITE_X_SUP:%d LIMITE_Y_SUP:%d, LIMITE_Z_SUP:%d\n", rank, limite_sup_x, limite_sup_y, limite_sup_z );
+    //printf("RANK:%d LIMITE_X_INF:%d LIMITE_Y_INF:%d, LIMITE_Z_INF:%d\n", rank, limite_inf_x, limite_inf_y, limite_inf_z );
+    //printf("RANK:%d SUB_X:%d  SUB_Y:%d, SUB_Z:%d\n", rank, sub_x, sub_y, sub_z);
 
     for (int init_x=0; init_x < NUM_LINHAS; init_x++){
     if (init_x >= limite_inf_x && init_x<limite_sup_x){
@@ -293,7 +293,7 @@ int main(int argc, char *argv[]) {
             {
                 // preenchimento initial do grid_even dependendo da seed
                 valor_aux = (int)(r4_uni() * N_SPECIES) + 1; // preenchimento initial do grid_even dependendo da seed
-                
+                printf("VALORES A ENTRAR %d\n", valor_aux);
             }else{
                 valor_aux = 0;
             }
@@ -303,7 +303,7 @@ int main(int argc, char *argv[]) {
                  ++varrimento_z;
             }
         }
-        printf ("RANK :%d   Varrimento = %d\n",rank, varrimento_z);
+        //printf ("RANK :%d   Varrimento = %d\n",rank, varrimento_z);
         varrimento_z = 0;
     }
     
