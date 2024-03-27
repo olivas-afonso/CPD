@@ -99,7 +99,7 @@ void divide_number_parts(int number, int divide, int * sub_div) {
         end_index = start_index + part_size + (i1 < remainder ? 1 : 0);
 
         //printf("Part %d: ", i + 1);
-        sub_div[i]=end_index-start_index;
+        sub_div[i1]=end_index-start_index;
         start_index = end_index;
     }
 }
