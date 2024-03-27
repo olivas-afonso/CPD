@@ -151,6 +151,7 @@ int main(int argc, char *argv[]) {
     int flag_y=0,flag_x=0;
 
     char erro[9999];
+    char *tam=9999;
 
        MPI_Status status;
 
@@ -405,7 +406,7 @@ int main(int argc, char *argv[]) {
             if(rank == 1)
             {
                 printf("VALOR ENVIAR %d \n", data_send[aux_z+1][aux_y+1][1]);
-                MPI_Error_string(status.MPI_ERROR, erro, strlen(erro));
+                MPI_Error_string(status.MPI_ERROR, erro, tam);
                 printf("VALOR GUARDAR %s \n", erro);
             } 
             //FACE ESQUERDA
