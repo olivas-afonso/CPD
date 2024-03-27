@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <mpi.h>
+#include <string.h>
 
 int rank, size;
 int my_coords[3];
@@ -404,7 +405,7 @@ int main(int argc, char *argv[]) {
             if(rank == 1)
             {
                 printf("VALOR ENVIAR %d \n", data_send[aux_z+1][aux_y+1][1]);
-                MPI_Error_string(status.MPI_ERROR, erro, 9999);
+                MPI_Error_string(status.MPI_ERROR, erro, strlen(erro));
                 printf("VALOR GUARDAR %s \n", erro);
             } 
             //FACE ESQUERDA
