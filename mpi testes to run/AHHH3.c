@@ -21,9 +21,9 @@ int *sub_divz_y;
 int *sub_divz_x;
 
 
-void init_r4uni(int input_seed)
+void init_r4uni(int seed)
 {
-    seed = input_seed + 987654321;
+    seed = seed + 987654321;
 }
 
 float r4_uni()
@@ -362,7 +362,7 @@ int main(int argc, char *argv[]) {
 
 int x_colocar, y_colocar, z_colocar, provisorio;
 
-    init_r4uni(input_seed);
+    init_r4uni(seed);
 
 
    for(x_colocar = 0; x_colocar < NUM_LINHAS; x_colocar++) {
