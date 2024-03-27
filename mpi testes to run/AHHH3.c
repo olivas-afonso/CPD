@@ -78,10 +78,10 @@ int main(int argc, char *argv[]) {
     
 	//NUM_LINHAS= atoi (argv[1]);
 	
-	number_of_gens = atoi (argv[1]);
-    NUM_LINHAS = atoi (argv[2]);
-    density = atof (argv[3]);
-    seed = atoi (argv[4]);
+	int number_of_gens = atoi (argv[1]);
+    int NUM_LINHAS = atoi (argv[2]);
+    int density = atof (argv[3]);
+    int input_seed = atoi (argv[4]);
 	
    
 	MPI_Init(&argc, &argv);
@@ -364,7 +364,7 @@ int x_colocar, y_colocar, z_colocar, provisorio;
                     {
 						// preenchimento initial do grid_even dependendo da seed
                         provisorio = (int)(r4_uni() * N_SPECIES) + 1; // preenchimento initial do grid_even dependendo da seed
-                        count_species[grid_even[x][y][z]]++;
+                        count_species[grid_even[x_colocar][y_colocar][z_colocar]]++;
 						printf(" %d ", provisorio);
 					}
 				printf("\n");		
