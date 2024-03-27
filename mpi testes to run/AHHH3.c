@@ -7,6 +7,8 @@
 int rank, size;
 int my_coords[3];
 
+unsigned int seed;
+
 //#define NUM_LINHAS 7
 
 
@@ -75,12 +77,14 @@ void My_MPI_Cart_Shift(MPI_Comm cart_comm, int pos_x, int pos_y,int pos_z, int d
 int main(int argc, char *argv[]) {
 
     int NUM_LINHAS;
-    
+	int number_of_gens,  number_of_cells;
+    float density;
+	
 	//NUM_LINHAS= atoi (argv[1]);
 	
-	int number_of_gens = atoi (argv[1]);
-    int NUM_LINHAS = atoi (argv[2]);
-    int density = atof (argv[3]);
+	number_of_gens = atoi (argv[1]);
+    NUM_LINHAS = atoi (argv[2]);
+    density = atof (argv[3]);
 	seed = atoi (argv[4]);
 	
    
@@ -364,8 +368,7 @@ int x_colocar, y_colocar, z_colocar, provisorio;
                     {
 						// preenchimento initial do grid_even dependendo da seed
                         provisorio = (int)(r4_uni() * N_SPECIES) + 1; // preenchimento initial do grid_even dependendo da seed
-                        count_species[grid_even[x_colocar][y_colocar][z_colocar]]++;
-						printf(" %d ", provisorio);
+                        printf(" %d ", provisorio);
 					}
 				printf("\n");		
         }
