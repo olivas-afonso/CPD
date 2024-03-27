@@ -151,7 +151,7 @@ int main(int argc, char *argv[]) {
     int flag_y=0,flag_x=0;
 
     char erro[9999];
-    int *tam=9999;
+    int *tam;
 
        MPI_Status status;
 
