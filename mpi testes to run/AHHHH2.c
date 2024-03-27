@@ -111,7 +111,7 @@ int main(int argc, char *argv[]) {
         }
     }
 
-    printf("A combinação com o maior menor número é: %d * %d * %d\n", a_final, b_final, c_final);
+    //printf("A combinação com o maior menor número é: %d * %d * %d\n", a_final, b_final, c_final);
 
 	
    
@@ -187,16 +187,15 @@ int main(int argc, char *argv[]) {
 	
    
 
-    int ***data_send = (int ***)malloc((sub_z+2) * sizeof(int **));
+    char ***data_send = (char ***)malloc((sub_z+2) * sizeof(char **));
     for (int i = 0; i < (sub_z+2); ++i) {
-        data_send[i] = (int **)malloc(((sub_y+2)) * sizeof(int *));
+        data_send[i] = (char **)malloc(((sub_y+2)) * sizeof(char *));
         for (int j = 0; j < (sub_y+2); ++j) {
-            data_send[i][j] = (int *)malloc(((sub_x+2)) * sizeof(int));
+            data_send[i][j] = (char *)malloc(((sub_x+2)) * sizeof(char));
             for (int k = 0; k < (sub_x+2); ++k) {
                 if((k!=0) && (i!=0) && (j!= 0) && (k!= (sub_x+1)) && (i!= (sub_z+1)) && (j!= (sub_y+1)) )
                 {
-                    data_send[i][j][k]=rank*1000; 
-                    data_send[i][j][k] = data_send[i][j][k] + count;
+                    data_send[i][j][k]=(int)(rank*1000+ count); 
                     count++;
                 }
                 else
