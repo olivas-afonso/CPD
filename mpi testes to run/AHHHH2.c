@@ -280,7 +280,7 @@ int main(int argc, char *argv[]) {
     }
     else flag_x=0;
     
-    for (int init_y=0; init_y < NUM_LINHAS; init_y++){
+    for (int init_y=NUM_LINHAS-1; init_y >= 0; init_y--){
         if (init_y>=limite_inf_y && init_y<limite_sup_y){
             flag_y = 1;
             ++varrimento_y;
