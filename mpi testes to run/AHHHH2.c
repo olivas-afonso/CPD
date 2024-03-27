@@ -288,15 +288,6 @@ int main(int argc, char *argv[]) {
         else flag_y=0;
 
         for (int init_z=0; init_z < NUM_LINHAS; init_z++){
-            
-             if(r4_uni() < density)
-            {
-                // preenchimento initial do grid_even dependendo da seed
-                valor_aux = (int)(r4_uni() * N_SPECIES) + 1; // preenchimento initial do grid_even dependendo da seed
-
-            }else{
-                valor_aux = 0;
-            }
 
             if (init_z>=limite_inf_y && init_z<limite_sup_y && flag_x == 1 && flag_y == 1 && r4_uni() < density){
                   
