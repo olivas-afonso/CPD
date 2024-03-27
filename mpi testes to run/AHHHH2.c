@@ -421,7 +421,7 @@ int main(int argc, char *argv[]) {
             //MPI_Cart_coords(cart_comm, rank, 3, my_coords);
         for(aux_z=0;aux_z<(sub_z+2);aux_z++)
         {
-            printf("CAMADA %d\n", aux_z);
+            printf("RANK :%d    CAMADA %d\n",rank, aux_z);
             for(aux_y=0;aux_y<(sub_y+2);aux_y++)
             {
                 for(aux_x=0;aux_x<(sub_x+2); aux_x++)
@@ -440,7 +440,7 @@ int main(int argc, char *argv[]) {
             //MPI_Cart_coords(cart_comm, rank, 3, my_coords);
         for(aux_z=0;aux_z<(sub_z+2);aux_z++)
         {
-            printf("CAMADA %d\n", aux_z);
+            printf("RANK :%d    CAMADA %d\n",rank, aux_z);
             for(aux_y=0;aux_y<(sub_y+2);aux_y++)
             {
                 for(aux_x=0;aux_x<(sub_x+2); aux_x++)
@@ -459,7 +459,7 @@ int main(int argc, char *argv[]) {
             //MPI_Cart_coords(cart_comm, rank, 3, my_coords);
         for(aux_z=0;aux_z<(sub_z+2);aux_z++)
         {
-            printf("CAMADA %d\n", aux_z);
+            printf("RANK :%d    CAMADA %d\n",rank, aux_z);
             for(aux_y=0;aux_y<(sub_y+2);aux_y++)
             {
                 for(aux_x=0;aux_x<(sub_x+2); aux_x++)
@@ -477,7 +477,7 @@ int main(int argc, char *argv[]) {
             //MPI_Cart_coords(cart_comm, rank, 3, my_coords);
         for(aux_z=0;aux_z<(sub_z+2);aux_z++)
         {
-            printf("CAMADA %d\n", aux_z);
+            printf("RANK :%d    CAMADA %d\n",rank, aux_z);
             for(aux_y=0;aux_y<(sub_y+2);aux_y++)
             {
                 for(aux_x=0;aux_x<(sub_x+2); aux_x++)
