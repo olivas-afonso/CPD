@@ -137,7 +137,7 @@ int main(int argc, char *argv[]) {
     
 
     seed = 100;
-    density=.1;
+    density=.4;
     init_r4uni(seed);
 
 	MPI_Init(&argc, &argv);
