@@ -364,7 +364,7 @@ int main(int argc, char *argv[]) {
         {
             //FACE DIREITA 
             MPI_Sendrecv(&data_send[aux_z+1][aux_y+1][1], 1, MPI_INT, esq_rank, 0, &data_send[aux_z+1][aux_y+1][sub_x+1], 1, MPI_INT, dir_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir
-            
+            if(rank == 1) printf("VALOR A ENVIAR %d \n", data_send[aux_z+1][aux_y+1][1]);
             //FACE ESQUERDA
             MPI_Sendrecv(&data_send[aux_z+1][aux_y+1][sub_x], 1, MPI_INT, dir_rank, 0, &data_send[aux_z+1][aux_y+1][0], 1, MPI_INT, esq_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir
 
