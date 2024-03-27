@@ -6,6 +6,8 @@
 
 int rank, size;
 int my_coords[3];
+int limite_inf_x, limite_inf_y , limite_inf_z ;
+int limite_sup_x , limite_sup_y , limite_sup_z; 
 
 unsigned int seed;
 #define N_SPECIES 9
@@ -31,6 +33,52 @@ float r4_uni()
     seed ^= (seed << 5);
 
     return 0.5 + 0.2328306e-09 * (seed_in + (int) seed);
+}
+
+void limites_x (){
+    if (my_coords[2] == 0){
+        limite_inf_x = 0; 
+    }
+        
+    else{
+        for (int i = 0; i < my_coords[2] -1; ++ i){
+            limite_inf_x = limite_inf_x + sub_divz_x [i];
+        }
+    }
+
+    for (int i = 0; i<my_coords[2]; ++i){
+        limite_sup_x = limite_sup_x + sub_divz_x [i];
+    }
+}
+
+void limites_y (){
+    if (my_coords[1] == 0){
+        limite_inf_y = 0; 
+    }
+        
+    else{
+        for (int i = 0; i < my_coords[1] -1; ++ i){
+            limite_inf_y = limite_inf_y + sub_divz_y [i];
+        }
+    }
+
+    for (int i = 0; i< my_coords[1]; ++i){
+        limite_sup_y = limite_sup_y + sub_divz_y [i];
+    }
+}
+
+void limites_z (){
+    if (my_coords[0] == 0)
+        limite_inf_z = 0;
+    else{
+        for (int i = 0; i < my_coords[0] -1; ++ i){
+            limite_inf_z = limite_inf_z + sub_divz_z [i];
+        }
+    }
+
+    for (int i = 0; i< my_coords[0]; ++i){
+        limite_sup_z = limite_sup_z + sub_divz_z [i];
+    }
 }
 
 
@@ -79,6 +127,13 @@ int main(int argc, char *argv[]) {
 
     int NUM_LINHAS;
     NUM_LINHAS= atoi (argv[1]);
+
+    int varrimento_x = 1;
+    int varrimento_y = 1;
+    int varrimento_z = 1;
+    int flag_y=0,flag_x=0;
+
+    
 
     seed = 100;
     init_r4uni(seed);
@@ -198,37 +253,58 @@ int main(int argc, char *argv[]) {
     int sub_y = sub_divz_y[my_coords[1]];
     int sub_x = sub_divz_x[my_coords[2]];
 
-    /*
+     char ***data_send = (char ***)malloc((sub_z+2) * sizeof(char **));
+    for (int i = 0; i < (sub_z+2); ++i) {
+        data_send[i] = (char **)malloc(((sub_y+2)) * sizeof(char *));
+        for (int j = 0; j < (sub_y+2); ++j) {
+            data_send[i][j] = (char *)malloc(((sub_x+2)) * sizeof(char));
+        }
+    }
+
+    int valor_aux=0;
+
+    limites_x ();
+    limites_y ();
+    limites_z();
+
+    for (int init_x=0; init_x < NUM_LINHAS; init_x+++){
+    if (init_x>=limite_inf_x && init_x<limite_sup_x){
+        flag_x = 1;
+        ++varrimento_x;
+    }
+    else flag_x=0;
+    
+    for (int init_y=0; init_y < NUM_LINHAS; init_y+++){
+        if (init_y>=limite_inf_y && init_y<limite_sup_y){
+            flag_y = 1;
+            ++varrimento_y;
+        }
+        else flag_y=0;
+
+        for (int init_z=0; init_z < NUM_LINHAS; init_z+++){
+
+            if (init_z>=limite_inf_y && init_z<limite_sup_y && flag_x = 1 && flag_y == 1 && r4_uni() < density){
+                  data_send[varrimento_x-1][varrimento_y-1][varrimento_z] =(int)(r4_uni() * N_SPECIES) + 1;
+                 ++varrimento_z;
+            }
+        }
+        varrimento_z = 0;
+    }
+    
+    varrimento_y = 0;
+}
+
+    
     if(rank==0)
     {
         printf("SUB_DIV_Z :%d   SUB_DIV_Z :%d \n",sub_divz_z[0],sub_divz_z[1]  );
         printf("SUB_DIV_Y :%d   SUB_DIV_Y :%d \n",sub_divz_y[0],sub_divz_y[1]  );
         printf("SUB_DIV_X :%d   SUB_DIV_X :%d   SUB_DIV_X :%d\n",sub_divz_x[0],sub_divz_x[1], sub_divz_x[2]  );
     }
-    */
+    
 	
 	
-   int auxi;
-
-    char ***data_send = (char ***)malloc((sub_z+2) * sizeof(char **));
-    for (int i = 0; i < (sub_z+2); ++i) {
-        data_send[i] = (char **)malloc(((sub_y+2)) * sizeof(char *));
-        for (int j = 0; j < (sub_y+2); ++j) {
-            data_send[i][j] = (char *)malloc(((sub_x+2)) * sizeof(char));
-            for (int k = 0; k < (sub_x+2); ++k) {
-                if((k!=0) && (i!=0) && (j!= 0) && (k!= (sub_x+1)) && (i!= (sub_z+1)) && (j!= (sub_y+1)) )
-                {
-                    
-                    data_send[i][j][k]=(int)(r4_uni() * N_SPECIES) + 1; 
-                   
-                }
-                else
-                {
-                   data_send[i][j][k]=0; 
-                } 
-            }
-        }
-    }
+ 
     
 
     int vert_esq_cima_frente, vert_dir_baixo_tras, vert_dir_cima_frente, vert_esq_baixo_tras;
