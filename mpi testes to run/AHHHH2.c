@@ -287,7 +287,7 @@ int main(int argc, char *argv[]) {
         }
         else flag_y=0;
 
-        for (int init_z=NUM_LINHAS; init_z < 0; init_z--){
+        for (int init_z=NUM_LINHAS; init_z > 0; init_z--){
             
              if(r4_uni() < density)
                     {
