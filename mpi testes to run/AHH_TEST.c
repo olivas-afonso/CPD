@@ -11,24 +11,6 @@ int my_coords[3];
 int *sub_divz_z;
 int *sub_divz_y;
 int *sub_divz_x;
-unsigned int seed;
-
-void init_r4uni(int input_seed)
-{
-    seed = input_seed + 987654321;
-}
-
-float r4_uni()
-{
-    int seed_in = seed;
-
-    seed ^= (seed << 13);
-    seed ^= (seed >> 17);
-    seed ^= (seed << 5);
-
-    return 0.5 + 0.2328306e-09 * (seed_in + (int) seed);
-}
-
 
 
 void divide_number_parts(int number, int divide, int * sub_div) {
@@ -73,12 +55,9 @@ void My_MPI_Cart_Shift(MPI_Comm cart_comm, int pos_x, int pos_y,int pos_z, int d
 
 int main(int argc, char *argv[]) {
 
-    int NUM_LINHAS, number_of_gens, density;
-    //number_of_gens = atoi (argv[1]);
-    NUM_LINHAS = atoi (argv[1]);
-    //density = atof (argv[3]);
-    //seed = atoi (argv[4]);
-    printf("NUM_LINHAS %d\n", NUM_LINHAS);
+    int NUM_LINHAS;
+    NUM_LINHAS= atoi (argv[1]);
+    
     // FALTA A DIVISAO DOS PROCESSADORES
     sub_divz_z= (int *)malloc(2 * sizeof(int)); 
     /*
@@ -140,26 +119,24 @@ int main(int argc, char *argv[]) {
     int sub_y = sub_divz_y[my_coords[1]];
     int sub_x = sub_divz_x[my_coords[2]];
 
-    
+    /*
     if(rank==0)
     {
         printf("SUB_DIV_Z :%d   SUB_DIV_Z :%d \n",sub_divz_z[0],sub_divz_z[1]  );
         printf("SUB_DIV_Y :%d   SUB_DIV_Y :%d \n",sub_divz_y[0],sub_divz_y[1]  );
         printf("SUB_DIV_X :%d   SUB_DIV_X :%d   SUB_DIV_X :%d\n",sub_divz_x[0],sub_divz_x[1], sub_divz_x[2]  );
     }
-    
+    */
 
-    int ***data_send = (int ***)malloc((sub_z+2) * sizeof(int **));
+    char ***data_send = (char ***)malloc((sub_z+2) * sizeof(char **));
     for (int i = 0; i < (sub_z+2); ++i) {
-        data_send[i] = (int **)malloc(((sub_y+2)) * sizeof(int *));
+        data_send[i] = (char **)malloc(((sub_y+2)) * sizeof(char *));
         for (int j = 0; j < (sub_y+2); ++j) {
-            data_send[i][j] = (int *)malloc(((sub_x+2)) * sizeof(int));
+            data_send[i][j] = (char *)malloc(((sub_x+2)) * sizeof(char));
             for (int k = 0; k < (sub_x+2); ++k) {
                 if((k!=0) && (i!=0) && (j!= 0) && (k!= (sub_x+1)) && (i!= (sub_z+1)) && (j!= (sub_y+1)) )
                 {
-                    
-                    data_send[i][j][k]= (int)(rank*1000 + count); 
-                    //data_send[i][j][k] = data_send[i][j][k] + count;
+                    data_send[i][j][k]=(int)(rank*1000+ count); 
                     count++;
                 }
                 else
