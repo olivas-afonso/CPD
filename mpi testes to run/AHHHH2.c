@@ -301,7 +301,7 @@ int main(int argc, char *argv[]) {
                  ++varrimento_z;
             }
         }
-        printf ("Varrimento = %d\n", varrimento_z);
+        printf ("RANK :%d   Varrimento = %d\n",rank, varrimento_z);
         varrimento_z = 0;
     }
     
