@@ -333,7 +333,7 @@ for (int auxz=0; auxz < (sub_z+2); auxz++)
     {
         for (int auxx=0; auxx < (sub_x+2); auxx++)
         {
-            printf("%d ", ) = data_send[auxz][auxy][auxx];
+            printf("%d ", data_send[auxz][auxy][auxx]);
         }
         printf("\n");
     }
