@@ -309,7 +309,7 @@ int main(int argc, char *argv[]) {
         varrimento_z = 1;
     }
     
-    varrimento_y = 0;
+    varrimento_y = 1;
 }
 
     
