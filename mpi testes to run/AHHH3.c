@@ -86,13 +86,18 @@ int main(int argc, char *argv[]) {
 	
 	//NUM_LINHAS= atoi (argv[1]);
 	
+	MPI_Init(&argc, &argv);
+    
 	number_of_gens = atoi (argv[1]);
     NUM_LINHAS = atoi (argv[2]);
     density = atof (argv[3]);
 	seed = atoi (argv[4]);
 	
    
-	MPI_Init(&argc, &argv);
+
+  if (rank == 0) {
+        // Código para o processo com rank 0
+        // Espera até receber uma mensagem do processo com rank 1
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
     MPI_Comm_size(MPI_COMM_WORLD, &size);
 
@@ -357,29 +362,37 @@ int main(int argc, char *argv[]) {
         }
     }
 
+	printf("Processo 0: Esperando...\n");
+	MPI_Status status;
+	int message;
+	MPI_Recv(&message, 1, MPI_INT, 1, 0, MPI_COMM_WORLD, &status);
+	printf("Processo 0: Recebeu a mensagem %d do processo 1.\n", message);
+
+	} else if (rank == 1) {
+		int x_colocar, y_colocar, z_colocar, provisorio;
+
+		init_r4uni(seed	);
 
 
-
-int x_colocar, y_colocar, z_colocar, provisorio;
-
-    init_r4uni(seed);
-
-
-   for(x_colocar = 0; x_colocar < NUM_LINHAS; x_colocar++) {
-		for (y_colocar = 0; y_colocar < NUM_LINHAS; y_colocar++){
-            for (z_colocar = 0; z_colocar < NUM_LINHAS; z_colocar++)
-                if(r4_uni() < density)
-                    {
+	    for(x_colocar = 0; x_colocar < NUM_LINHAS; x_colocar++) {
+			for (y_colocar = 0; y_colocar < NUM_LINHAS; y_colocar++){
+				for (z_colocar = 0; z_colocar < NUM_LINHAS; z_colocar++)
+					if(r4_uni() < density)
+					{
 						// preenchimento initial do grid_even dependendo da seed
-                        provisorio = (int)(r4_uni() * N_SPECIES) + 1; // preenchimento initial do grid_even dependendo da seed
-                        printf(" %d ", provisorio);
+						provisorio = (int)(r4_uni() * N_SPECIES) + 1; // preenchimento initial do grid_even dependendo da seed
+						printf(" %d ", provisorio);
 					}
-				printf("\n");		
-        }
-		printf("\n\n");	
+					printf("\n");		
+			}
+			printf("\n\n");	
+		}
+        int message = 123;
+        MPI_Send(&message, 1, MPI_INT, 0, 0, MPI_COMM_WORLD);
+        printf("Processo 1: Enviou a mensagem %d para o processo 0.\n", message);
     }
 
-    
+
 
 
     MPI_Finalize();
