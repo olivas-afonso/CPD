@@ -13,12 +13,27 @@ float density;
 unsigned int seed;
 #define N_SPECIES 9
 
+char ***data_send;
+
 //#define NUM_LINHAS 7
 
 
 int *sub_divz_z;
 int *sub_divz_y;
 int *sub_divz_x;
+
+void freeMatrix(int size_y, int size_z) {
+    int i, j;
+
+    for (i = 0; i < size_y; i++) {
+        for (j = 0; j < size_z; j++) {
+            free(data_send[i][j]);
+        }
+        free(data_send[i]);
+    }
+    free(data_send);
+}
+
 
 void init_r4uni(int input_seed)
 {
@@ -255,7 +270,7 @@ int main(int argc, char *argv[]) {
     int sub_y = sub_divz_y[my_coords[1]];
     int sub_x = sub_divz_x[my_coords[2]];
 
-    char ***data_send = (char ***)malloc((sub_z+2) * sizeof(char **));
+    data_send = (char ***)malloc((sub_z+2) * sizeof(char **));
     for (int i = 0; i < (sub_z+2); ++i) {
         data_send[i] = (char **)malloc(((sub_y+2)) * sizeof(char *));
         for (int j = 0; j < (sub_y+2); ++j) {
@@ -454,6 +469,8 @@ int main(int argc, char *argv[]) {
 
         }
     }
+
+    freeMatrix((sub_y+2), (sub_z+2));
 
    
     
