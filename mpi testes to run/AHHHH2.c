@@ -270,7 +270,7 @@ int main(int argc, char *argv[]) {
     limites_z();
 
     for (int init_x=0; init_x < NUM_LINHAS; init_x++){
-    if (init_x>=limite_inf_x && init_x<limite_sup_x){
+    if (init_x >= limite_inf_x && init_x<limite_sup_x){
         flag_x = 1;
         ++varrimento_x;
     }
@@ -294,7 +294,7 @@ int main(int argc, char *argv[]) {
                 valor_aux = 0;
             }
 
-            if (init_z>=limite_inf_y && init_z<limite_sup_y && flag_x == 1 && flag_y == 1 && r4_uni() < density){
+            if (init_z>=limite_inf_y && init_z<limite_sup_y && flag_x == 1 && flag_y == 1){
                   data_send[varrimento_x-1][varrimento_y-1][varrimento_z] = valor_aux;
                  ++varrimento_z;
             }
