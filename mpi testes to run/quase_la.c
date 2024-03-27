@@ -399,7 +399,7 @@ int main(int argc, char *argv[]) {
         {
             //FACE CIMA
             MPI_Sendrecv(&data_send[1][aux_y+1][aux_x+1], 1, MPI_INT, baixo_rank, 0, &data_send[sub_z+1][aux_y+1][aux_x+1], 1, MPI_INT, cima_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir  
-            if(rank==0) printf("DATA SEND %d\n", data_send[1][aux_y+1][aux_x+1]);
+            if(rank==4) printf("DATA SEND %d\n", data_send[1][aux_y+1][aux_x+1]);
             //FACE BAIXO
             MPI_Sendrecv(&data_send[sub_z][aux_y+1][aux_x+1], 1, MPI_INT, cima_rank, 0, &data_send[0][aux_y+1][aux_x+1], 1, MPI_INT, baixo_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir                      
         }
