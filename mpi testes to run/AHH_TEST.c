@@ -78,7 +78,7 @@ int main(int argc, char *argv[]) {
     NUM_LINHAS = atoi (argv[1]);
     //density = atof (argv[3]);
     //seed = atoi (argv[4]);
-    
+    printf("NUM_LINHAS %d\n", NUM_LINHAS);
     // FALTA A DIVISAO DOS PROCESSADORES
     sub_divz_z= (int *)malloc(2 * sizeof(int)); 
     /*
