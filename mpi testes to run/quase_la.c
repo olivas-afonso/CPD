@@ -260,7 +260,7 @@ int main(int argc, char *argv[]) {
         data_send[i] = (char **)malloc(((sub_y+2)) * sizeof(char *));
         for (int j = 0; j < (sub_y+2); ++j) {
             data_send[i][j] = (char *)malloc(((sub_x+2)) * sizeof(char));
-
+            
         }
     }
 
@@ -275,7 +275,7 @@ int main(int argc, char *argv[]) {
     //printf("RANK:%d SUB_X:%d  SUB_Y:%d, SUB_Z:%d\n", rank, sub_x, sub_y, sub_z);
 
     for (int init_x=0; init_x < NUM_LINHAS; init_x++){
-    if (init_x >= limite_inf_x && init_x<limite_sup_x){
+    if (init_x >= limite_inf_z && init_x<limite_sup_z){
         flag_x = 1;
         ++varrimento_x;
     }
@@ -298,9 +298,9 @@ int main(int argc, char *argv[]) {
                         valor_aux = 0;
                     }
 
-            if (init_z>=limite_inf_z && init_z<limite_sup_z && flag_x == 1 && flag_y == 1 ){
+            if (init_z>=limite_inf_x && init_z<limite_sup_x && flag_x == 1 && flag_y == 1 ){
 
-                data_send[varrimento_z][varrimento_y-1][varrimento_x-1] = valor_aux;
+                data_send[varrimento_z-1][varrimento_y-1][varrimento_x] = valor_aux;
                   //printf("VALORES A ENTRAR %d, pos_x = %d, pos_y = %d, pos_z = %d \n", data_send[varrimento_x-1][varrimento_y-1][varrimento_z], varrimento_x-1, varrimento_y-1, varrimento_z);
                  ++varrimento_z;
             }
