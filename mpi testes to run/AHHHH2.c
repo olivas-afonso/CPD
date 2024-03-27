@@ -297,15 +297,6 @@ int main(int argc, char *argv[]) {
 }
 
     
-    if(rank==0)
-    {
-        printf("SUB_DIV_Z :%d   SUB_DIV_Z :%d \n",sub_divz_z[0],sub_divz_z[1]  );
-        printf("SUB_DIV_Y :%d   SUB_DIV_Y :%d \n",sub_divz_y[0],sub_divz_y[1]  );
-        printf("SUB_DIV_X :%d   SUB_DIV_X :%d   SUB_DIV_X :%d\n",sub_divz_x[0],sub_divz_x[1], sub_divz_x[2]  );
-    }
-    
-	
-	
  
     
 
@@ -411,14 +402,14 @@ int main(int argc, char *argv[]) {
     {
         //printf("RANK: %d    SUB_Z: %d   SUB_Y: %d   SUB_X:  %d\n",rank, sub_z, sub_y, sub_x);
             //MPI_Cart_coords(cart_comm, rank, 3, my_coords);
-        for(aux_z=0;aux_z<((sub_z)+2);aux_z++)
+        for(aux_z=0;aux_z<((sub_z));aux_z++)
         {
             printf("CAMADA %d\n", aux_z);
-            for(aux_y=0;aux_y<(sub_y+2);aux_y++)
+            for(aux_y=0;aux_y<(sub_y);aux_y++)
             {
-                for(aux_x=0;aux_x<(sub_x+2); aux_x++)
+                for(aux_x=0;aux_x<(sub_x); aux_x++)
                 {
-                     printf("%d ",data_send[aux_z][aux_y][aux_x]);
+                     printf("%d ",data_send[aux_z+1][aux_y+1][aux_x+1]);
                 }
                 printf("\n");       
             }
