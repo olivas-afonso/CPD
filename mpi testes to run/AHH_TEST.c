@@ -1,6 +1,4 @@
 #include <stdio.h>
-
-#include <stdio.h>
 #include <stdlib.h>
 #include <mpi.h>
 
@@ -59,64 +57,9 @@ int main(int argc, char *argv[]) {
 
     int NUM_LINHAS;
     NUM_LINHAS= atoi (argv[1]);
-   
-	MPI_Init(&argc, &argv);
-    MPI_Comm_rank(MPI_COMM_WORLD, &rank);
-    MPI_Comm_size(MPI_COMM_WORLD, &size);
-
-
-	int x = size;
-    /*printf("Digite um inteiro x: ");
-    scanf("%d", &x);
-	*/ 
-	
-    //printf("Todas as combinações possíveis de três inteiros cujo produto é %d:\n", x);
-
-    int maior_linha = 0, maior_linha_prev = 24 ;
-    int a, b, c;
-	int a_final, b_final, c_final;
-	
-
-    for (a = 1; a <= x; a++) {
-        if (x % a == 0) {
-            for (b = a; b <= x / a; b++) {
-                if (x % (a * b) == 0) {
-                    c = x / (a * b);
-                    //printf("%d * %d * %d\n", a, b, c);
-					
-					if(maior_linha < a){
-						maior_linha = a;
-					}
-					
-					if(maior_linha < b){
-						maior_linha = b;
-					}
-					
-					if(maior_linha < c){
-						maior_linha = c;
-					}
-					
-					//printf("maior_linha: %d\n", maior_linha);
-                    // Atualizar os menores números encontrados até agora
-                    if (maior_linha < maior_linha_prev) {
-                      //  printf("entrou\n");
-						a_final = a;
-                        b_final = b;
-                        c_final = c;
-						maior_linha_prev = maior_linha;
-                    }
-					maior_linha = 0;
-                }
-            }
-        }
-    }
-
-    //printf("A combinação com o maior menor número é: %d * %d * %d\n", a_final, b_final, c_final);
-
-	
-   
+    
     // FALTA A DIVISAO DOS PROCESSADORES
-    sub_divz_z= (int *)malloc( a_final * sizeof(int)); 
+    sub_divz_z= (int *)malloc(2 * sizeof(int)); 
     /*
     for(int k=0; k<2; k++)
     {
@@ -124,7 +67,7 @@ int main(int argc, char *argv[]) {
     }
     */
 
-    sub_divz_y= (int *)malloc( b_final * sizeof(int)); 
+    sub_divz_y= (int *)malloc(2 * sizeof(int)); 
 
     /*
     for(int k=0; k<2; k++)
@@ -133,7 +76,7 @@ int main(int argc, char *argv[]) {
     }
     */
 
-    sub_divz_x= (int *)malloc( c_final* sizeof(int)); 
+    sub_divz_x= (int *)malloc(3* sizeof(int)); 
 
     /*
     for(int k=0; k<3; k++)
@@ -142,17 +85,18 @@ int main(int argc, char *argv[]) {
     }
     */
 
-	
+   divide_number_parts(NUM_LINHAS, 2, sub_divz_z);
+   divide_number_parts(NUM_LINHAS, 2, sub_divz_y);
+   divide_number_parts(NUM_LINHAS, 3, sub_divz_x);
 
-   divide_number_parts(NUM_LINHAS,  a_final, sub_divz_z);
-   divide_number_parts(NUM_LINHAS,  b_final, sub_divz_y);
-   divide_number_parts(NUM_LINHAS,  c_final, sub_divz_x);
+    MPI_Init(&argc, &argv);
+    MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+    MPI_Comm_size(MPI_COMM_WORLD, &size);
 
-  
     //printf("SIZE %d\n", size);
     int count=0;
     //Cartesiano : 
-    int dims[3] = { a_final, b_final, c_final};  // ISTO TEM DE VIR DOS INTEIROS QUE MULTIPLICAM O Nº PROCESSO
+    int dims[3] = {2, 2, 3};  // ISTO TEM DE VIR DOS INTEIROS QUE MULTIPLICAM O Nº PROCESSO
     //ACHO QUE TEM DE SER SEMPRE OS MESMOS 3 EIXOS ^^
     int periods[3] = {1, 1, 1};  // Enable wraparound
     MPI_Comm cart_comm;
@@ -183,19 +127,17 @@ int main(int argc, char *argv[]) {
         printf("SUB_DIV_X :%d   SUB_DIV_X :%d   SUB_DIV_X :%d\n",sub_divz_x[0],sub_divz_x[1], sub_divz_x[2]  );
     }
     */
-	
-	
-   
 
-    char ***data_send = (char ***)malloc((sub_z+2) * sizeof(char **));
+    int ***data_send = (int ***)malloc((sub_z+2) * sizeof(int **));
     for (int i = 0; i < (sub_z+2); ++i) {
-        data_send[i] = (char **)malloc(((sub_y+2)) * sizeof(char *));
+        data_send[i] = (int **)malloc(((sub_y+2)) * sizeof(int *));
         for (int j = 0; j < (sub_y+2); ++j) {
-            data_send[i][j] = (char *)malloc(((sub_x+2)) * sizeof(char));
+            data_send[i][j] = (int *)malloc(((sub_x+2)) * sizeof(int));
             for (int k = 0; k < (sub_x+2); ++k) {
                 if((k!=0) && (i!=0) && (j!= 0) && (k!= (sub_x+1)) && (i!= (sub_z+1)) && (j!= (sub_y+1)) )
                 {
-                    data_send[i][j][k]=(int)(rank*1000+ count); 
+                    data_send[i][j][k]=rank*1000; 
+                    data_send[i][j][k] = data_send[i][j][k] + count;
                     count++;
                 }
                 else
@@ -304,7 +246,7 @@ int main(int argc, char *argv[]) {
         MPI_Sendrecv(&data_send[1][sub_y][aux_x+1], 1, MPI_INT, frente_baixo_rank, 0, &data_send[sub_z+1][0][aux_x+1], 1, MPI_INT, tras_cima_rank, 0, cart_comm, MPI_STATUS_IGNORE); // AR dir cima
     }
 
-    //--------------------------------------DEBUG-----------------------------------------------
+    
     if(rank==5)
     {
         //printf("RANK: %d    SUB_Z: %d   SUB_Y: %d   SUB_X:  %d\n",rank, sub_z, sub_y, sub_x);
