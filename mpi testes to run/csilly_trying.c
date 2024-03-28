@@ -165,7 +165,7 @@ void divide_em_tres (int *a_final, int *b_final, int *c_final, int size){
 }
 
 void aloca_matrizes (int sub_x, int sub_y, int sub_z){
-    
+
     grid_even = (char ***)malloc((sub_z+2) * sizeof(char **));
     grid_odd = (char ***)malloc((sub_z+2) * sizeof(char **));
     for (int i = 0; i < (sub_z+2); ++i) {
@@ -514,7 +514,7 @@ int main(int argc, char *argv[]) {
 
     cria_primeira_grid (NUM_LINHAS);
     comunica_entre_processos (grid_even, sub_x, sub_y, sub_z, cart_comm);
-    verifica_max (gen_number);
+    verifica_max (0);
     
     
     for (int gen_number = 1; gen_number< number_of_gens; ++ gen_number){
@@ -532,7 +532,9 @@ int main(int argc, char *argv[]) {
         
         //MPI_Barrier(MPI_COMM_WORLD);
         verifica_max (gen_number);  
+        comunica_entre_processos (grid_even, sub_x, sub_y, sub_z, cart_comm);
     }
+
 
     if (rank == 0){
         for(int auxi=1; auxi < 10; auxi++)
