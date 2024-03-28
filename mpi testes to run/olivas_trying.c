@@ -250,7 +250,7 @@ int main(int argc, char *argv[]) {
    divide_number_parts(NUM_LINHAS,  c_final, sub_divz_x);
 
   
-    //printf("SIZE %d\n", size);
+    printf("SIZE %d\n", size);
     int count=0;
     //Cartesiano : 
     int dims[3] = { a_final, b_final, c_final};  // ISTO TEM DE VIR DOS INTEIROS QUE MULTIPLICAM O Nº PROCESSO
