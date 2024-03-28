@@ -142,7 +142,8 @@ void My_MPI_Cart_Shift(MPI_Comm cart_comm, int pos_x, int pos_y,int pos_z, int d
 int main(int argc, char *argv[]) {
 
     int NUM_LINHAS;
-    NUM_LINHAS= atoi (argv[1]);
+    NUM_LINHAS= 4;
+    printf("OI\n");
 
     int varrimento_x = 1;
     int varrimento_y = 1;
@@ -250,7 +251,7 @@ int main(int argc, char *argv[]) {
    divide_number_parts(NUM_LINHAS,  c_final, sub_divz_x);
 
   
-    //printf("SIZE %d\n", size);
+    printf("SIZE %d\n", size);
     int count=0;
     //Cartesiano : 
     int dims[3] = { a_final, b_final, c_final};  // ISTO TEM DE VIR DOS INTEIROS QUE MULTIPLICAM O Nº PROCESSO
@@ -498,11 +499,11 @@ if(rank == 0)
     
 
    
-    //freeMatrix((sub_y+2), (sub_z+2), data_send);
+    freeMatrix((sub_y+2), (sub_z+2), data_send);
 
-    //free(sub_divz_x);
-    //free(sub_divz_y);
-    //free(sub_divz_z);
+    free(sub_divz_x);
+    free(sub_divz_y);
+    free(sub_divz_z);
 
    
     
