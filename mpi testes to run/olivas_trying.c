@@ -396,7 +396,10 @@ MPI_Barrier(cart_comm);
 
     for( aux_z=0; aux_z < sub_z; aux_z++)
     {
-        
+        MPI_Cart_coords(cart_comm, rank, 3, my_coords);
+        sub_z = sub_divz_z[my_coords[0]];
+        sub_y = sub_divz_y[my_coords[1]];
+        sub_x = sub_divz_x[my_coords[2]];
         //FACE DIREITA DIAGS
         MPI_Sendrecv(&data_send[aux_z+1][1][1], 1, MPI_INT, esq_tras_rank, 0, &data_send[aux_z+1][sub_y+1][sub_x+1], 1, MPI_INT, dir_frente_rank, 0, cart_comm, MPI_STATUS_IGNORE); // AR dir cima
         MPI_Sendrecv(&data_send[aux_z+1][sub_y][1], 1, MPI_INT, esq_frente_rank, 0, &data_send[aux_z+1][0][sub_x+1], 1, MPI_INT, dir_tras_rank, 0, cart_comm, MPI_STATUS_IGNORE); // AR dir baixo
