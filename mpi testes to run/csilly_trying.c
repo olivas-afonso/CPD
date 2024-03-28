@@ -159,6 +159,7 @@ void divide_em_tres (int *a_final, int *b_final, int *c_final, int size){
 
 }
 
+//PODE DAR PORCARIA
 void aloca_matrizes (int sub_x, int sub_y, int sub_z){
     grid_even = (char ***)malloc((sub_z+2) * sizeof(char **));
     grid_odd = (char ***)malloc((sub_z+2) * sizeof(char **));
@@ -181,6 +182,7 @@ int main(int argc, char *argv[]) {
     NUM_LINHAS = atoi (argv[2]);
     density = atof (argv[3]);
     seed = atoi (argv[4]);
+
 
 
     int varrimento_x = 1;
@@ -232,7 +234,7 @@ int main(int argc, char *argv[]) {
 
     int valor_aux=0;
 
-    limites_x ();
+    /*limites_x ();
     limites_y ();
     limites_z();
 
@@ -377,7 +379,7 @@ int main(int argc, char *argv[]) {
         MPI_Sendrecv(&data_send[sub_z][sub_y][aux_x+1], 1, MPI_INT, frente_cima_rank, 0, &data_send[0][0][aux_x+1], 1, MPI_INT, tras_baixo_rank, 0, cart_comm, MPI_STATUS_IGNORE); // AR esq baixo
         MPI_Sendrecv(&data_send[1][sub_y][aux_x+1], 1, MPI_INT, frente_baixo_rank, 0, &data_send[sub_z+1][0][aux_x+1], 1, MPI_INT, tras_cima_rank, 0, cart_comm, MPI_STATUS_IGNORE); // AR dir cima
     }
-    */
+   
     //--------------------------------------DEBUG-----------------------------------------------
    
     if(rank==0)
@@ -398,7 +400,7 @@ int main(int argc, char *argv[]) {
             }
 
         }
-    }
+    } */
     
 
 
@@ -409,5 +411,5 @@ int main(int argc, char *argv[]) {
 
 
     MPI_Finalize();
-    return 0;
+    return 0; 
 }
