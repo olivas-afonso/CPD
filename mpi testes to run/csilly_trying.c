@@ -23,7 +23,7 @@ char ***grid_odd;
 long count_species_local[10]={0,0,0,0,0,0,0,0,0,0};
 long count_species[10]={0,0,0,0,0,0,0,0,0,0};
 long max_count[10]={0,0,0,0,0,0,0,0,0,0};
-int max_gen[10];
+int max_gen[10]={0,0,0,0,0,0,0,0,0,0};
 
 void init_r4uni(int input_seed)
 {
