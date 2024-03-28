@@ -341,6 +341,7 @@ if(rank == 2)
  {
     for (int auxz=0; auxz < (sub_z+2); auxz++)
     {
+        printf("CAMADA\n");
         for (int auxy=0; auxy < (sub_y+2); auxy++)
         {
             for (int auxx=0; auxx < (sub_x+2); auxx++)
