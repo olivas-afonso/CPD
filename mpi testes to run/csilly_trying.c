@@ -181,12 +181,10 @@ void aloca_matrizes (int sub_x, int sub_y, int sub_z){
 void verifica_max (int gen_number){
     
     MPI_Reduce(count_species_local, count_species, sizeof (count_species), MPI_INT, MPI_SUM, 0, MPI_COMM_WORLD);
-    MPI_Reduce(count_species_local, count_species, sizeof (count_species), MPI_INT, MPI_SUM, 0, MPI_COMM_WORLD);
-
     for (int x=1; x< 10; ++x){
         printf ("X=%d Cnt=%d\n", x, count_species[x]);
     }
-    
+
     for(int x=1; x < 10; x++)
     {
         if(count_species[x] > max_count[x])
@@ -203,14 +201,14 @@ void cria_primeira_grid (int NUM_LINHAS){
     int varrimento_z = 1;
     int valor_aux=0;
 
-    int flag_y=0,flag_x=0;
+    int flag_y=0,flag_z=0;
 
-    for (int init_x=0; init_x < NUM_LINHAS; init_x++){
-        if (init_x >= limite_inf_z && init_x<limite_sup_z){
-            flag_x = 1;
-            ++varrimento_x;
+    for (int init_z=0; init_x < NUM_LINHAS; init_z++){
+        if (init_z >= limite_inf_z && init_z<limite_sup_z){
+            flag_z = 1;
+            ++varrimento_z;
         }
-        else flag_x=0;
+        else flag_z=0;
 
         for (int init_y=0; init_y < NUM_LINHAS; init_y++){
             if (init_y>=limite_inf_y && init_y<limite_sup_y){
@@ -219,7 +217,7 @@ void cria_primeira_grid (int NUM_LINHAS){
             }
             else flag_y=0;
 
-            for (int init_z=0; init_z < NUM_LINHAS; init_z++){
+            for (int init_x=0; init_x < NUM_LINHAS; init_x++){
                 if(r4_uni() < density)
                 {
                     // preenchimento initial do grid_even dependendo da seed
@@ -228,14 +226,14 @@ void cria_primeira_grid (int NUM_LINHAS){
                   valor_aux = 0;
                 }
 
-                if (init_z>=limite_inf_x && init_z<limite_sup_x && flag_x == 1 && flag_y == 1 ){
-                    grid_even[varrimento_x-1][varrimento_y-1][varrimento_z] = valor_aux;
+                if (init_>=limite_inf_x && init_x<limite_sup_x && flag_z == 1 && flag_y == 1 ){
+                    grid_even[varrimento_z-1][varrimento_y-1][varrimento_x] = valor_aux;
                     count_species_local[valor_aux]++;
-                    ++varrimento_z;
+                    ++varrimento_x;
                 }
             }
             //printf ("RANK :%d   Varrimento = %d\n",rank, varrimento_z);
-            varrimento_z = 1;
+            varrimento_x = 1;
         }
         varrimento_y = 1;
     }
@@ -391,7 +389,7 @@ int main(int argc, char *argv[]) {
     comunica_entre_processos (grid_even, sub_x, sub_y, sub_z, cart_comm);
     
     
-    /*for (int gen_number = 1; gen_number< number_of_gens; ++ gen_number){
+    for (int gen_number = 1; gen_number< number_of_gens; ++ gen_number){
        
         for (int auxi = 0; auxi < 10; ++auxi){
             count_species[auxi]=0;  
@@ -405,10 +403,15 @@ int main(int argc, char *argv[]) {
             rules (number_of_gens, grid_even, grid_odd);
         }
 
-        verifica_max (gen_number);
-            
-    }  */ 
-        
+        verifica_max (gen_number);  
+    }  
+    
+    for(auxi=1; auxi < 10; auxi++)
+    {
+        printf("%d %ld %d \n", auxi, max_count[auxi], max_gen[auxi]);
+    }
+
+    free (sub_y; sub_z)
     
     MPI_Finalize();
     return 0; 
