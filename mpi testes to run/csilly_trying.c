@@ -236,10 +236,10 @@ int main(int argc, char *argv[]) {
 
     int valor_aux=0;
 
-    /*limites_x ();
+    limites_x ();
     limites_y ();
     limites_z();
-
+    
     for (int init_x=0; init_x < NUM_LINHAS; init_x++){
     if (init_x >= limite_inf_z && init_x<limite_sup_z){
         flag_x = 1;
