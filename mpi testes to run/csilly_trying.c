@@ -465,8 +465,8 @@ void rules(int sub_x ,int sub_y, int sub_z , char ***grid_new, char ***grid_old)
                     {  
                         grid_new[aux_z][aux_y][aux_x]= life_rule(grid_old, aux_x, aux_y, aux_z);     
                     }
-                    if (rank == 1)
-                    printf ("Grid New = %d posx = %d posy = %d posz = %d\n", grid_new[aux_z][aux_y][aux_x], aux_x, aux_y, aux_z);
+                    //if (rank == 1)
+                    //printf ("Grid New = %d posx = %d posy = %d posz = %d\n", grid_new[aux_z][aux_y][aux_x], aux_x, aux_y, aux_z);
 
                     // se a celula esta viva nesta geracao, aumentamos o numero no array contador 
                     count_species_local[grid_new[aux_z][aux_y][aux_x]]++;
@@ -600,7 +600,7 @@ int main(int argc, char *argv[]) {
     if (rank == 0){
         for(int auxi=1; auxi < 10; auxi++)
         {
-            //printf("%d %ld %d \n", auxi, max_count[auxi], max_gen[auxi]);
+            printf("%d %ld %d \n", auxi, max_count[auxi], max_gen[auxi]);
         }
     }
 
