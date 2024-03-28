@@ -371,7 +371,7 @@ int death_rule(char *** grid, long aux_x, long aux_y, long aux_z)
         }
     } 
     
-     if ( cont_rule >= 7 && cont_rule <= 10 )
+    /* if ( cont_rule >= 7 && cont_rule <= 10 )
     {
         max=0;
         
@@ -387,7 +387,7 @@ int death_rule(char *** grid, long aux_x, long aux_y, long aux_z)
 
         return max_pos;
     }
-    else return 0; 
+    else */return 0; 
 }
 
 /************************************************************************************************
