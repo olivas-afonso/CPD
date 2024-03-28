@@ -473,6 +473,22 @@ void rules(int sub_x ,int sub_y, int sub_z , char ***grid_new, char ***grid_old)
    // }
 }
 
+void freeMatrix(int sub_y, int sub_z) {
+    int i, j;
+
+    for (i = 0; i < sub_z; i++) {
+        for (j = 0; j < sub_y; j++) {
+            free(grid_even[i][j]);
+            free(grid_odd[i][j]);
+        }
+        free(grid_even[i]);
+        free(grid_odd[i]);
+    }
+
+    free(grid_even);
+    free(grid_odd);
+}
+
 
 int main(int argc, char *argv[]) {
 
@@ -595,14 +611,13 @@ int main(int argc, char *argv[]) {
 
 
     if (rank == 0){
-        //printf ("Gen = 0\n");
         for(int auxi=1; auxi < 10; auxi++)
         {
           printf("%d %ld %d \n", auxi, max_count[auxi], max_gen[auxi-1]);
         }
     }
 
-    //free (sub_y, sub_z)
+    freeMatrix (sub_y, sub_z);
     
     MPI_Finalize();
     return 0; 
