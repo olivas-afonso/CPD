@@ -245,6 +245,26 @@ void cria_primeira_grid (int NUM_LINHAS){
         }
         varrimento_y = 1;
     }
+
+    MPI_Barrier(MPI_COMM_WORLD);
+    MPI_Reduce(count_species_local, count_species, sizeof (count_species), MPI_INT, MPI_SUM, 0, MPI_COMM_WORLD);
+    MPI_Barrier(MPI_COMM_WORLD);
+/*for (int x=1; x< 10; ++x){
+    printf ("X=%d Cnt=%d\n", x, count_species[x]);
+}*/
+
+    if (rank == 0){
+        for(int auxiii=1; auxiii < 10; auxiii++)
+        {
+            if(count_species[auxiii] > max_count[auxiii])
+            {   
+                max_count[auxiii] = count_species[auxiii];
+                max_gen[auxiii]=0;
+            }
+        }    
+    }
+
+
 }
 
 void comunica_entre_processos (char ***data_send, int sub_x, int sub_y, int sub_z, MPI_Comm cart_comm){
@@ -540,7 +560,7 @@ int main(int argc, char *argv[]) {
     limites_z();
 
     cria_primeira_grid (NUM_LINHAS);
-    verifica_max (max_gen, 0);
+    //verifica_max (max_gen, 0);
     comunica_entre_processos (grid_even, sub_x, sub_y, sub_z, cart_comm);
 
     /*if (rank == 0){
