@@ -80,6 +80,7 @@ char ***gen_initial_grid(int N, float density, int input_seed)
                 printf("Failed to allocate matrix6\n");
                 exit(1);
             }
+            
             for (z = 0; z < N; z++)
                 if(r4_uni() < density)
                     {
