@@ -359,9 +359,9 @@ int death_rule(char *** grid, long aux_x, long aux_y, long aux_z)
         {
             for(search_x=aux_x-1, x=0; x< 3;x++, search_x++)
             {
-                if (grid [search_z][search_y][search_x] != 0){       
+                if ((int)grid [search_z][search_y][search_x] != 0){       
                     ++cont_rule;                
-                    cont_species_death[(int)grid[search_z][search_y][search_x]]++;
+                    cont_species_death[grid[search_z][search_y][search_x]]++;
                 }
                 
                 if (cont_rule >10){
