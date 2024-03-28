@@ -14,7 +14,6 @@ float density;
 unsigned int seed;
 #define N_SPECIES 9
 
-char ***data_send;
 
 //#define NUM_LINHAS 7
 
@@ -23,7 +22,7 @@ int *sub_divz_z;
 int *sub_divz_y;
 int *sub_divz_x;
 
-void freeMatrix(int size_y, int size_z) {
+void freeMatrix(int size_y, int size_z, char *** data_send) {
     int i, j;
 
     for (i = 0; i < size_y; i++) {
@@ -277,7 +276,7 @@ int main(int argc, char *argv[]) {
     int sub_y = sub_divz_y[my_coords[1]];
     int sub_x = sub_divz_x[my_coords[2]];
 
-    data_send = (char ***)malloc((sub_z+2) * sizeof(char **));
+    char ***data_send = (char ***)malloc((sub_z+2) * sizeof(char **));
     for (int i = 0; i < (sub_z+2); ++i) {
         data_send[i] = (char **)malloc(((sub_y+2)) * sizeof(char *));
         for (int j = 0; j < (sub_y+2); ++j) {
@@ -352,8 +351,7 @@ if(rank == 0)
  */
 
 
-MPI_Barrier(MPI_COMM_WORLD);
-MPI_Barrier(cart_comm);
+
 
 
 
@@ -397,7 +395,7 @@ for( aux_z=0; aux_z < sub_z; aux_z++)
             MPI_Sendrecv(&data_send[aux_z+1][aux_y+1][1], 1, MPI_INT, esq_rank, 0, &data_send[aux_z+1][aux_y+1][sub_x+1], 1, MPI_INT, dir_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir
         }
     }
-
+//MPI_Barrier(MPI_COMM_WORLD);
 for( aux_z=0; aux_z < sub_z; aux_z++)
     {
         for (aux_y=0; aux_y<sub_y; aux_y++)
@@ -405,7 +403,7 @@ for( aux_z=0; aux_z < sub_z; aux_z++)
             MPI_Sendrecv(&data_send[aux_z+1][aux_y+1][sub_x], 1, MPI_INT, dir_rank, 0, &data_send[aux_z+1][aux_y+1][0], 1, MPI_INT, esq_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir
         }
     }
-
+//MPI_Barrier(MPI_COMM_WORLD);
 
     for( aux_z=0; aux_z < sub_z; aux_z++)
     {
@@ -493,8 +491,7 @@ for( aux_z=0; aux_z < sub_z; aux_z++)
     }
     */
     //--------------------------------------DEBUG-----------------------------------------------
-    MPI_Barrier(MPI_COMM_WORLD);
-    MPI_Barrier(cart_comm);
+
     
     if(rank==0)
     {
@@ -516,7 +513,7 @@ for( aux_z=0; aux_z < sub_z; aux_z++)
     
 
    
-    freeMatrix((sub_y+2), (sub_z+2));
+    freeMatrix((sub_y+2), (sub_z+2), data_send);
 
     free(sub_divz_x);
     free(sub_divz_y);
