@@ -183,7 +183,7 @@ void aloca_matrizes (int sub_x, int sub_y, int sub_z){
     }
 }
 
-void verifica_max (char *max_gen, int gen_number){
+void verifica_max (int *max_gen, int gen_number){
     
     
     MPI_Reduce(count_species_local, count_species, sizeof (count_species), MPI_INT, MPI_SUM, 0, MPI_COMM_WORLD);
