@@ -414,7 +414,7 @@ int life_rule (char *** grid, long aux_x, long aux_y, long aux_z){
             for(search_x= aux_x-1, x=0; x< 3; x++, search_x++)
             {
                 //verifica se o vizinho está vivo
-                if ((int)(grid [search_z][search_y][search_x]) != 0){       
+                if (grid [search_z][search_y][search_x] != 0){       
                     ++cont_rule;
                 }
                 // (OTIMIZACAO) se já tem vizinhos suficientes para permanecer morta sai da funcao
@@ -454,7 +454,7 @@ void rules(int sub_x ,int sub_y, int sub_z , char ***grid_new, char ***grid_old)
             {
                 for(aux_x=1; aux_x<= sub_x; aux_x++)
                 {
-                    if((int)(grid_old[aux_z][aux_y][aux_x])==0) // morto 
+                    if(grid_old[aux_z][aux_y][aux_x]==0) // morto 
                     { 
                         grid_new[aux_z][aux_y][aux_x]= death_rule(grid_old, aux_x, aux_y, aux_z);
                     }
