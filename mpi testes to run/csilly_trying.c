@@ -177,6 +177,8 @@ void cria_primeira_grid (int NUM_LINHAS){
     int varrimento_x = 1;
     int varrimento_y = 1;
     int varrimento_z = 1;
+    int valor_aux=0;
+
     int flag_y=0,flag_x=0;
 
     for (int init_x=0; init_x < NUM_LINHAS; init_x++){
@@ -270,8 +272,6 @@ int main(int argc, char *argv[]) {
     int sub_x = sub_divz_x[my_coords[2]];
 
     aloca_matrizes (sub_x, sub_y, sub_z);
-
-    int valor_aux=0;
 
     limites_x ();
     limites_y ();
