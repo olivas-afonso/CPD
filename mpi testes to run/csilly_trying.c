@@ -465,6 +465,9 @@ void rules(int sub_x ,int sub_y, int sub_z , char ***grid_new, char ***grid_old)
                     {  
                         grid_new[aux_z][aux_y][aux_x]= life_rule(grid_old, aux_x, aux_y, aux_z);     
                     }
+                    if (rank == 1)
+                    printf ("Grid New = %d posx = %d posy = %d posz = %d\n", grid_new[aux_z][aux_y][aux_x], aux_x, aux_y, aux_z);
+
                     // se a celula esta viva nesta geracao, aumentamos o numero no array contador 
                     count_species_local[grid_new[aux_z][aux_y][aux_x]]++;
                 }
@@ -533,7 +536,7 @@ int main(int argc, char *argv[]) {
         }
     }
 
-    if(rank==5)
+    if(rank==1)
             {
                 for(int auxi_x=1; auxi_x<3; auxi_x++)
                 {
@@ -564,7 +567,7 @@ int main(int argc, char *argv[]) {
             rules (sub_x, sub_y, sub_z, grid_odd, grid_even);
             comunica_entre_processos (grid_odd, sub_x, sub_y, sub_z, cart_comm);
             MPI_Barrier(MPI_COMM_WORLD);
-            if(rank==5)
+            if(rank==1)
             {
                 for(int auxi_x=1; auxi_x<3; auxi_x++)
                 {
