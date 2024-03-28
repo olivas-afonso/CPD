@@ -455,7 +455,8 @@ MPI_Barrier(cart_comm);
     }
 
     //--------------------------------------DEBUG-----------------------------------------------
-    
+    MPI_Barrier(MPI_COMM_WORLD);
+    MPI_Barrier(cart_comm);
     if(rank==0)
     {
         printf("RANK: %d    SUB_Z: %d   SUB_Y: %d   SUB_X:  %d\n",rank, sub_z, sub_y, sub_x);
