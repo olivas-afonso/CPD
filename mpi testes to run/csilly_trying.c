@@ -174,6 +174,11 @@ void aloca_matrizes (int sub_x, int sub_y, int sub_z){
         for (int j = 0; j < (sub_y+2); ++j) {
             grid_even[i][j] = (char *)malloc(((sub_x+2)) * sizeof(char));
             grid_odd[i][j] = (char *)malloc(((sub_x+2)) * sizeof(char)); 
+            for(int k =0; k<(sub_x+2);k++)
+            {
+                grid_even[i][j][k]=0;
+                grid_odd[i][j][k]=0;
+            }
         }
     }
 }
