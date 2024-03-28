@@ -9,6 +9,7 @@ int my_coords[3];
 int limite_inf_x, limite_inf_y , limite_inf_z ;
 int limite_sup_x , limite_sup_y , limite_sup_z; 
 float density;
+int NUM_LINHAS;
 
 unsigned int seed;
 #define N_SPECIES 9
@@ -217,7 +218,7 @@ void cria_primeira_grid (int NUM_LINHAS){
     }
 }
 
-void comunica_entre_processos (char ***data_send, int sub_x, int sub_y, int sub_z){
+void comunica_entre_processos (char ***data_send, int sub_x, int sub_y, int sub_z, MPI_Comm cart_comm){
     int aux_x, aux_y, aux_z; 
     int cima_rank, baixo_rank, esq_rank, dir_rank, frente_rank, tras_rank;
     int dir_cima_rank, esq_baixo_rank,dir_baixo_rank, esq_cima_rank, frente_cima_rank, tras_baixo_rank;
@@ -315,7 +316,7 @@ void comunica_entre_processos (char ***data_send, int sub_x, int sub_y, int sub_
 
 int main(int argc, char *argv[]) {
 
-    int NUM_LINHAS;
+
     int number_of_gens;
 
     number_of_gens = atoi (argv[1]);
@@ -364,7 +365,7 @@ int main(int argc, char *argv[]) {
 
     cria_primeira_grid (NUM_LINHAS);
       
-    comunica_entre_processos (grid_even, sub_x, sub_y, sub_z);
+    comunica_entre_processos (grid_even, sub_x, sub_y, sub_z, cart_comm);
     //--------------------------------------DEBUG-----------------------------------------------
    
     if(rank==0)
