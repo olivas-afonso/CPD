@@ -192,14 +192,15 @@ void verifica_max (int gen_number){
         printf ("X=%d Cnt=%d\n", x, count_species[x]);
     }*/
 
-    for(int x=1; x < 10; x++)
-    {
-        if(count_species[x] > max_count[x])
+    if (rank == 0)
+        for(int x=1; x < 10; x++)
         {
-            max_count[x] = count_species[x];
-            max_gen[x]=gen_number;
+            if(count_species[x] > max_count[x])
+            {
+                max_count[x] = count_species[x];
+                max_gen[x]=gen_number;
+            }
         }
-    }
 }
 
 void cria_primeira_grid (int NUM_LINHAS){
