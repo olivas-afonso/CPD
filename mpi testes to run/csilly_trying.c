@@ -441,13 +441,13 @@ void rules(int sub_x ,int sub_y, int sub_z , char ***grid_new, char ***grid_old)
     //{
         //#pragma omp for schedule (dynamic)
         
-        for(aux_z=1; aux_z< sub_z; aux_z ++)
+        for(aux_z=1; aux_z<= sub_z; aux_z ++)
         {   
             if (rank == 0)
                 printf ("ENTREI EM Z\n");
-            for(aux_y=1; aux_y< sub_y; aux_y++)
+            for(aux_y=1; aux_y<= sub_y; aux_y++)
             {
-                for(aux_x=1; aux_x< sub_x; aux_x++)
+                for(aux_x=1; aux_x<= sub_x; aux_x++)
                 {
                     if(grid_old[aux_z][aux_y][aux_x]==0) // morto 
                     { 
@@ -519,7 +519,7 @@ int main(int argc, char *argv[]) {
     //verifica_max (0);
     
     
-    for (int gen_number = 1; gen_number< number_of_gens; ++ gen_number){
+    for (int gen_number = 1; gen_number<= number_of_gens; ++ gen_number){
        
         for (int auxi = 0; auxi < 10; ++auxi){
             count_species_local[auxi]=0;  
@@ -532,7 +532,7 @@ int main(int argc, char *argv[]) {
             rules (sub_x, sub_y, sub_z, grid_even, grid_odd);
         }
         
-        //MPI_Barrier(MPI_COMM_WORLD);
+        MPI_Barrier(MPI_COMM_WORLD);
         verifica_max (gen_number);  
         comunica_entre_processos (grid_even, sub_x, sub_y, sub_z, cart_comm);
 
