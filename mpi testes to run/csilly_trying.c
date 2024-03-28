@@ -120,7 +120,7 @@ void My_MPI_Cart_Shift(MPI_Comm cart_comm, int pos_x, int pos_y,int pos_z, int d
 }
 
 void divide_em_tres (int *a_final, int *b_final, int *c_final, int size){
-    int maior_linha = 0, maior_linha_prev = x;
+    int maior_linha = 0, maior_linha_prev = size;
     int a, b, c;
     int x = size;
     for (a = 1; a <= x; a++) {
@@ -132,7 +132,7 @@ void divide_em_tres (int *a_final, int *b_final, int *c_final, int size){
 					
 					if(maior_linha < a){
 						maior_linha = a;
-					}
+					}   
 					
 					if(maior_linha < b){
 						maior_linha = b;
@@ -159,7 +159,7 @@ void divide_em_tres (int *a_final, int *b_final, int *c_final, int size){
 
 }
 
-void aloca_matrizes (void){
+void aloca_matrizes (int sub_x, int sub_y, int sub_z){
     grid_even = (char ***)malloc((sub_z+2) * sizeof(char **));
     grid_odd = (char ***)malloc((sub_z+2) * sizeof(char **));
     for (int i = 0; i < (sub_z+2); ++i) {
@@ -228,7 +228,7 @@ int main(int argc, char *argv[]) {
     int sub_y = sub_divz_y[my_coords[1]];
     int sub_x = sub_divz_x[my_coords[2]];
 
-    aloca_matrizes ();
+    aloca_matrizes (sub_x, sub_y, sub_z);
 
     int valor_aux=0;
 
