@@ -185,12 +185,13 @@ void aloca_matrizes (int sub_x, int sub_y, int sub_z){
 
 void verifica_max (int *max_gen, int gen_number){
     MPI_Barrier(MPI_COMM_WORLD);
-    MPI_Reduce(count_species_local, count_species, 10, MPI_INT, MPI_SUM, 0, MPI_COMM_WORLD);
+    //MPI_Reduce(count_species_local, count_species, 10, MPI_INT, MPI_SUM, 0, MPI_COMM_WORLD);
     
     /*for (int x=1; x< 10; ++x){
         printf ("X=%d Cnt=%d\n", x, count_species[x]);
     }*/
 
+/*
     if (rank == 0){
         for(int x=1; x < 10; x++)
         {
@@ -201,9 +202,10 @@ void verifica_max (int *max_gen, int gen_number){
             }
         }    
     }
+    */
 }
 
-void cria_primeira_grid (int NUM_LINHAS,int * count_species, int* count_species_new){
+void cria_primeira_grid (int NUM_LINHAS,long * count_species, long* count_species_new, int * max_gen){
     int varrimento_x = 1;
     int varrimento_y = 1;
     int varrimento_z = 1;
@@ -265,7 +267,7 @@ if(rank==0)
         {
             if(count_species[auxiii] > count_species_new[auxiii])
             {   
-                if(auxiii == 7) printf("COUNT_SPECIES:%d  MAX COUNT:%d\n",count_species[auxiii], max_count[auxiii] );
+                if(auxiii == 7) printf("COUNT_SPECIES:%d  MAX COUNT:%d\n",count_species[auxiii], count_species_new[auxiii] );
                 count_species_new[auxiii] = count_species[auxiii];
                 max_gen[auxiii]=0;
             }
@@ -571,7 +573,7 @@ int main(int argc, char *argv[]) {
     limites_y ();
     limites_z();
 
-    cria_primeira_grid (NUM_LINHAS, max_gen);
+    cria_primeira_grid (NUM_LINHAS,count_species, count_species_new, max_gen);
     //verifica_max (max_gen, 0);
     comunica_entre_processos (grid_even, sub_x, sub_y, sub_z, cart_comm);
 
@@ -651,7 +653,7 @@ int main(int argc, char *argv[]) {
             {
                 if(count_species[auxiii] > count_species_new[auxiii])
                 {   
-                    if(auxiii == 7) printf("COUNT_SPECIES:%d  MAX COUNT:%d\n",count_species[auxiii], max_count[auxiii] );
+                    if(auxiii == 7) printf("COUNT_SPECIES:%d  MAX COUNT:%d\n",count_species[auxiii], count_species_new[auxiii] );
                     count_species_new[auxiii] = count_species[auxiii];
                     max_gen[auxiii]=gen_number;
                 }
