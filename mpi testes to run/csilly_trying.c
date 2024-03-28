@@ -23,7 +23,7 @@ char ***grid_odd;
 long count_species_local[10]={0,0,0,0,0,0,0,0,0,0};
 long count_species[10]={0,0,0,0,0,0,0,0,0,0};
 long max_count[10]={0,0,0,0,0,0,0,0,0,0};
-int max_gen[10]={0,0,0,0,0,0,0,0,0,0};
+
 
 void init_r4uni(int input_seed)
 {
@@ -183,7 +183,7 @@ void aloca_matrizes (int sub_x, int sub_y, int sub_z){
     }
 }
 
-void verifica_max (int gen_number){
+void verifica_max (char *max_gen, int gen_number){
     
     
     MPI_Reduce(count_species_local, count_species, sizeof (count_species), MPI_INT, MPI_SUM, 0, MPI_COMM_WORLD);
@@ -193,11 +193,11 @@ void verifica_max (int gen_number){
     }*/
 
     if (rank == 0){
-        for(int x=1; x < 10; x++)
+        for(int x=0; x < 9; x++)
         {
-            if(count_species[x] > max_count[x])
+            if(count_species[x+1] > max_count[x])
             {   
-                max_count[x] = count_species[x];
+                max_count[x] = count_species[x+1];
                 max_gen[x]=gen_number;
             }
         }    
@@ -246,8 +246,6 @@ void cria_primeira_grid (int NUM_LINHAS){
         }
         varrimento_y = 1;
     }
-
-    verifica_max (0);
 }
 
 void comunica_entre_processos (char ***data_send, int sub_x, int sub_y, int sub_z, MPI_Comm cart_comm){
@@ -480,6 +478,7 @@ void rules(int sub_x ,int sub_y, int sub_z , char ***grid_new, char ***grid_old)
 int main(int argc, char *argv[]) {
 
     int number_of_gens;
+    int max_gen[9]={0,0,0,0,0,0,0,0,0};
 
     number_of_gens = atoi (argv[1]);
     NUM_LINHAS = atoi (argv[2]);
@@ -526,8 +525,9 @@ int main(int argc, char *argv[]) {
     limites_z();
 
     cria_primeira_grid (NUM_LINHAS);
+    verifica_max (max_gen, 0);
     comunica_entre_processos (grid_even, sub_x, sub_y, sub_z, cart_comm);
-    
+
     if (rank == 0){
         //printf ("Gen = 0\n");
         for(int auxi=1; auxi < 10; auxi++)
@@ -591,7 +591,7 @@ int main(int argc, char *argv[]) {
         }
         MPI_Barrier(MPI_COMM_WORLD);
         
-        verifica_max (gen_number);  
+        verifica_max ( max_gen ,gen_number);  
 
         
       
@@ -599,7 +599,7 @@ int main(int argc, char *argv[]) {
 
 
     if (rank == 0){
-        for(int auxi=1; auxi < 10; auxi++)
+        for(int auxi=0; auxi < 9; auxi++)
         {
             printf("%d \n",  max_gen[auxi]);
         }
