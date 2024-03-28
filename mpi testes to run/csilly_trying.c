@@ -547,7 +547,7 @@ int main(int argc, char *argv[]) {
             rules (sub_x, sub_y, sub_z, grid_odd, grid_even);
             comunica_entre_processos (grid_odd, sub_x, sub_y, sub_z, cart_comm);
 
-            if(rank==0)
+            if(rank==1)
             {
                 for(int auxi_x=1; auxi_x<3; auxi_x++)
                 {
