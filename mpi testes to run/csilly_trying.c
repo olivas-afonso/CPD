@@ -342,7 +342,7 @@ void comunica_entre_processos (char ***data_send, int sub_x, int sub_y, int sub_
 * funcao: verifica os vizinhos no caso da celula ter estado morta na geracao anterior
 *
 ************************************************************************************************/
-int death_rule(int N, char *** grid, long aux_x, long aux_y, long aux_z)
+int death_rule(char *** grid, long aux_x, long aux_y, long aux_z)
 {
 
     long search_x, search_y, search_z;
@@ -432,7 +432,7 @@ int life_rule (char *** grid, long aux_x, long aux_y, long aux_z){
 * funcao: corre as funcoes relativas às regras dependendo do valor que a celula tem
 *
 ************************************************************************************************/
-void rules(int sub_y, int sub_z , char ***grid_new, char ***grid_old)
+void rules(int sub_x ,int sub_y, int sub_z , char ***grid_new, char ***grid_old)
 {
     long aux_x, aux_y, aux_z;
 
@@ -522,10 +522,10 @@ int main(int argc, char *argv[]) {
         }
 
         if (gen_number % 2 == 1){
-            //rules (sub_x, sub_y, sub_z, number_of_gens, grid_odd, grid_even);
+            rules (sub_x, sub_y, sub_z, number_of_gens, grid_odd, grid_even);
         }   
         else{
-            //rules (sub_x, sub_y, sub_z, number_of_gens, grid_even, grid_odd);
+            rules (sub_x, sub_y, sub_z, number_of_gens, grid_even, grid_odd);
         }
 
         verifica_max (gen_number);  
