@@ -181,7 +181,7 @@ void aloca_matrizes (int sub_x, int sub_y, int sub_z){
 void verifica_max (int gen_number){
     
     MPI_Reduce(count_species_local, count_species, sizeof (count_species), MPI_INT, MPI_SUM, 0, MPI_COMM_WORLD);
-    //MPI_Barrier(MPI_COMM_WORLD);
+    MPI_Barrier(MPI_COMM_WORLD);
     /*for (int x=1; x< 10; ++x){
         printf ("X=%d Cnt=%d\n", x, count_species[x]);
     }*/
@@ -359,9 +359,9 @@ int death_rule(char *** grid, long aux_x, long aux_y, long aux_z)
         {
             for(search_x=aux_x-1, x=0; x< 3;x++, search_x++)
             {
-                if ((int)grid [search_z][search_y][search_x] != 0){       
+                if ((int)(grid[search_z][search_y][search_x]) != 0){       
                     ++cont_rule;                
-                    cont_species_death[grid[search_z][search_y][search_x]]++;
+                    cont_species_death[(int)(grid[search_z][search_y][search_x])]++;
                 }
                 
                 if (cont_rule >10){
@@ -409,7 +409,7 @@ int life_rule (char *** grid, long aux_x, long aux_y, long aux_z){
             for(search_x= aux_x-1, x=0; x< 3; x++, search_x++)
             {
                 //verifica se o vizinho está vivo
-                if (grid [search_z][search_y][search_x] != 0){       
+                if ((int)(grid [search_z][search_y][search_x]) != 0){       
                     ++cont_rule;
                 }
                 // (OTIMIZACAO) se já tem vizinhos suficientes para permanecer morta sai da funcao
@@ -449,7 +449,7 @@ void rules(int sub_x ,int sub_y, int sub_z , char ***grid_new, char ***grid_old)
             {
                 for(aux_x=1; aux_x<= sub_x; aux_x++)
                 {
-                    if(grid_old[aux_z][aux_y][aux_x]==0) // morto 
+                    if((int)(grid_old[aux_z][aux_y][aux_x])==0) // morto 
                     { 
                         grid_new[aux_z][aux_y][aux_x]= death_rule(grid_old, aux_x, aux_y, aux_z);
                     }
