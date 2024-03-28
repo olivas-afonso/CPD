@@ -226,7 +226,7 @@ void cria_primeira_grid (int NUM_LINHAS){
                   valor_aux = 0;
                 }
 
-                if (init_>=limite_inf_x && init_x<limite_sup_x && flag_z == 1 && flag_y == 1 ){
+                if (init_x>=limite_inf_x && init_x<limite_sup_x && flag_z == 1 && flag_y == 1 ){
                     grid_even[varrimento_z-1][varrimento_y-1][varrimento_x] = valor_aux;
                     count_species_local[valor_aux]++;
                     ++varrimento_x;
