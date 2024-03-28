@@ -1,6 +1,11 @@
-sub_div_x[2] = [2, 2, 1]
-sub_div_y [2] = [2, 3]
-sub_div_z [2] = [2, 3]
+sub_div_x[2] = [2, 2, 1];
+sub_div_y [2] = [2, 3];
+sub_div_z [2] = [2, 3];
+
+int limite_inf_x;
+int limite_inf_y;
+int limite_inf_z;
+
 
 void limites_x (){
     if (coodernada de x do pc == 0){
@@ -82,9 +87,3 @@ for (x...){
     varrimento_y = 0;
 }
     
-
-        for (z...)            
-            if (z>=limite_inf_z && z<limite_sup_z)
-                
-                    
-                        = 
