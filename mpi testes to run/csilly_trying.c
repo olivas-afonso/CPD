@@ -383,7 +383,7 @@ int main(int argc, char *argv[]) {
     
     if (rank == 0)
         for (int i= 1; i<10; ++ i){
-            printf ("Specie = %d Max Count = %d\n", i , max_count[i]);
+            printf ("Specie = %d Max Count = %d\n", i , count_species[i]);
         }
     /*
     for (int i=0; i< number_of_gens; ++ i){
