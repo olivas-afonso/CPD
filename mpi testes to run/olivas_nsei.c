@@ -253,7 +253,7 @@ void cria_primeira_grid (int NUM_LINHAS,int * max_gen){
     printf ("X=%d Cnt=%d\n", x, count_species[x]);
 }*/
 
-    if (rank == 0){
+    
         for(int auxiii=1; auxiii < 10; auxiii++)
         {
             if(count_species[auxiii] > max_count[auxiii])
@@ -262,7 +262,7 @@ void cria_primeira_grid (int NUM_LINHAS,int * max_gen){
                 max_gen[auxiii]=0;
             }
         }    
-    }
+    
 
 
 }
@@ -633,7 +633,7 @@ int main(int argc, char *argv[]) {
         printf ("X=%d Cnt=%d\n", x, count_species[x]);
     }*/
 
-        if (rank == 0){
+       
             for(int auxiii=1; auxiii < 10; auxiii++)
             {
                 if(count_species[auxiii] > max_count[auxiii])
@@ -642,7 +642,7 @@ int main(int argc, char *argv[]) {
                     max_gen[auxiii]=gen_number;
                 }
             }    
-        }
+        
     }
 
 
