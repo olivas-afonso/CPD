@@ -337,6 +337,7 @@ int main(int argc, char *argv[]) {
     
     varrimento_y = 1;
 }
+/*
 if(rank == 0)
  {
     for (int auxz=0; auxz < (sub_z+2); auxz++)
@@ -352,6 +353,7 @@ if(rank == 0)
         }
     }
  } 
+ */
 
 
 MPI_Barrier(MPI_COMM_WORLD);
@@ -380,12 +382,6 @@ MPI_Barrier(cart_comm);
     My_MPI_Cart_Shift(cart_comm, 2, 1, 0, -1, -1, 1, &dir_baixo_frente_rank, &esq_cima_tras_rank); // FACE TRAS/CIMA
     My_MPI_Cart_Shift(cart_comm, 2, 1, 0, 1, -1, 1, &esq_baixo_frente_rank, &dir_cima_tras_rank); // FACE TRAS/CIMA
 
-    
-
-    MPI_Sendrecv(&data_send[0][0][1], 1, MPI_CHAR, esq_rank, 0, &data_send[0][0][3], 1, MPI_CHAR, dir_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir
-    MPI_Sendrecv(&data_send[0][0][2], 1, MPI_CHAR, dir_rank, 0, &data_send[0][0][0], 1, MPI_CHAR, esq_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir
-    MPI_Sendrecv(&data_send[0][1][1], 1, MPI_CHAR, esq_rank, 0, &data_send[0][1][3], 1, MPI_CHAR, dir_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir
-    MPI_Sendrecv(&data_send[0][1][2], 1, MPI_CHAR, dir_rank, 0, &data_send[0][1][0], 1, MPI_CHAR, esq_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir
 
     /*
     MPI_Sendrecv(&data_send[1][1][sub_x], 1, MPI_INT, dir_baixo_tras_rank, 0, &data_send[sub_z+1][sub_y+1][0], 1, MPI_INT, esq_cima_frente_rank, 0, cart_comm, MPI_STATUS_IGNORE); // AR dir cima
@@ -486,10 +482,9 @@ MPI_Barrier(cart_comm);
     //--------------------------------------DEBUG-----------------------------------------------
     MPI_Barrier(MPI_COMM_WORLD);
     MPI_Barrier(cart_comm);
-    /*
+    
     if(rank==0)
     {
-        printf("RANK: %d    SUB_Z: %d   SUB_Y: %d   SUB_X:  %d\n",rank, sub_z, sub_y, sub_x);
             //MPI_Cart_coords(cart_comm, rank, 3, my_coords);
         for(aux_z=0;aux_z<(sub_z+2);aux_z++)
         {
@@ -505,7 +500,7 @@ MPI_Barrier(cart_comm);
 
         }
     }
-    */
+    
 
    
     freeMatrix((sub_y+2), (sub_z+2));
