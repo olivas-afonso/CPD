@@ -152,7 +152,7 @@ int main(int argc, char *argv[]) {
 	
     //printf("Todas as combinações possíveis de três inteiros cujo produto é %d:\n", x);
 
-    int maior_linha = 0, maior_linha_prev = 24 ;
+    int maior_linha = 0, maior_linha_prev = x ;
     int a, b, c;
 	int a_final, b_final, c_final;
 	
