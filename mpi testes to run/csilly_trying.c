@@ -185,9 +185,9 @@ void aloca_matrizes (int sub_x, int sub_y, int sub_z){
 
 void verifica_max (int *max_gen, int gen_number){
     
-    
+    MPI_Barrier(MPI_COMM_WORLD);
     MPI_Reduce(count_species_local, count_species, sizeof (count_species), MPI_INT, MPI_SUM, 0, MPI_COMM_WORLD);
-    
+    MPI_Barrier(MPI_COMM_WORLD);
     /*for (int x=1; x< 10; ++x){
         printf ("X=%d Cnt=%d\n", x, count_species[x]);
     }*/
@@ -590,8 +590,7 @@ int main(int argc, char *argv[]) {
             rules (sub_x, sub_y, sub_z, grid_even, grid_odd);
             comunica_entre_processos (grid_even, sub_x, sub_y, sub_z, cart_comm);
         }
-        MPI_Barrier(MPI_COMM_WORLD);
-        
+               
         verifica_max ( max_gen ,gen_number);  
     }
 
