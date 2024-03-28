@@ -2,7 +2,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <mpi.h>
+//#include <mpi.h>
 
 int rank, size;
 int my_coords[3];
