@@ -326,7 +326,7 @@ int main(int argc, char *argv[]) {
 
             if (init_z>=limite_inf_x && init_z<limite_sup_x && flag_x == 1 && flag_y == 1 ){
 
-                data_send[varrimento_x-1][varrimento_y-1][varrimento_z] = valor_aux;
+                data_send[varrimento_x-1][varrimento_y-1][varrimento_z] = (int)valor_aux;
                   //printf("VALORES A ENTRAR %d, pos_x = %d, pos_y = %d, pos_z = %d \n", data_send[varrimento_x-1][varrimento_y-1][varrimento_z], varrimento_x-1, varrimento_y-1, varrimento_z);
                  ++varrimento_z;
             }
@@ -379,10 +379,10 @@ MPI_Barrier(cart_comm);
 
     
 
-    if(rank==0) MPI_Sendrecv(&data_send[0][0][1], 1, MPI_CHAR, esq_rank, 0, &data_send[0][0][3], 1, MPI_CHAR, dir_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir
+    MPI_Sendrecv(&data_send[0][0][1], 1, MPI_CHAR, esq_rank, 0, &data_send[0][0][3], 1, MPI_CHAR, dir_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir
     MPI_Sendrecv(&data_send[0][0][2], 1, MPI_CHAR, dir_rank, 0, &data_send[0][0][0], 1, MPI_CHAR, esq_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir
     MPI_Sendrecv(&data_send[0][1][1], 1, MPI_CHAR, esq_rank, 0, &data_send[0][1][3], 1, MPI_CHAR, dir_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir
-    MPI_Sendrecv(&data_send[0][1][2], 1,MPI_CHAR, dir_rank, 0, &data_send[0][1][0], 1, MPI_CHAR, esq_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir
+    MPI_Sendrecv(&data_send[0][1][2], 1, MPI_CHAR, dir_rank, 0, &data_send[0][1][0], 1, MPI_CHAR, esq_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir
 
     /*
     MPI_Sendrecv(&data_send[1][1][sub_x], 1, MPI_INT, dir_baixo_tras_rank, 0, &data_send[sub_z+1][sub_y+1][0], 1, MPI_INT, esq_cima_frente_rank, 0, cart_comm, MPI_STATUS_IGNORE); // AR dir cima
