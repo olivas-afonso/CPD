@@ -282,10 +282,6 @@ int main(int argc, char *argv[]) {
         data_send[i] = (char **)malloc(((sub_y+2)) * sizeof(char *));
         for (int j = 0; j < (sub_y+2); ++j) {
             data_send[i][j] = (char *)malloc(((sub_x+2)) * sizeof(char));
-            for(int k = 0; k < (sub_x+2); k++)
-            {
-                data_send[i][j][k]=0;
-            }
             
         }
     }
