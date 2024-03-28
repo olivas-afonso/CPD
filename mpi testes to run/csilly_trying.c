@@ -185,7 +185,7 @@ void aloca_matrizes (int sub_x, int sub_y, int sub_z){
 
 void verifica_max (int gen_number){
     
-
+    MPI_Barrier(MPI_COMM_WORLD);
     MPI_Reduce(count_species_local, count_species, sizeof (count_species), MPI_INT, MPI_SUM, 0, MPI_COMM_WORLD);
     MPI_Barrier(MPI_COMM_WORLD);
     /*for (int x=1; x< 10; ++x){
@@ -524,24 +524,18 @@ int main(int argc, char *argv[]) {
 
     cria_primeira_grid (NUM_LINHAS);
     comunica_entre_processos (grid_even, sub_x, sub_y, sub_z, cart_comm);
-    //verifica_max (0);
-     if (rank == 0){
-        printf ("Gen = 0\n");
+    
+    if (rank == 0 && gen_number == 0){
+        printf ("Gen = %d\n", gen_number);
         for(int auxi=1; auxi < 10; auxi++)
         {
-            printf("%d %ld %d \n", auxi, max_count[auxi], max_gen[auxi]);
+         printf("%d %ld %d \n", auxi, max_count[auxi], max_gen[auxi]);
         }
     }
-    
+
     for (int gen_number = 1; gen_number<= number_of_gens; ++ gen_number){
 
-        if (rank == 0 && gen_number == 0){
-            printf ("Gen = %d\n", gen_number);
-            for(int auxi=1; auxi < 10; auxi++)
-            {
-                printf("%d %ld %d \n", auxi, max_count[auxi], max_gen[auxi]);
-            }
-        }
+        
        
         for (int auxi = 0; auxi < 10; ++auxi){
             count_species_local[auxi]=0;  
