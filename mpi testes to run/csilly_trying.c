@@ -192,7 +192,7 @@ void verifica_max (int gen_number){
         printf ("X=%d Cnt=%d\n", x, count_species[x]);
     }*/
 
-    if (rank == 0)
+    if (rank == 0){
         for(int x=1; x < 10; x++)
         {
             if(count_species[x] > max_count[x])
@@ -200,7 +200,8 @@ void verifica_max (int gen_number){
                 max_count[x] = count_species[x];
                 max_gen[x]=gen_number;
             }
-        }
+        }    
+    }
 }
 
 void cria_primeira_grid (int NUM_LINHAS){
@@ -533,6 +534,13 @@ int main(int argc, char *argv[]) {
     }
     
     for (int gen_number = 1; gen_number<= number_of_gens; ++ gen_number){
+
+        if (rank == 0){
+            printf ("Gen = %d\n", gen_number);
+            for(int auxi=1; auxi < 10; auxi++)
+            {
+                printf("%d %ld %d \n", auxi, max_count[auxi], max_gen[auxi]);
+        }
        
         for (int auxi = 0; auxi < 10; ++auxi){
             count_species_local[auxi]=0;  
@@ -549,12 +557,7 @@ int main(int argc, char *argv[]) {
         
         verifica_max (gen_number);  
 
-        if (rank == 0){
-        printf ("Gen = %d\n", gen_number);
-        for(int auxi=1; auxi < 10; auxi++)
-        {
-            printf("%d %ld %d \n", auxi, max_count[auxi], max_gen[auxi]);
-        }
+        
       }
     }
 
