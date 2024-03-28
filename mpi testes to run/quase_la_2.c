@@ -265,6 +265,7 @@ int main(int argc, char *argv[]) {
     }
 
     int valor_aux=0;
+	int rank_val=0;
 
     limites_x ();
     limites_y ();
@@ -293,8 +294,8 @@ int main(int argc, char *argv[]) {
              if(r4_uni() < density)
                     {
                         // preenchimento initial do grid_even dependendo da seed
-                        valor_aux = 1000 * rank; // preenchimento initial do grid_even dependendo da see
-                        valor_aux = valor_aux + (int)(r4_uni() * N_SPECIES) + 1; // preenchimento initial do grid_even dependendo da see
+                        //valor_aux = (int) (1000 * rank); // preenchimento initial do grid_even dependendo da see
+                        valor_aux = (int)(r4_uni() * N_SPECIES) + 1; // preenchimento initial do grid_even dependendo da see
                     }else{
                         valor_aux = 0;
                     }
@@ -302,8 +303,10 @@ int main(int argc, char *argv[]) {
             if (init_z>=limite_inf_x && init_z<limite_sup_x && flag_x == 1 && flag_y == 1 ){
 
                 data_send[varrimento_x-1][varrimento_y-1][varrimento_z] = valor_aux;
-                  //printf("VALORES A ENTRAR %d, pos_x = %d, pos_y = %d, pos_z = %d \n", data_send[varrimento_x-1][varrimento_y-1][varrimento_z], varrimento_x-1, varrimento_y-1, varrimento_z);
-                 ++varrimento_z;
+                if(rank == 0)
+					printf("RANK: %d VALORES A ENTRAR %d, pos_x = %d, pos_y = %d, pos_z = %d \n", rank,data_send[varrimento_x-1][varrimento_y-1][varrimento_z], varrimento_x-1, varrimento_y-1, varrimento_z);
+                
+				++varrimento_z;
             }
         }
         //printf ("RANK :%d   Varrimento = %d\n",rank, varrimento_z);

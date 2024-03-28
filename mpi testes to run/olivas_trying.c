@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <mpi.h>
+#include <string.h>
 
 int rank, size;
 int my_coords[3];
@@ -149,11 +150,17 @@ int main(int argc, char *argv[]) {
     int varrimento_z = 1;
     int flag_y=0,flag_x=0;
 
+    char erro[9999];
+    int *tam;
+
+       MPI_Status status;
+
     
 
     seed = 100;
     density=.4;
     init_r4uni(seed);
+    MPI_Request request;
 
 	MPI_Init(&argc, &argv);
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
@@ -330,6 +337,9 @@ int main(int argc, char *argv[]) {
     
     varrimento_y = 1;
 }
+
+MPI_Barrier(MPI_COMM_WORLD);
+MPI_Barrier(cart_comm);
 /*
  if(rank == 2)
  {
@@ -351,7 +361,7 @@ int main(int argc, char *argv[]) {
     int vert_esq_cima_frente, vert_dir_baixo_tras, vert_dir_cima_frente, vert_esq_baixo_tras;
     int vert_esq_cima_tras, vert_dir_baixo_frente, vert_dir_cima_tras, vert_esq_baixo_frente;
 
-    int aux_x, aux_y, aux_z;
+    int aux_x=0, aux_y=0, aux_z=0;
     int data_recv_up, data_recv_left, data_recv_right, data_recv_forward, data_recv_backward;
     My_MPI_Cart_Shift(cart_comm, 2, 1, 0, 1, 0, 1, &esq_baixo_rank, &dir_cima_rank); // DIAG DIR CIMA/ ESQ BAIXO
     My_MPI_Cart_Shift(cart_comm, 2, 1, 0, 1, 1, 0, &esq_tras_rank, &dir_frente_rank); // DIAG DIR CIMA/ ESQ BAIXO
@@ -369,6 +379,7 @@ int main(int argc, char *argv[]) {
 
     
 
+    
 
     
     MPI_Sendrecv(&data_send[1][1][sub_x], 1, MPI_INT, dir_baixo_tras_rank, 0, &data_send[sub_z+1][sub_y+1][0], 1, MPI_INT, esq_cima_frente_rank, 0, cart_comm, MPI_STATUS_IGNORE); // AR dir cima
@@ -383,7 +394,7 @@ int main(int argc, char *argv[]) {
 
     for( aux_z=0; aux_z < sub_z; aux_z++)
     {
-        
+        if (rank==0) printf("%d %d %d\n", aux_z, aux_y, aux_z);
         //FACE DIREITA DIAGS
         MPI_Sendrecv(&data_send[aux_z+1][1][1], 1, MPI_INT, esq_tras_rank, 0, &data_send[aux_z+1][sub_y+1][sub_x+1], 1, MPI_INT, dir_frente_rank, 0, cart_comm, MPI_STATUS_IGNORE); // AR dir cima
         MPI_Sendrecv(&data_send[aux_z+1][sub_y][1], 1, MPI_INT, esq_frente_rank, 0, &data_send[aux_z+1][0][sub_x+1], 1, MPI_INT, dir_tras_rank, 0, cart_comm, MPI_STATUS_IGNORE); // AR dir baixo
@@ -395,20 +406,18 @@ int main(int argc, char *argv[]) {
         
         for (aux_y=0; aux_y<sub_y; aux_y++)
         {
+             if (rank==0)  printf("SAO ESTES: %d %d %d\n", aux_z, aux_y, aux_z);
             //FACE DIREITA 
-            MPI_Sendrecv(&data_send[aux_z+1][aux_y+1][1], 1, MPI_INT, esq_rank, 0, &data_send[aux_z+1][aux_y+1][sub_x+1], 1, MPI_INT, dir_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir
-            if(rank == 1)
-            {
-                printf("VALOR ENVIAR %d \n", data_send[aux_z+1][aux_y+1][1]);
-                printf("VALOR GUARDAR %d \n", data_send[aux_z+1][aux_y+1][sub_x+1]);
-            } 
-            //FACE ESQUERDA
+            //MPI_Sendrecv(&data_send[aux_z+1][aux_y+1][1], 1, MPI_INT, esq_rank, 0, &data_send[aux_z+1][aux_y+1][sub_x+1], 1, MPI_INT, dir_rank, 0, cart_comm, &status); // face dir
+            MPI_Isend(&data_send[aux_z+1][aux_y+1][1], 1, MPI_INT, esq_rank, 0, cart_comm, &request);
+            MPI_Recv(&data_send[aux_z+1][aux_y+1][sub_x+1], 1, MPI_INT, dir_rank, 0, cart_comm, MPI_STATUS_IGNORE);
+            //FACE ESQUERDA 
             MPI_Sendrecv(&data_send[aux_z+1][aux_y+1][sub_x], 1, MPI_INT, dir_rank, 0, &data_send[aux_z+1][aux_y+1][0], 1, MPI_INT, esq_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir
 
         }
         for(aux_x=0; aux_x<sub_x; aux_x++)
         {
-
+             if (rank==0)  printf("%d %d %d\n", aux_z, aux_y, aux_z);
             //FACE FRENTE
             MPI_Sendrecv(&data_send[aux_z+1][1][aux_x+1], 1, MPI_INT, tras_rank, 0, &data_send[aux_z+1][sub_y+1][aux_x+1], 1, MPI_INT, frente_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir   
             
@@ -420,6 +429,7 @@ int main(int argc, char *argv[]) {
     
     for (aux_y=0; aux_y<sub_y; aux_y++)
     {
+         if (rank==0)  printf("%d %d %d\n", aux_z, aux_y, aux_z);
         //FACE CIMA DIAGS
         MPI_Sendrecv(&data_send[1][aux_y+1][sub_x],1, MPI_INT, dir_baixo_rank, 0, &data_send[sub_z+1][aux_y+1][0], 1, MPI_INT, esq_cima_rank, 0, cart_comm, MPI_STATUS_IGNORE); // AR esq baixo
         MPI_Sendrecv(&data_send[1][aux_y+1][1], 1, MPI_INT, esq_baixo_rank, 0, &data_send[sub_z+1][aux_y+1][sub_x+1], 1, MPI_INT, dir_cima_rank, 0, cart_comm, MPI_STATUS_IGNORE); // AR dir cima
@@ -430,6 +440,7 @@ int main(int argc, char *argv[]) {
 
         for(aux_x=0; aux_x<sub_x; aux_x++)
         {
+             if (rank==0)  printf("%d %d %d\n", aux_z, aux_y, aux_z);
             //FACE CIMA
             MPI_Sendrecv(&data_send[1][aux_y+1][aux_x+1], 1, MPI_INT, baixo_rank, 0, &data_send[sub_z+1][aux_y+1][aux_x+1], 1, MPI_INT, cima_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir  
             
@@ -440,6 +451,7 @@ int main(int argc, char *argv[]) {
 
     for(aux_x=0; aux_x<sub_x; aux_x++)
     {
+         if (rank==0)  printf("%d %d %d\n", aux_z, aux_y, aux_z);
         //FACE FRENTE DIAGS
         MPI_Sendrecv(&data_send[sub_z][1][aux_x+1], 1, MPI_INT, tras_cima_rank, 0, &data_send[0][sub_y+1][aux_x+1], 1, MPI_INT, frente_baixo_rank, 0, cart_comm, MPI_STATUS_IGNORE); // AR esq baixo
         MPI_Sendrecv(&data_send[1][1][aux_x+1], 1, MPI_INT, tras_baixo_rank, 0, &data_send[sub_z+1][sub_y+1][aux_x+1], 1, MPI_INT, frente_cima_rank, 0, cart_comm, MPI_STATUS_IGNORE); // AR dir cima
@@ -450,7 +462,8 @@ int main(int argc, char *argv[]) {
     }
 
     //--------------------------------------DEBUG-----------------------------------------------
-    /*
+    MPI_Barrier(MPI_COMM_WORLD);
+    MPI_Barrier(cart_comm);
     if(rank==0)
     {
         printf("RANK: %d    SUB_Z: %d   SUB_Y: %d   SUB_X:  %d\n",rank, sub_z, sub_y, sub_x);
@@ -470,25 +483,7 @@ int main(int argc, char *argv[]) {
         }
     }
 
-    if(rank==1)
-    {
-        printf("RANK: %d    SUB_Z: %d   SUB_Y: %d   SUB_X:  %d\n",rank, sub_z, sub_y, sub_x);
-            //MPI_Cart_coords(cart_comm, rank, 3, my_coords);
-        for(aux_z=0;aux_z<(sub_z+2);aux_z++)
-        {
-            printf("CAMADA %d\n", aux_z);
-            for(aux_y=0;aux_y<(sub_y+2);aux_y++)
-            {
-                for(aux_x=0;aux_x<(sub_x+2); aux_x++)
-                {
-                     printf("%d ",data_send[aux_z][aux_y][aux_x]);
-                }
-                printf("\n");       
-            }
-
-        }
-    }
-    */
+   
     freeMatrix((sub_y+2), (sub_z+2));
 
     free(sub_divz_x);
