@@ -348,7 +348,7 @@ int death_rule(char *** grid, long aux_x, long aux_y, long aux_z)
 
     long search_x, search_y, search_z;
     long aux_search_y, aux_search_z;
-    long cont_species_death[9]={0,0,0,0,0,0,0,0,0};
+    long cont_species_death[10]={0,0,0,0,0,0,0,0,0,0};
     int cont_rule=0;
     int max=0, max_pos=0, i;
     int x,y,z;
@@ -361,7 +361,7 @@ int death_rule(char *** grid, long aux_x, long aux_y, long aux_z)
             {
                 if (grid [search_z][search_y][search_x] != 0){       
                     ++cont_rule;                
-                    //cont_species_death[grid[search_z][search_y][search_x]-1]++;
+                    cont_species_death[grid[search_z][search_y][search_x]]++;
                 }
                 
                 if (cont_rule >10){
@@ -373,10 +373,10 @@ int death_rule(char *** grid, long aux_x, long aux_y, long aux_z)
     
      if ( cont_rule >= 7 && cont_rule <= 10 )
     {
-        max=cont_species_death[0];
+        max=0;
         
         max_pos=0;
-        for(i=1; i <9;i++ )
+        for(i=1; i <10;i++ )
         {
             if(cont_species_death[i]>max)
             {
@@ -385,7 +385,7 @@ int death_rule(char *** grid, long aux_x, long aux_y, long aux_z)
             }      
         }
 
-        return max_pos+1;
+        return max_pos;
     }
     else return 0; 
 }
