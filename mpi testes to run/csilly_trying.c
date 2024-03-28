@@ -195,9 +195,9 @@ void verifica_max (int *max_gen, int gen_number){
     if (rank == 0){
         for(int x=0; x < 9; x++)
         {
-            if(count_species[x+1] > max_count[x])
+            if(count_species[x+1] > max_count[x+1])
             {   
-                max_count[x] = count_species[x+1];
+                max_count[x+1] = count_species[x+1];
                 max_gen[x]=gen_number;
             }
         }    
