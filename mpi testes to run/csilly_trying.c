@@ -199,6 +199,8 @@ int main(int argc, char *argv[]) {
     int a_final, b_final, c_final;
     divide_em_tres (&a_final, &b_final, &c_final, size);
 
+    printf ("A_final = %d B_final = %d C_final = %d\n", a_final, b_final, c_final);
+    fflush (stdout);
 
     sub_divz_z= (int *)malloc( a_final * sizeof(int)); 
     sub_divz_y= (int *)malloc( b_final * sizeof(int)); 
