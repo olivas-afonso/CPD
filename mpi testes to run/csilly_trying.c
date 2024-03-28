@@ -13,12 +13,12 @@ float density;
 unsigned int seed;
 #define N_SPECIES 9
 
-//#define NUM_LINHAS 7
-
-
 int *sub_divz_z;
 int *sub_divz_y;
 int *sub_divz_x;
+
+char ***grid_even;
+char ***grid_odd;
 
 void init_r4uni(int input_seed)
 {
@@ -82,8 +82,6 @@ void limites_z (){
     }
 }
 
-
-
 void divide_number_parts(int number, int divide, int * sub_div) {
 
     int part_size, remainder;
@@ -104,9 +102,6 @@ void divide_number_parts(int number, int divide, int * sub_div) {
     }
 }
 
-
-
-
 void My_MPI_Cart_Shift(MPI_Comm cart_comm, int pos_x, int pos_y,int pos_z, int dist_x, int dist_y,int dist_z, int *source, int*dest)
 {
     MPI_Comm_rank(cart_comm, &rank);
@@ -124,39 +119,10 @@ void My_MPI_Cart_Shift(MPI_Comm cart_comm, int pos_x, int pos_y,int pos_z, int d
     MPI_Cart_rank(cart_comm, my_coords, source);
 }
 
-int main(int argc, char *argv[]) {
-
-    int NUM_LINHAS;
-    NUM_LINHAS= atoi (argv[1]);
-
-    int varrimento_x = 1;
-    int varrimento_y = 1;
-    int varrimento_z = 1;
-    int flag_y=0,flag_x=0;
-
-    
-
-    seed = 100;
-    density=.4;
-    init_r4uni(seed);
-
-	MPI_Init(&argc, &argv);
-    MPI_Comm_rank(MPI_COMM_WORLD, &rank);
-    MPI_Comm_size(MPI_COMM_WORLD, &size);
-
-
-	int x = size;
-    /*printf("Digite um inteiro x: ");
-    scanf("%d", &x);
-	*/ 
-	
-    //printf("Todas as combinações possíveis de três inteiros cujo produto é %d:\n", x);
-
-    int maior_linha = 0, maior_linha_prev = 24 ;
+void divide_em_tres (int *a_final, int *b_final, int *c_final, int size){
+    int maior_linha = 0, maior_linha_prev = x;
     int a, b, c;
-	int a_final, b_final, c_final;
-	
-
+    int x = size;
     for (a = 1; a <= x; a++) {
         if (x % a == 0) {
             for (b = a; b <= x / a; b++) {
@@ -180,9 +146,9 @@ int main(int argc, char *argv[]) {
                     // Atualizar os menores números encontrados até agora
                     if (maior_linha < maior_linha_prev) {
                       //  printf("entrou\n");
-						a_final = a;
-                        b_final = b;
-                        c_final = c;
+						*a_final = a;
+                        *b_final = b;
+                        *c_final = c;
 						maior_linha_prev = maior_linha;
                     }
 					maior_linha = 0;
@@ -191,88 +157,84 @@ int main(int argc, char *argv[]) {
         }
     }
 
-    //printf("A combinação com o maior menor número é: %d * %d * %d\n", a_final, b_final, c_final);
+}
 
-	
-   
-    // FALTA A DIVISAO DOS PROCESSADORES
+void aloca_matrizes (void){
+    grid_even = (char ***)malloc((sub_z+2) * sizeof(char **));
+    grid_odd = (char ***)malloc((sub_z+2) * sizeof(char **));
+    for (int i = 0; i < (sub_z+2); ++i) {
+        grid_even[i] = (char **)malloc(((sub_y+2)) * sizeof(char *));
+        grid_odd[i] = (char **)malloc(((sub_y+2)) * sizeof(char *));
+        for (int j = 0; j < (sub_y+2); ++j) {
+            grid_even[i][j] = (char *)malloc(((sub_x+2)) * sizeof(char));
+            grid_odd[i][j] = (char *)malloc(((sub_x+2)) * sizeof(char)); 
+        }
+    }
+}
+
+int main(int argc, char *argv[]) {
+
+    int NUM_LINHAS;
+    int number_of_gens;
+
+    number_of_gens = atoi (argv[1]);
+    NUM_LINHAS = atoi (argv[2]);
+    density = atof (argv[3]);
+    seed = atoi (argv[4]);
+
+
+    int varrimento_x = 1;
+    int varrimento_y = 1;
+    int varrimento_z = 1;
+    int flag_y=0,flag_x=0;
+
+    init_r4uni(seed);
+
+	MPI_Init(&argc, &argv);
+    MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+    MPI_Comm_size(MPI_COMM_WORLD, &size);
+
+    int a_final, b_final, c_final;
+    divide_em_tres (&a_final, &b_final, &c_final, size);
+
+
     sub_divz_z= (int *)malloc( a_final * sizeof(int)); 
-    /*
-    for(int k=0; k<2; k++)
-    {
-        sub_divz_z[k]=aux_z_size[k];
-    }
-    */
-
     sub_divz_y= (int *)malloc( b_final * sizeof(int)); 
-
-    /*
-    for(int k=0; k<2; k++)
-    {
-        sub_divz_y[k]=aux_y_size[k];
-    }
-    */
-
     sub_divz_x= (int *)malloc( c_final* sizeof(int)); 
 
-    /*
-    for(int k=0; k<3; k++)
-    {
-        sub_divz_x[k]=aux_x_size[k];
-    }
-    */
-
-	
-
-   divide_number_parts(NUM_LINHAS,  a_final, sub_divz_z);
-   divide_number_parts(NUM_LINHAS,  b_final, sub_divz_y);
-   divide_number_parts(NUM_LINHAS,  c_final, sub_divz_x);
+    divide_number_parts(NUM_LINHAS,  a_final, sub_divz_z);
+    divide_number_parts(NUM_LINHAS,  b_final, sub_divz_y);
+    divide_number_parts(NUM_LINHAS,  c_final, sub_divz_x);
 
   
     //printf("SIZE %d\n", size);
     int count=0;
     //Cartesiano : 
     int dims[3] = { a_final, b_final, c_final};  // ISTO TEM DE VIR DOS INTEIROS QUE MULTIPLICAM O Nº PROCESSO
-    //ACHO QUE TEM DE SER SEMPRE OS MESMOS 3 EIXOS ^^
+    //ACHO QUE TEM DE SER SEMPRE OS MESMOS 3 EIXOS 
     int periods[3] = {1, 1, 1};  // Enable wraparound
     MPI_Comm cart_comm;
     MPI_Cart_create(MPI_COMM_WORLD, 3, dims, periods, 0, &cart_comm);
 
     
-
     int cima_rank, baixo_rank, esq_rank, dir_rank, frente_rank, tras_rank;
     int dir_cima_rank, esq_baixo_rank,dir_baixo_rank, esq_cima_rank, frente_cima_rank, tras_baixo_rank;
     int frente_baixo_rank, tras_cima_rank, dir_frente_rank, esq_tras_rank, dir_tras_rank, esq_frente_rank;
     int esq_cima_frente_rank, dir_baixo_tras_rank, dir_cima_frente_rank, esq_baixo_tras_rank;
     int esq_cima_tras_rank, dir_baixo_frente_rank, dir_cima_tras_rank, esq_baixo_frente_rank;
 
-    //int sub_divz_z[my_coords[0]] = NUM_LINHAS/SUB_DIV_Z;
-    //int sub_divz_y[my_coords[1]] = SUB_DIV_Y;
-    //int sub_divz_x[my_coords[2]] = SUB_DIV_X;
-
     MPI_Cart_coords(cart_comm, rank, 3, my_coords);
     int sub_z = sub_divz_z[my_coords[0]];
     int sub_y = sub_divz_y[my_coords[1]];
     int sub_x = sub_divz_x[my_coords[2]];
 
-     char ***data_send = (char ***)malloc((sub_z+2) * sizeof(char **));
-    for (int i = 0; i < (sub_z+2); ++i) {
-        data_send[i] = (char **)malloc(((sub_y+2)) * sizeof(char *));
-        for (int j = 0; j < (sub_y+2); ++j) {
-            data_send[i][j] = (char *)malloc(((sub_x+2)) * sizeof(char));
-            
-        }
-    }
+    aloca_matrizes ();
 
     int valor_aux=0;
 
     limites_x ();
     limites_y ();
     limites_z();
-
-    //printf("RANK:%d LIMITE_X_SUP:%d LIMITE_Y_SUP:%d, LIMITE_Z_SUP:%d\n", rank, limite_sup_x, limite_sup_y, limite_sup_z );
-    //printf("RANK:%d LIMITE_X_INF:%d LIMITE_Y_INF:%d, LIMITE_Z_INF:%d\n", rank, limite_inf_x, limite_inf_y, limite_inf_z );
-    //printf("RANK:%d SUB_X:%d  SUB_Y:%d, SUB_Z:%d\n", rank, sub_x, sub_y, sub_z);
 
     for (int init_x=0; init_x < NUM_LINHAS; init_x++){
     if (init_x >= limite_inf_z && init_x<limite_sup_z){
@@ -300,7 +262,7 @@ int main(int argc, char *argv[]) {
 
             if (init_z>=limite_inf_x && init_z<limite_sup_x && flag_x == 1 && flag_y == 1 ){
 
-                data_send[varrimento_x-1][varrimento_y-1][varrimento_z] = valor_aux;
+                grid_even[varrimento_x-1][varrimento_y-1][varrimento_z] = valor_aux;
                   //printf("VALORES A ENTRAR %d, pos_x = %d, pos_y = %d, pos_z = %d \n", data_send[varrimento_x-1][varrimento_y-1][varrimento_z], varrimento_x-1, varrimento_y-1, varrimento_z);
                  ++varrimento_z;
             }
