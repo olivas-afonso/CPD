@@ -21,7 +21,7 @@ char ***grid_even;
 char ***grid_odd;
 
 long count_species_local[10]={0,0,0,0,0,0,0,0,0,0};
-long count_species[10]={0,0,0,0,0,0,0,0,0,0};
+
 //long max_count[10]={0,0,0,0,0,0,0,0,0,0};
 
 
