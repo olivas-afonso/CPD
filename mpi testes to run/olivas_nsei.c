@@ -633,16 +633,18 @@ int main(int argc, char *argv[]) {
         printf ("X=%d Cnt=%d\n", x, count_species[x]);
     }*/
 
-       
+        if(rank==0)
+        {
             for(int auxiii=1; auxiii < 10; auxiii++)
             {
                 if(count_species[auxiii] > max_count[auxiii])
                 {   
+                    if(auxiii == 7) printf("SPECIES:%d  MAX COUNT:%d\n",count_species[auxiii], max_count[auxiii] )
                     max_count[auxiii] = count_species[auxiii];
                     max_gen[auxiii]=gen_number;
                 }
             }    
-        
+        }
     }
 
 
