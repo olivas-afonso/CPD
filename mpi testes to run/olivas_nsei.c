@@ -22,6 +22,7 @@ char ***grid_odd;
 
 long count_species_local[10]={0,0,0,0,0,0,0,0,0,0};
 long count_species[10]={0,0,0,0,0,0,0,0,0,0};
+long max_count[10]={0,0,0,0,0,0,0,0,0,0};
 
 
 void init_r4uni(int input_seed)
@@ -188,7 +189,7 @@ void verifica_max (int *max_gen, int gen_number){
     
     /*for (int x=1; x< 10; ++x){
         printf ("X=%d Cnt=%d\n", x, count_species[x]);
-    }
+    }*/
 
     if (rank == 0){
         for(int x=1; x < 10; x++)
@@ -200,10 +201,9 @@ void verifica_max (int *max_gen, int gen_number){
             }
         }    
     }
-    */
 }
 
-void cria_primeira_grid (int NUM_LINHAS,int * max_gen, long *max_count){
+void cria_primeira_grid (int NUM_LINHAS,int * max_gen){
     int varrimento_x = 1;
     int varrimento_y = 1;
     int varrimento_z = 1;
@@ -252,6 +252,10 @@ void cria_primeira_grid (int NUM_LINHAS,int * max_gen, long *max_count){
 /*for (int x=1; x< 10; ++x){
     printf ("X=%d Cnt=%d\n", x, count_species[x]);
 }*/
+    for(int x=0; x<10; x++)
+    {
+        max_count[x]=0;
+    }
 
     
         for(int auxiii=1; auxiii < 10; auxiii++)
@@ -519,8 +523,6 @@ int main(int argc, char *argv[]) {
 
     int number_of_gens = 0;
     int max_gen[10]={0,0,0,0,0,0,0,0,0,0};
-    long max_count[10]={0,0,0,0,0,0,0,0,0,0};
-
 
     number_of_gens = atoi (argv[1]);
     NUM_LINHAS = atoi (argv[2]);
@@ -564,7 +566,7 @@ int main(int argc, char *argv[]) {
     limites_y ();
     limites_z();
 
-    cria_primeira_grid (NUM_LINHAS, max_gen, max_count);
+    cria_primeira_grid (NUM_LINHAS, max_gen);
     //verifica_max (max_gen, 0);
     comunica_entre_processos (grid_even, sub_x, sub_y, sub_z, cart_comm);
 
