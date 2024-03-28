@@ -143,6 +143,7 @@ int main(int argc, char *argv[]) {
 
     int NUM_LINHAS;
     NUM_LINHAS= atoi (argv[1]);
+    printf("OI\n");
 
     int varrimento_x = 1;
     int varrimento_y = 1;
