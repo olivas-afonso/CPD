@@ -451,7 +451,7 @@ void rules(int sub_x ,int sub_y, int sub_z , char ***grid_new, char ***grid_old)
         
         for(aux_z=1; aux_z<= sub_z; aux_z ++)
         {   
-            if (rank == 0)
+            //if (rank == 0)
                 //printf ("ENTREI EM Z\n");
             for(aux_y=1; aux_y<= sub_y; aux_y++)
             {
@@ -564,7 +564,7 @@ int main(int argc, char *argv[]) {
         
 
         if (gen_number % 2 == 1){
-            if(rank==1)printf("ENTROU\n");
+            
             rules (sub_x, sub_y, sub_z, grid_odd, grid_even);
             comunica_entre_processos (grid_odd, sub_x, sub_y, sub_z, cart_comm);
             MPI_Barrier(MPI_COMM_WORLD);
