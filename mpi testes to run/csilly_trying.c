@@ -221,7 +221,6 @@ void cria_primeira_grid (int NUM_LINHAS){
         varrimento_y = 1;
     }
 
-    MPI_Barrier (MPI_COMM_WORLD);
     MPI_Allreduce(count_species_local, count_species, 1, MPI_INT, MPI_SUM, MPI_COMM_WORLD);
 
     for(int x=1; x < 10; x++)
@@ -383,7 +382,7 @@ int main(int argc, char *argv[]) {
     
     if (rank == 0)
         for (int i= 1; i<10; ++ i){
-            printf ("Specie = %d Max Count = %d\n", i , count_species[i]);
+            printf ("Specie = %d Max Count = %d\n", i , max_count[i]);
         }
     /*
     for (int i=0; i< number_of_gens; ++ i){
