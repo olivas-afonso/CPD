@@ -555,7 +555,7 @@ int main(int argc, char *argv[]) {
 
     for (int gen_number = 1; gen_number<= number_of_gens; ++ gen_number){
 
-        
+        if(rank==1)printf("ENTROU\n");
        
         for (int auxi = 0; auxi < 10; ++auxi){
             count_species_local[auxi]=0;  
