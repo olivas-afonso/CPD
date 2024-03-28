@@ -182,9 +182,9 @@ void verifica_max (int gen_number){
     
     MPI_Reduce(count_species_local, count_species, sizeof (count_species), MPI_INT, MPI_SUM, 0, MPI_COMM_WORLD);
      
-    for (int x=1; x< 10; ++x){
+    /*for (int x=1; x< 10; ++x){
         printf ("X=%d Cnt=%d\n", x, count_species[x]);
-    }
+    }*/
 
     for(int x=1; x < 10; x++)
     {
@@ -441,11 +441,11 @@ void rules(int sub_x ,int sub_y, int sub_z , char ***grid_new, char ***grid_old)
     //{
         //#pragma omp for schedule (dynamic)
         
-        for(aux_z=1; aux_z< sub_z; aux_z ++)
+        for(aux_z=1; aux_z<= sub_z; aux_z ++)
         {
-            for(aux_y=1; aux_y< sub_y; aux_y++)
+            for(aux_y=1; aux_y<= sub_y; aux_y++)
             {
-                for(aux_x=1; aux_x< sub_x; aux_x++)
+                for(aux_x=1; aux_x<= sub_x; aux_x++)
                 {
                     if(grid_old[aux_z][aux_y][aux_x]==0) // morto 
                     { 
@@ -514,7 +514,7 @@ int main(int argc, char *argv[]) {
 
     cria_primeira_grid (NUM_LINHAS);
     comunica_entre_processos (grid_even, sub_x, sub_y, sub_z, cart_comm);
-    verifica_max (0);
+    //verifica_max (0);
     
     
     for (int gen_number = 1; gen_number< number_of_gens; ++ gen_number){
@@ -533,6 +533,14 @@ int main(int argc, char *argv[]) {
         //MPI_Barrier(MPI_COMM_WORLD);
         verifica_max (gen_number);  
         comunica_entre_processos (grid_even, sub_x, sub_y, sub_z, cart_comm);
+
+        if (rank == 0){
+        printf ("Gen = %d\n", gen_number);
+        for(int auxi=1; auxi < 10; auxi++)
+        {
+            printf("%d %ld %d \n", auxi, max_count[auxi], max_gen[auxi]);
+        }
+    }
     }
 
 
