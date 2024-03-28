@@ -394,6 +394,23 @@ MPI_Barrier(cart_comm);
     MPI_Sendrecv(&data_send[sub_z][1][sub_x], 1, MPI_INT, dir_cima_tras_rank, 0, &data_send[0][sub_y+1][0], 1, MPI_INT, esq_baixo_frente_rank, 0, cart_comm, MPI_STATUS_IGNORE);
     MPI_Sendrecv(&data_send[1][sub_y][1], 1, MPI_INT, esq_baixo_frente_rank, 0, &data_send[sub_z+1][0][sub_x+1], 1, MPI_INT, dir_cima_tras_rank, 0, cart_comm, MPI_STATUS_IGNORE);
 */
+for( aux_z=0; aux_z < sub_z; aux_z++)
+    {
+        for (aux_y=0; aux_y<sub_y; aux_y++)
+        {
+            MPI_Sendrecv(&data_send[aux_z+1][aux_y+1][1], 1, MPI_INT, esq_rank, 0, &data_send[aux_z+1][aux_y+1][sub_x+1], 1, MPI_INT, dir_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir
+        }
+    }
+
+for( aux_z=0; aux_z < sub_z; aux_z++)
+    {
+        for (aux_y=0; aux_y<sub_y; aux_y++)
+        {
+            MPI_Sendrecv(&data_send[aux_z+1][aux_y+1][sub_x], 1, MPI_INT, dir_rank, 0, &data_send[aux_z+1][aux_y+1][0], 1, MPI_INT, esq_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir
+        }
+    }
+
+
     for( aux_z=0; aux_z < sub_z; aux_z++)
     {
         /*
