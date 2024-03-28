@@ -555,7 +555,7 @@ int main(int argc, char *argv[]) {
 
     for (int gen_number = 1; gen_number<= number_of_gens; ++ gen_number){
 
-        if(rank==1)printf("ENTROU\n");
+        
        
         for (int auxi = 0; auxi < 10; ++auxi){
             count_species_local[auxi]=0;  
@@ -564,6 +564,7 @@ int main(int argc, char *argv[]) {
         
 
         if (gen_number % 2 == 1){
+            if(rank==1)printf("ENTROU\n");
             rules (sub_x, sub_y, sub_z, grid_odd, grid_even);
             comunica_entre_processos (grid_odd, sub_x, sub_y, sub_z, cart_comm);
             MPI_Barrier(MPI_COMM_WORLD);
