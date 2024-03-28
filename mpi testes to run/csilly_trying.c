@@ -533,6 +533,23 @@ int main(int argc, char *argv[]) {
         }
     }
 
+    if(rank==1)
+            {
+                for(int auxi_x=1; auxi_x<3; auxi_x++)
+                {
+                    printf("CAMADA ODD\n");
+                    for(int auxi_y=1; auxi_y<3; auxi_y++)
+                    {
+                        for(int auxi_z=1; auxi_z<3; auxi_z++)
+                        {
+                            printf("%d ", grid_odd[auxi_x][auxi_y][auxi_z]);
+                        }
+                        printf("\n");
+                    } 
+                }
+            }
+            
+
     for (int gen_number = 1; gen_number<= number_of_gens; ++ gen_number){
 
         
