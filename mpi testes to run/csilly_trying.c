@@ -381,10 +381,10 @@ int main(int argc, char *argv[]) {
     cria_primeira_grid (NUM_LINHAS);
     comunica_entre_processos (grid_even, sub_x, sub_y, sub_z, cart_comm);
     
-
-    for (int i= 1; i<10; ++ i){
-        printf ("Specie = %d Max Count = %d\n", i , max_count[i]);
-    }
+    if (rank == 0)
+        for (int i= 1; i<10; ++ i){
+            printf ("Specie = %d Max Count = %d\n", i , max_count[i]);
+        }
     /*
     for (int i=0; i< number_of_gens; ++ i){
         
