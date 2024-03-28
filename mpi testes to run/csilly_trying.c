@@ -367,9 +367,9 @@ int death_rule(char *** grid, long aux_x, long aux_y, long aux_z)
         {
             for(search_x=aux_x-1, x=0; x< 3;x++, search_x++)
             {
-                if ((int)(grid[search_z][search_y][search_x]) != 0){       
+                if (grid[search_z][search_y][search_x] != 0){       
                     ++cont_rule;                
-                    cont_species_death[(int)(grid[search_z][search_y][search_x])-1]++;
+                    cont_species_death[grid[search_z][search_y][search_x]-1]++;
                 }
                 
                 if (cont_rule >10){
@@ -563,7 +563,7 @@ int main(int argc, char *argv[]) {
         if (gen_number % 2 == 1){
             rules (sub_x, sub_y, sub_z, grid_odd, grid_even);
             comunica_entre_processos (grid_odd, sub_x, sub_y, sub_z, cart_comm);
-
+            MPI_Barrier(MPI_COMM_WORLD);
             if(rank==1)
             {
                 for(int auxi_x=1; auxi_x<3; auxi_x++)
