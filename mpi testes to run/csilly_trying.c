@@ -542,13 +542,13 @@ int main(int argc, char *argv[]) {
                     {
                         for(int auxi_z=1; auxi_z<3; auxi_z++)
                         {
-                            printf("%d ", grid_odd[auxi_x][auxi_y][auxi_z]);
+                            printf("%d ", grid_even[auxi_x][auxi_y][auxi_z]);
                         }
                         printf("\n");
                     } 
                 }
             }
-            
+
 
     for (int gen_number = 1; gen_number<= number_of_gens; ++ gen_number){
 
