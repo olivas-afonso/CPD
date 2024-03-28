@@ -1,8 +1,7 @@
 #include <stdio.h>
-
-#include <stdio.h>
 #include <stdlib.h>
-//#include <mpi.h>
+#include <string.h>
+#include <mpi.h>
 
 int rank, size;
 int my_coords[3];
