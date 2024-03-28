@@ -536,12 +536,12 @@ int main(int argc, char *argv[]) {
         verifica_max (gen_number);  
         comunica_entre_processos (grid_even, sub_x, sub_y, sub_z, cart_comm);
 
-        if (rank == 0){
+        /*if (rank == 0){
         printf ("Gen = %d\n", gen_number);
         for(int auxi=1; auxi < 10; auxi++)
         {
             printf("%d %ld %d \n", auxi, max_count[auxi], max_gen[auxi]);
-        }
+        }*/
     }
     }
 
