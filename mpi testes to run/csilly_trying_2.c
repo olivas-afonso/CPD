@@ -175,7 +175,7 @@ void aloca_matrizes (int sub_x, int sub_y, int sub_z){
 int main(int argc, char *argv[]) {
 	
 	printf("Comeca...\n");
-/*
+
     int NUM_LINHAS;
     int number_of_gens;
 
@@ -208,6 +208,7 @@ int main(int argc, char *argv[]) {
     divide_number_parts(NUM_LINHAS,  b_final, sub_divz_y);
     divide_number_parts(NUM_LINHAS,  c_final, sub_divz_x);
 
+/*
   
     //printf("SIZE %d\n", size);
     int count=0;
@@ -408,9 +409,9 @@ int main(int argc, char *argv[]) {
    
     
 
-
+	*/
     MPI_Finalize();
-    */
+   
 	return 0;
 	
 }
