@@ -159,6 +159,7 @@ void divide_em_tres (int *a_final, int *b_final, int *c_final, int size){
 
 }
 
+//PODE DAR PORCARIA
 void aloca_matrizes (int sub_x, int sub_y, int sub_z){
     grid_even = (char ***)malloc((sub_z+2) * sizeof(char **));
     grid_odd = (char ***)malloc((sub_z+2) * sizeof(char **));
@@ -182,7 +183,6 @@ int main(int argc, char *argv[]) {
     density = atof (argv[3]);
     seed = atoi (argv[4]);
 
-
     int varrimento_x = 1;
     int varrimento_y = 1;
     int varrimento_z = 1;
@@ -197,6 +197,8 @@ int main(int argc, char *argv[]) {
     int a_final, b_final, c_final;
     divide_em_tres (&a_final, &b_final, &c_final, size);
 
+    printf ("A_final = %d B_final = %d C_final = %d\n", a_final, b_final, c_final);
+    fflush (stdout);
 
     sub_divz_z= (int *)malloc( a_final * sizeof(int)); 
     sub_divz_y= (int *)malloc( b_final * sizeof(int)); 
@@ -276,12 +278,12 @@ int main(int argc, char *argv[]) {
 
     
  
-    
-
+       int aux_x, aux_y, aux_z; 
+    /*
     int vert_esq_cima_frente, vert_dir_baixo_tras, vert_dir_cima_frente, vert_esq_baixo_tras;
     int vert_esq_cima_tras, vert_dir_baixo_frente, vert_dir_cima_tras, vert_esq_baixo_frente;
 
-    int aux_x, aux_y, aux_z;
+
     int data_recv_up, data_recv_left, data_recv_right, data_recv_forward, data_recv_backward;
     My_MPI_Cart_Shift(cart_comm, 2, 1, 0, 1, 0, 1, &esq_baixo_rank, &dir_cima_rank); // DIAG DIR CIMA/ ESQ BAIXO
     My_MPI_Cart_Shift(cart_comm, 2, 1, 0, 1, -1, 0, &esq_tras_rank, &dir_frente_rank); // DIAG DIR CIMA/ ESQ BAIXO
@@ -377,27 +379,28 @@ int main(int argc, char *argv[]) {
         MPI_Sendrecv(&data_send[sub_z][sub_y][aux_x+1], 1, MPI_INT, frente_cima_rank, 0, &data_send[0][0][aux_x+1], 1, MPI_INT, tras_baixo_rank, 0, cart_comm, MPI_STATUS_IGNORE); // AR esq baixo
         MPI_Sendrecv(&data_send[1][sub_y][aux_x+1], 1, MPI_INT, frente_baixo_rank, 0, &data_send[sub_z+1][0][aux_x+1], 1, MPI_INT, tras_cima_rank, 0, cart_comm, MPI_STATUS_IGNORE); // AR dir cima
     }
-
+   
     //--------------------------------------DEBUG-----------------------------------------------
+   
     if(rank==0)
     {
         //printf("RANK: %d    SUB_Z: %d   SUB_Y: %d   SUB_X:  %d\n",rank, sub_z, sub_y, sub_x);
             //MPI_Cart_coords(cart_comm, rank, 3, my_coords)
             printf("RANK :%d\n", rank);
-        for(aux_z=0;aux_z<(sub_z+2);aux_z++)
+        for(aux_z=0;aux_z<(sub_z);aux_z++)
         {
             printf("CAMADA %d\n", aux_z);
-            for(aux_y=0;aux_y<(sub_y+2);aux_y++)
+            for(aux_y=0;aux_y<(sub_y);aux_y++)
             {
-                for(aux_x=0;aux_x<(sub_x+2); aux_x++)
+                for(aux_x=0;aux_x<(sub_x); aux_x++)
                 {
-                     printf("%d ",data_send[aux_z][aux_y][aux_x]);
+                    // printf("%d ",grid_even[aux_z+1][aux_y+1][aux_x+1]);
                 }
                 printf("\n");       
             }
 
         }
-    }
+    } */
     
 
 
@@ -408,5 +411,5 @@ int main(int argc, char *argv[]) {
 
 
     MPI_Finalize();
-    return 0;
+    return 0; 
 }
