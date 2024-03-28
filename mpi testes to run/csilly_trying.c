@@ -203,7 +203,7 @@ void cria_primeira_grid (int NUM_LINHAS){
 
     int flag_y=0,flag_z=0;
 
-    for (int init_z=0; init_x < NUM_LINHAS; init_z++){
+    for (int init_z=0; init_z < NUM_LINHAS; init_z++){
         if (init_z >= limite_inf_z && init_z<limite_sup_z){
             flag_z = 1;
             ++varrimento_z;
@@ -396,22 +396,22 @@ int main(int argc, char *argv[]) {
         }
 
         if (gen_number % 2 == 1){
-            rules (number_of_gens, grid_odd, grid_even);
+            //rules (number_of_gens, grid_odd, grid_even);
         }
             
         else{
-            rules (number_of_gens, grid_even, grid_odd);
+            //rules (number_of_gens, grid_even, grid_odd);
         }
 
         verifica_max (gen_number);  
     }  
     
-    for(auxi=1; auxi < 10; auxi++)
+    for(int auxi=1; auxi < 10; auxi++)
     {
         printf("%d %ld %d \n", auxi, max_count[auxi], max_gen[auxi]);
     }
 
-    free (sub_y; sub_z)
+    //free (sub_y, sub_z)
     
     MPI_Finalize();
     return 0; 
