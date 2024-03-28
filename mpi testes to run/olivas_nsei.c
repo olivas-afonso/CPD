@@ -21,8 +21,8 @@ char ***grid_even;
 char ***grid_odd;
 
 long count_species_local[10]={0,0,0,0,0,0,0,0,0,0};
-long count_species[10]={0,0,0,0,0,0,0,0,0,0};
-long max_count[10]={0,0,0,0,0,0,0,0,0,0};
+
+//long max_count[10]={0,0,0,0,0,0,0,0,0,0};
 
 
 void init_r4uni(int input_seed)
@@ -203,7 +203,7 @@ void verifica_max (int *max_gen, int gen_number){
     }
 }
 
-void cria_primeira_grid (int NUM_LINHAS,int * max_gen){
+void cria_primeira_grid (int NUM_LINHAS,int * count_species, int* count_species_new){
     int varrimento_x = 1;
     int varrimento_y = 1;
     int varrimento_z = 1;
@@ -254,18 +254,19 @@ void cria_primeira_grid (int NUM_LINHAS,int * max_gen){
 }*/
 if(rank==0)
 {
+    /*
     for(int x=0; x<10; x++)
     {
         max_count[x]=0;
     }
-
+*/
     
         for(int auxiii=1; auxiii < 10; auxiii++)
         {
-            if(count_species[auxiii] > max_count[auxiii])
+            if(count_species[auxiii] > count_species_new[auxiii])
             {   
                 if(auxiii == 7) printf("COUNT_SPECIES:%d  MAX COUNT:%d\n",count_species[auxiii], max_count[auxiii] );
-                max_count[auxiii] = count_species[auxiii];
+                count_species_new[auxiii] = count_species[auxiii];
                 max_gen[auxiii]=0;
             }
         }    
@@ -525,6 +526,8 @@ int main(int argc, char *argv[]) {
 
     int number_of_gens = 0;
     int max_gen[10]={0,0,0,0,0,0,0,0,0,0};
+    long count_species[10]={0,0,0,0,0,0,0,0,0,0};
+    long count_species_new[10]={0,0,0,0,0,0,0,0,0,0};
 
     number_of_gens = atoi (argv[1]);
     NUM_LINHAS = atoi (argv[2]);
@@ -646,13 +649,13 @@ int main(int argc, char *argv[]) {
         {
             for(int auxiii=1; auxiii < 10; auxiii++)
             {
-                if(count_species[auxiii] > max_count[auxiii])
+                if(count_species[auxiii] > count_species_new[auxiii])
                 {   
                     if(auxiii == 7) printf("COUNT_SPECIES:%d  MAX COUNT:%d\n",count_species[auxiii], max_count[auxiii] );
-                    max_count[auxiii] = count_species[auxiii];
+                    count_species_new[auxiii] = count_species[auxiii];
                     max_gen[auxiii]=gen_number;
                 }
-            }    
+            }  
         }
     }
 
