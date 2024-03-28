@@ -224,7 +224,7 @@ void cria_primeira_grid (int NUM_LINHAS){
     MPI_Reduce(&count_species_local, &count_species, 1, MPI_INT, MPI_SUM, 0, MPI_COMM_WORLD);
     MPI_Barrier (MPI_COMM_WORLD);
 
-    for(x=1; x < 10; x++)
+    for(int x=1; x < 10; x++)
     {
         if(count_species[x] > max_count[x])
         {
