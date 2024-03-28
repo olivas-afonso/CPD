@@ -525,6 +525,10 @@ int main(int argc, char *argv[]) {
     limites_y ();
     limites_z();
 
+    for (int i=0; i<10; ++i){
+        printf ("%d  ", max_gen[i]);
+    }
+
     cria_primeira_grid (NUM_LINHAS);
     comunica_entre_processos (grid_even, sub_x, sub_y, sub_z, cart_comm);
     
