@@ -21,6 +21,11 @@ int *sub_divz_x;
 char ***grid_even;
 char ***grid_odd;
 
+long count_species_local[10]={0,0,0,0,0,0,0,0,0,0};
+long count_species[10]={0,0,0,0,0,0,0,0,0,0};
+long max_count[10]={0,0,0,0,0,0,0,0,0,0};
+int max_gen[10];
+
 void init_r4uni(int input_seed)
 {
     seed = input_seed + 987654321;
@@ -160,7 +165,6 @@ void divide_em_tres (int *a_final, int *b_final, int *c_final, int size){
 
 }
 
-//PODE DAR PORCARIA
 void aloca_matrizes (int sub_x, int sub_y, int sub_z){
     grid_even = (char ***)malloc((sub_z+2) * sizeof(char **));
     grid_odd = (char ***)malloc((sub_z+2) * sizeof(char **));
@@ -207,7 +211,7 @@ void cria_primeira_grid (int NUM_LINHAS){
 
                 if (init_z>=limite_inf_x && init_z<limite_sup_x && flag_x == 1 && flag_y == 1 ){
                     grid_even[varrimento_x-1][varrimento_y-1][varrimento_z] = valor_aux;
-                    //printf("VALORES A ENTRAR %d, pos_x = %d, pos_y = %d, pos_z = %d \n", data_send[varrimento_x-1][varrimento_y-1][varrimento_z], varrimento_x-1, varrimento_y-1, varrimento_z);
+                    count_species_local[valor_aux]++;
                     ++varrimento_z;
                 }
             }
@@ -215,6 +219,18 @@ void cria_primeira_grid (int NUM_LINHAS){
             varrimento_z = 1;
         }
         varrimento_y = 1;
+    }
+
+    MPI_Reduce(&count_species_local, &count_species, 1, MPI_INT, MPI_SUM, 0, MPI_COMM_WORLD);
+    MPI_Barrier (MPI_COMM_WORLD);
+
+    for(x=1; x < 10; x++)
+    {
+        if(count_species[x] > max_count[x])
+        {
+            max_count[x] = count_species[x];
+            max_gen[x]=0;
+        }
     }
 }
 
@@ -316,7 +332,6 @@ void comunica_entre_processos (char ***data_send, int sub_x, int sub_y, int sub_
 
 int main(int argc, char *argv[]) {
 
-
     int number_of_gens;
 
     number_of_gens = atoi (argv[1]);
@@ -364,8 +379,17 @@ int main(int argc, char *argv[]) {
     limites_z();
 
     cria_primeira_grid (NUM_LINHAS);
-      
     comunica_entre_processos (grid_even, sub_x, sub_y, sub_z, cart_comm);
+    
+
+    for (int i= 1; i<10, ++ i){
+        printf ("Specie = %d Max Count = %d\n",x, max_count[x]);
+    }
+    /*
+    for (int i=0; i< number_of_gens; ++ i){
+        
+    }*/
+        
     //--------------------------------------DEBUG-----------------------------------------------
    
     if(rank==0)

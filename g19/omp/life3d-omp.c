@@ -8,8 +8,8 @@
 char *** grid_even;
 char *** grid_odd;
 unsigned int seed;
-long count_species[10]={0,0,0,0,0,0,0,0,0,0};
 
+long count_species[10]={0,0,0,0,0,0,0,0,0,0};
 long max_count[10]={0,0,0,0,0,0,0,0,0,0};
 int max_gen[10];
 
