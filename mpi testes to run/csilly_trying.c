@@ -528,7 +528,7 @@ int main(int argc, char *argv[]) {
             rules (sub_x, sub_y, sub_z, grid_even, grid_odd);
         }
         
-        MPI_Barrier(MPI_COMM_WORLD);
+        //MPI_Barrier(MPI_COMM_WORLD);
         verifica_max (gen_number);  
     }
 
