@@ -197,7 +197,6 @@ void verifica_max (int *max_gen, int gen_number){
             if(count_species[x] > max_count[x])
             {   
                 max_count[x] = count_species[x];
-                printf("maximos iniciais: %d\n", max_count[x]);
                 max_gen[x]=gen_number;
             }
         }    
@@ -531,6 +530,24 @@ int main(int argc, char *argv[]) {
     NUM_LINHAS = atoi (argv[2]);
     density = atof (argv[3]);
     seed = atoi (argv[4]);
+
+    int contagem_ger[N_SPECIES][number_of_gens] = {0}
+    int sporting_para_o_olivas_falar =0;
+
+    for(int cont1=0; cont1 < N_SPECIES; cont1++){
+        for(int cont2=0; cont2 < number_of_gens; cont2++){
+            contagem_ger[cont1][cont2] = sporting_para_o_olivas_falar;
+            sporting_para_o_olivas_falar++;
+        }
+    }
+
+
+    for(cont1=0; cont1 < N_SPECIES; cont1++){
+        for(cont2=0; cont2 < number_of_gens; cont2++){
+            ptintf(" %d ",contagem_ger[cont1][cont2]);
+        }
+        ptintf("\n");
+    }
 
     init_r4uni(seed);
 
