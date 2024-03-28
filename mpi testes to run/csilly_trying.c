@@ -440,7 +440,7 @@ void rules(int sub_x ,int sub_y, int sub_z , char ***grid_new, char ***grid_old)
     //{
         //#pragma omp for schedule (dynamic)
         
-        for(aux_x=1; aux_x< sub_x; aux_x ++)
+        for(aux_x=1; aux_x<  sub_x; aux_x ++)
         {
             for(aux_y=1; aux_y< sub_y; aux_y++)
             {
