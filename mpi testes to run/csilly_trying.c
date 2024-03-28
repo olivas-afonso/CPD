@@ -185,7 +185,8 @@ void aloca_matrizes (int sub_x, int sub_y, int sub_z){
 
 void verifica_max (int *max_gen, int gen_number){
     MPI_Barrier(MPI_COMM_WORLD);
-    MPI_Reduce(count_species_local, count_species, sizeof (count_species), MPI_INT, MPI_SUM, 0, MPI_COMM_WORLD);
+    memset (count_species, 0 ,sizeof(count_species));
+    MPI_Allreduce(count_species_local, count_species, sizeof (count_species), MPI_INT, MPI_SUM, MPI_COMM_WORLD);
     MPI_Barrier(MPI_COMM_WORLD);
     /*for (int x=1; x< 10; ++x){
         printf ("X=%d Cnt=%d\n", x, count_species[x]);
@@ -201,7 +202,6 @@ void verifica_max (int *max_gen, int gen_number){
             }
         }    
     }
-
 }
 
 void cria_primeira_grid (int NUM_LINHAS){
@@ -367,7 +367,7 @@ int death_rule(char *** grid, long aux_x, long aux_y, long aux_z)
             {
                 if (grid[search_z][search_y][search_x] != 0){       
                     ++cont_rule;                
-                    cont_species_death[(int)grid[search_z][search_y][search_x]-1]++;
+                    cont_species_death[grid[search_z][search_y][search_x]-1]++;
                 }
                 
                 if (cont_rule >10){
@@ -382,7 +382,7 @@ int death_rule(char *** grid, long aux_x, long aux_y, long aux_z)
         max=cont_species_death[0];
         
         max_pos=0;
-        for(i=0; i <9;i++)
+        for(i=0; i <9;i++ )
         {
             if(cont_species_death[i]>max)
             {
