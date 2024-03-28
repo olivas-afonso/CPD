@@ -382,8 +382,8 @@ int main(int argc, char *argv[]) {
     comunica_entre_processos (grid_even, sub_x, sub_y, sub_z, cart_comm);
     
 
-    for (int i= 1; i<10, ++ i){
-        printf ("Specie = %d Max Count = %d\n",x, max_count[x]);
+    for (int i= 1; i<10; ++ i){
+        printf ("Specie = %d Max Count = %d\n",x, max_count[i]);
     }
     /*
     for (int i=0; i< number_of_gens; ++ i){
