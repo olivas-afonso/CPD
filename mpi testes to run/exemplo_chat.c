@@ -18,7 +18,8 @@ int main(int argc, char** argv) {
     // Inicializando o array local com valores específicos para cada processo
     for (int i = 0; i < N; i++) {
         local_array[i] = (rank + 1) * (i + 1); // Por exemplo, processo 0: [1, 2, 3, 4, 5], processo 1: [2, 4, 6, 8, 10], etc.
-    }
+		//printf("Array inicial: %d\n", local_array[i]);
+	}
 
     // Array para armazenar o resultado da redução
     int global_array[N];
