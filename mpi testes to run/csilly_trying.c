@@ -539,13 +539,14 @@ int main(int argc, char *argv[]) {
 
         if (gen_number % 2 == 1){
             rules (sub_x, sub_y, sub_z, grid_odd, grid_even);
+            comunica_entre_processos (grid_odd, sub_x, sub_y, sub_z, cart_comm);
         }   
         else{
             rules (sub_x, sub_y, sub_z, grid_even, grid_odd);
+            comunica_entre_processos (grid_even, sub_x, sub_y, sub_z, cart_comm);
         }
         
         verifica_max (gen_number);  
-        comunica_entre_processos (grid_even, sub_x, sub_y, sub_z, cart_comm);
 
         if (rank == 0){
         printf ("Gen = %d\n", gen_number);
