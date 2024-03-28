@@ -196,7 +196,7 @@ void verifica_max (int gen_number){
         for(int x=1; x < 10; x++)
         {
             if(count_species[x] > max_count[x])
-            {
+            {   
                 max_count[x] = count_species[x];
                 max_gen[x]=gen_number;
             }
@@ -535,7 +535,7 @@ int main(int argc, char *argv[]) {
     
     for (int gen_number = 1; gen_number<= number_of_gens; ++ gen_number){
 
-        if (rank == 0){
+        if (rank == 0 && gen_number == 0){
             printf ("Gen = %d\n", gen_number);
             for(int auxi=1; auxi < 10; auxi++)
             {
