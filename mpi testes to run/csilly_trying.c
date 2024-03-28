@@ -533,7 +533,7 @@ int main(int argc, char *argv[]) {
         }
     }
 
-    if(rank==2)
+    if(rank==5)
             {
                 for(int auxi_x=1; auxi_x<3; auxi_x++)
                 {
@@ -564,7 +564,7 @@ int main(int argc, char *argv[]) {
             rules (sub_x, sub_y, sub_z, grid_odd, grid_even);
             comunica_entre_processos (grid_odd, sub_x, sub_y, sub_z, cart_comm);
             MPI_Barrier(MPI_COMM_WORLD);
-            if(rank==2)
+            if(rank==5)
             {
                 for(int auxi_x=1; auxi_x<3; auxi_x++)
                 {
