@@ -277,54 +277,9 @@ int main(int argc, char *argv[]) {
     limites_y ();
     limites_z();
 
-<<<<<<< HEAD
     cria_primeira_grid ();
       
     int aux_x, aux_y, aux_z; 
-=======
-    for (int init_x=0; init_x < NUM_LINHAS; init_x++){
-    if (init_x >= limite_inf_z && init_x<limite_sup_z){
-        flag_x = 1;
-        ++varrimento_x;
-    }
-    else flag_x=0;
-    
-    for (int init_y=0; init_y < NUM_LINHAS; init_y++){
-        if (init_y>=limite_inf_y && init_y<limite_sup_y){
-            flag_y = 1;
-            ++varrimento_y;
-        }
-        else flag_y=0;
-
-        for (int init_z=0; init_z < NUM_LINHAS; init_z++){
-            
-             if(r4_uni() < density)
-                    {
-                        // preenchimento initial do grid_even dependendo da seed
-                        valor_aux = (int)(r4_uni() * N_SPECIES) + 1; // preenchimento initial do grid_even dependendo da see
-                    }else{
-                        valor_aux = 0;
-                    }
-
-            if (init_z>=limite_inf_x && init_z<limite_sup_x && flag_x == 1 && flag_y == 1 ){
-
-                grid_even[varrimento_x-1][varrimento_y-1][varrimento_z] = valor_aux;
-                  //printf("VALORES A ENTRAR %d, pos_x = %d, pos_y = %d, pos_z = %d \n", grid_even[varrimento_x-1][varrimento_y-1][varrimento_z], varrimento_x-1, varrimento_y-1, varrimento_z);
-                 ++varrimento_z;
-            }
-        }
-        //printf ("RANK :%d   Varrimento = %d\n",rank, varrimento_z);
-        varrimento_z = 1;
-    }
-    
-    varrimento_y = 1;
-}
-
-    
- 
-       int aux_x, aux_y, aux_z; 
-    
->>>>>>> 72925b93c7ac74f4af15a3fad6acb0b1bd5099f6
     int vert_esq_cima_frente, vert_dir_baixo_tras, vert_dir_cima_frente, vert_esq_baixo_tras;
     int vert_esq_cima_tras, vert_dir_baixo_frente, vert_dir_cima_tras, vert_esq_baixo_frente;
 
