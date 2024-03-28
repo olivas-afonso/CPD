@@ -185,6 +185,7 @@ void aloca_matrizes (int sub_x, int sub_y, int sub_z){
 
 void verifica_max (int *max_gen, int gen_number){
     MPI_Barrier(MPI_COMM_WORLD);
+    memset (count_species, 0 ,sizeof(count_species));
     MPI_Allreduce(count_species_local, count_species, sizeof (count_species), MPI_INT, MPI_SUM, MPI_COMM_WORLD);
     MPI_Barrier(MPI_COMM_WORLD);
     /*for (int x=1; x< 10; ++x){
