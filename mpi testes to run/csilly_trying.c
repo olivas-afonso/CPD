@@ -173,7 +173,12 @@ void aloca_matrizes (int sub_x, int sub_y, int sub_z){
     }
 }
 
-void cria_primeira_grid (){
+void cria_primeira_grid (int NUM_LINHAS){
+    int varrimento_x = 1;
+    int varrimento_y = 1;
+    int varrimento_z = 1;
+    int flag_y=0,flag_x=0;
+
     for (int init_x=0; init_x < NUM_LINHAS; init_x++){
     if (init_x >= limite_inf_z && init_x<limite_sup_z){
         flag_x = 1;
@@ -221,11 +226,6 @@ int main(int argc, char *argv[]) {
     NUM_LINHAS = atoi (argv[2]);
     density = atof (argv[3]);
     seed = atoi (argv[4]);
-
-    int varrimento_x = 1;
-    int varrimento_y = 1;
-    int varrimento_z = 1;
-    int flag_y=0,flag_x=0;
 
     init_r4uni(seed);
 
@@ -277,7 +277,7 @@ int main(int argc, char *argv[]) {
     limites_y ();
     limites_z();
 
-    cria_primeira_grid ();
+    cria_primeira_grid (NUM_LINHAS);
       
     int aux_x, aux_y, aux_z; 
     int vert_esq_cima_frente, vert_dir_baixo_tras, vert_dir_cima_frente, vert_esq_baixo_tras;
