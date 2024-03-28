@@ -337,7 +337,7 @@ int main(int argc, char *argv[]) {
     varrimento_y = 1;
 }
 
-MPI_BARRIER(MPI_COMM_WORLD);
+MPI_Barrier(MPI_COMM_WORLD);
 /*
  if(rank == 2)
  {
