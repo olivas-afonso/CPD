@@ -276,12 +276,12 @@ int main(int argc, char *argv[]) {
 
     
  
-    
+       int aux_x, aux_y, aux_z; 
     /*
     int vert_esq_cima_frente, vert_dir_baixo_tras, vert_dir_cima_frente, vert_esq_baixo_tras;
     int vert_esq_cima_tras, vert_dir_baixo_frente, vert_dir_cima_tras, vert_esq_baixo_frente;
 
-    int aux_x, aux_y, aux_z;
+
     int data_recv_up, data_recv_left, data_recv_right, data_recv_forward, data_recv_backward;
     My_MPI_Cart_Shift(cart_comm, 2, 1, 0, 1, 0, 1, &esq_baixo_rank, &dir_cima_rank); // DIAG DIR CIMA/ ESQ BAIXO
     My_MPI_Cart_Shift(cart_comm, 2, 1, 0, 1, -1, 0, &esq_tras_rank, &dir_frente_rank); // DIAG DIR CIMA/ ESQ BAIXO
@@ -379,6 +379,7 @@ int main(int argc, char *argv[]) {
     }
     */
     //--------------------------------------DEBUG-----------------------------------------------
+   
     if(rank==0)
     {
         //printf("RANK: %d    SUB_Z: %d   SUB_Y: %d   SUB_X:  %d\n",rank, sub_z, sub_y, sub_x);
@@ -391,7 +392,7 @@ int main(int argc, char *argv[]) {
             {
                 for(aux_x=0;aux_x<(sub_x); aux_x++)
                 {
-                     printf("%d ",data_send[aux_z+1][aux_y+1][aux_x+1]);
+                     printf("%d ",grid_even[aux_z+1][aux_y+1][aux_x+1]);
                 }
                 printf("\n");       
             }
