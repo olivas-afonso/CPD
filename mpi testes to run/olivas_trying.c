@@ -142,7 +142,7 @@ void My_MPI_Cart_Shift(MPI_Comm cart_comm, int pos_x, int pos_y,int pos_z, int d
 int main(int argc, char *argv[]) {
 
     int NUM_LINHAS;
-    NUM_LINHAS= atoi (argv[1]);
+    NUM_LINHAS= 4;
     printf("OI\n");
 
     int varrimento_x = 1;
