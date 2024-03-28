@@ -542,8 +542,8 @@ int main(int argc, char *argv[]) {
     }
 
 
-    for(cont1=0; cont1 < N_SPECIES; cont1++){
-        for(cont2=0; cont2 < number_of_gens; cont2++){
+    for(int cont3 = 0; cont1 < N_SPECIES; cont1++){
+        for(int cont 3 =0; cont2 < number_of_gens; cont2++){
             ptintf(" %d ",contagem_ger[cont1][cont2]);
         }
         ptintf("\n");
