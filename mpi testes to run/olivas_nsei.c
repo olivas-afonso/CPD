@@ -22,7 +22,6 @@ char ***grid_odd;
 
 long count_species_local[10]={0,0,0,0,0,0,0,0,0,0};
 long count_species[10]={0,0,0,0,0,0,0,0,0,0};
-long max_count[10]={0,0,0,0,0,0,0,0,0,0};
 
 
 void init_r4uni(int input_seed)
@@ -203,7 +202,7 @@ void verifica_max (int *max_gen, int gen_number){
     }
 }
 
-void cria_primeira_grid (int NUM_LINHAS,int * max_gen){
+void cria_primeira_grid (int NUM_LINHAS,int * max_gen, long *max_count){
     int varrimento_x = 1;
     int varrimento_y = 1;
     int varrimento_z = 1;
@@ -513,8 +512,14 @@ void freeMatrix(int sub_y, int sub_z) {
 
 int main(int argc, char *argv[]) {
 
+    MPI_Init(&argc, &argv);
+    MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+    MPI_Comm_size(MPI_COMM_WORLD, &size);
+
     int number_of_gens = 0;
     int max_gen[10]={0,0,0,0,0,0,0,0,0,0};
+    long max_count[10]={0,0,0,0,0,0,0,0,0,0};
+
 
     number_of_gens = atoi (argv[1]);
     NUM_LINHAS = atoi (argv[2]);
@@ -523,9 +528,7 @@ int main(int argc, char *argv[]) {
 
     init_r4uni(seed);
 
-	MPI_Init(&argc, &argv);
-    MPI_Comm_rank(MPI_COMM_WORLD, &rank);
-    MPI_Comm_size(MPI_COMM_WORLD, &size);
+	
 
     int a_final, b_final, c_final;
     divide_em_tres (&a_final, &b_final, &c_final, size);
