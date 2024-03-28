@@ -221,10 +221,9 @@ void cria_primeira_grid (int NUM_LINHAS){
         varrimento_y = 1;
     }
 
-    MPI_Barrier (MPI_COMM_WORLD);
     MPI_Allreduce(count_species_local, count_species, 1, MPI_INT, MPI_SUM, MPI_COMM_WORLD);
 
-    for(int x=0; x < 10; x++)
+    for(int x=1; x < 10; x++)
     {
         if(count_species[x] > max_count[x])
         {
