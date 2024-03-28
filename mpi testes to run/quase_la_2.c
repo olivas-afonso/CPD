@@ -303,8 +303,10 @@ int main(int argc, char *argv[]) {
             if (init_z>=limite_inf_x && init_z<limite_sup_x && flag_x == 1 && flag_y == 1 ){
 
                 data_send[varrimento_x-1][varrimento_y-1][varrimento_z] = valor_aux;
-                printf("RANK: %d VALORES A ENTRAR %d, pos_x = %d, pos_y = %d, pos_z = %d \n", rank,data_send[varrimento_x-1][varrimento_y-1][varrimento_z], varrimento_x-1, varrimento_y-1, varrimento_z);
-                 ++varrimento_z;
+                if(rank == 0)
+					printf("RANK: %d VALORES A ENTRAR %d, pos_x = %d, pos_y = %d, pos_z = %d \n", rank,data_send[varrimento_x-1][varrimento_y-1][varrimento_z], varrimento_x-1, varrimento_y-1, varrimento_z);
+                
+				++varrimento_z;
             }
         }
         //printf ("RANK :%d   Varrimento = %d\n",rank, varrimento_z);
