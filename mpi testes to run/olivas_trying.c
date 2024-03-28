@@ -337,7 +337,7 @@ int main(int argc, char *argv[]) {
     
     varrimento_y = 1;
 }
-if(rank == 2)
+if(rank == 0)
  {
     for (int auxz=0; auxz < (sub_z+2); auxz++)
     {
