@@ -528,7 +528,7 @@ int main(int argc, char *argv[]) {
     verifica_max (max_gen, 0);
     comunica_entre_processos (grid_even, sub_x, sub_y, sub_z, cart_comm);
 
-    if (rank == 0){
+    /*if (rank == 0){
         //printf ("Gen = 0\n");
         for(int auxi=1; auxi < 10; auxi++)
         {
@@ -552,6 +552,7 @@ int main(int argc, char *argv[]) {
                 }
             }
 
+    */
 
     for (int gen_number = 1; gen_number<= number_of_gens; ++ gen_number){
 
@@ -592,16 +593,14 @@ int main(int argc, char *argv[]) {
         MPI_Barrier(MPI_COMM_WORLD);
         
         verifica_max ( max_gen ,gen_number);  
-
-        
-      
     }
 
 
     if (rank == 0){
-        for(int auxi=0; auxi < 9; auxi++)
+        //printf ("Gen = 0\n");
+        for(int auxi=1; auxi < 10; auxi++)
         {
-            printf("%d \n",  max_gen[auxi]);
+          printf("%d %ld %d \n", auxi, max_count[auxi], max_gen[auxi-1]);
         }
     }
 
