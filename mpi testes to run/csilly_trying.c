@@ -53,17 +53,18 @@ void limites_x (){
 }
 
 void limites_y (){
-  
-        
-    for (int i = sizeof (sub_divz_y [i]); i >= my_coords[1]; -- i){
-        limite_sup_y = limite_sup_y + sub_divz_y [i];
-    }
-
-    if (my_coords[1] == sizeof (sub_divz_y [i]){
+    if (my_coords[1] == 0){
         limite_inf_y = 0; 
     }
-    for (int i = sizeof (sub_divz_y [i]); i>= my_coords[1]-1; --i){
-        limite_inf_y = limite_inf_y + limite_inf_y [i];
+        
+    else{
+        for (int i = 0; i <= my_coords[1] -1; ++ i){
+            limite_inf_y = limite_inf_y + sub_divz_y [i];
+        }
+    }
+
+    for (int i = 0; i<= my_coords[1]; ++i){
+        limite_sup_y = limite_sup_y + sub_divz_y [i];
     }
 }
 
@@ -436,6 +437,14 @@ int main(int argc, char *argv[]) {
         }
     }
     
+
+
+    
+
+   
+    
+
+
     MPI_Finalize();
     return 0;
 }
