@@ -547,18 +547,22 @@ int main(int argc, char *argv[]) {
             rules (sub_x, sub_y, sub_z, grid_odd, grid_even);
             comunica_entre_processos (grid_odd, sub_x, sub_y, sub_z, cart_comm);
 
-            for(int auxi_x=1, auxi_x<3; auxi_x++)
+            if(rank==0)
             {
-                printf("CAMADA ODD\n");
-                for(int auxi_y=1, auxi_y<3; auxi_y++)
+                for(int auxi_x=1, auxi_x<3; auxi_x++)
                 {
-                    for(int auxi_z=1, auxi_z<3; auxi_z++)
+                    printf("CAMADA ODD\n");
+                    for(int auxi_y=1, auxi_y<3; auxi_y++)
                     {
-                        printf("%d ", grid_odd[auxi_x][auxi_y][auxi_z]);
-                    }
-                    printf("\n");
-                } 
+                        for(int auxi_z=1, auxi_z<3; auxi_z++)
+                        {
+                            printf("%d ", grid_odd[auxi_x][auxi_y][auxi_z]);
+                        }
+                        printf("\n");
+                    } 
+                }
             }
+            
         }   
         else{
             rules (sub_x, sub_y, sub_z, grid_even, grid_odd);
