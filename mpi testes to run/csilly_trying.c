@@ -178,6 +178,25 @@ void aloca_matrizes (int sub_x, int sub_y, int sub_z){
     }
 }
 
+void verifica_max (int gen_number){
+    
+    MPI_Reduce(count_species_local, count_species, sizeof (count_species), MPI_INT, MPI_SUM, 0, MPI_COMM_WORLD);
+    MPI_Reduce(count_species_local, count_species, sizeof (count_species), MPI_INT, MPI_SUM, 0, MPI_COMM_WORLD);
+
+    for (int x=1; x< 10; ++x){
+        printf ("X=%d Cnt=%d\n", x, count_species[x]);
+    }
+    
+    for(int x=1; x < 10; x++)
+    {
+        if(count_species[x] > max_count[x])
+        {
+            max_count[x] = count_species[x];
+            max_gen[x]=gen_number;
+        }
+    }
+}
+
 void cria_primeira_grid (int NUM_LINHAS){
     int varrimento_x = 1;
     int varrimento_y = 1;
@@ -221,16 +240,7 @@ void cria_primeira_grid (int NUM_LINHAS){
         varrimento_y = 1;
     }
 
-    MPI_Reduce(count_species_local, count_species, sizeof (count_species), MPI_INT, MPI_SUM, 0, MPI_COMM_WORLD);
-
-    for(int x=1; x < 10; x++)
-    {
-        if(count_species[x] > max_count[x])
-        {
-            max_count[x] = count_species[x];
-            max_gen[x]=0;
-        }
-    }
+    verifica_max (0);
 }
 
 void comunica_entre_processos (char ***data_send, int sub_x, int sub_y, int sub_z, MPI_Comm cart_comm){
@@ -380,37 +390,26 @@ int main(int argc, char *argv[]) {
     cria_primeira_grid (NUM_LINHAS);
     comunica_entre_processos (grid_even, sub_x, sub_y, sub_z, cart_comm);
     
-    if (rank == 0)
-        for (int i= 1; i<10; ++ i){
-            printf ("Specie = %d Max Count = %d\n", i , max_count[i]);
+    
+    /*for (int gen_number = 1; gen_number< number_of_gens; ++ gen_number){
+       
+        for (int auxi = 0; auxi < 10; ++auxi){
+            count_species[auxi]=0;  
         }
-    /*
-    for (int i=0; i< number_of_gens; ++ i){
-        
-    }*/
-        
-    //--------------------------------------DEBUG-----------------------------------------------
-   
-    if(rank==0)
-    {
-        //printf("RANK: %d    SUB_Z: %d   SUB_Y: %d   SUB_X:  %d\n",rank, sub_z, sub_y, sub_x);
-            //MPI_Cart_coords(cart_comm, rank, 3, my_coords)
-            printf("RANK :%d\n", rank);
-        for(int aux_z=0;aux_z<(sub_z+2);aux_z++)
-        {
-            printf("CAMADA %d\n", aux_z);
-            for(int aux_y=0;aux_y<(sub_y+2);aux_y++)
-            {
-                for(int aux_x=0;aux_x<(sub_x+2); aux_x++)
-                {
-                    printf("%d ",grid_even[aux_z][aux_y][aux_x]);
-                }
-                printf("\n");       
-            }
 
+        if (gen_number % 2 == 1){
+            rules (number_of_gens, grid_odd, grid_even);
         }
-    } 
+            
+        else{
+            rules (number_of_gens, grid_even, grid_odd);
+        }
 
+        verifica_max (gen_number);
+            
+    }  */ 
+        
+    
     MPI_Finalize();
     return 0; 
 }

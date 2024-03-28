@@ -248,7 +248,6 @@ void freeMatrix(int N) {
         free(grid_odd[i]);
     }
 
-
     free(grid_even);
     free(grid_odd);
 }
