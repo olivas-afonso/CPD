@@ -522,7 +522,13 @@ int main(int argc, char *argv[]) {
     cria_primeira_grid (NUM_LINHAS);
     comunica_entre_processos (grid_even, sub_x, sub_y, sub_z, cart_comm);
     //verifica_max (0);
-    
+     if (rank == 0){
+        printf ("Gen = 0\n");
+        for(int auxi=1; auxi < 10; auxi++)
+        {
+            printf("%d %ld %d \n", auxi, max_count[auxi], max_gen[auxi]);
+        }
+    }
     
     for (int gen_number = 1; gen_number<= number_of_gens; ++ gen_number){
        
@@ -540,13 +546,13 @@ int main(int argc, char *argv[]) {
         verifica_max (gen_number);  
         comunica_entre_processos (grid_even, sub_x, sub_y, sub_z, cart_comm);
 
-        /*if (rank == 0){
+        if (rank == 0){
         printf ("Gen = %d\n", gen_number);
         for(int auxi=1; auxi < 10; auxi++)
         {
             printf("%d %ld %d \n", auxi, max_count[auxi], max_gen[auxi]);
         }
-      }*/
+      }
     }
 
 
