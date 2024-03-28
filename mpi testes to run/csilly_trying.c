@@ -540,10 +540,12 @@ int main(int argc, char *argv[]) {
             for(int auxi=1; auxi < 10; auxi++)
             {
                 printf("%d %ld %d \n", auxi, max_count[auxi], max_gen[auxi]);
+            }
         }
        
         for (int auxi = 0; auxi < 10; ++auxi){
             count_species_local[auxi]=0;  
+
         }
 
         if (gen_number % 2 == 1){
@@ -558,7 +560,7 @@ int main(int argc, char *argv[]) {
         verifica_max (gen_number);  
 
         
-      }
+      
     }
 
 
