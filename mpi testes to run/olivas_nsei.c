@@ -188,7 +188,7 @@ void verifica_max (int *max_gen, int gen_number){
     
     /*for (int x=1; x< 10; ++x){
         printf ("X=%d Cnt=%d\n", x, count_species[x]);
-    }*/
+    }
 
     if (rank == 0){
         for(int x=1; x < 10; x++)
@@ -200,6 +200,7 @@ void verifica_max (int *max_gen, int gen_number){
             }
         }    
     }
+    */
 }
 
 void cria_primeira_grid (int NUM_LINHAS,int * max_gen, long *max_count){
