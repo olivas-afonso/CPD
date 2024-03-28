@@ -364,7 +364,7 @@ int main(int argc, char *argv[]) {
 
     cria_primeira_grid (NUM_LINHAS);
       
-    comunica_entre_processos (grid_even, sub_y, sub_z);
+    comunica_entre_processos (grid_even, sub_x, sub_y, sub_z);
     //--------------------------------------DEBUG-----------------------------------------------
    
     if(rank==0)
