@@ -353,15 +353,15 @@ int death_rule(char *** grid, long aux_x, long aux_y, long aux_z)
     int max=0, max_pos=0, i;
     int x,y,z;
     
-    for(search_x= aux_x-1, x=0; x < 3; x++, search_x++) 
+    for(search_z= aux_z-1, z=0; z < 3; z++, search_z++) 
     {
         for(search_y=aux_y-1, y=0; y < 3; y++, search_y++)
         {
-            for(search_z=aux_z-1, z=0; z< 3;z++, search_z++)
+            for(search_x=aux_x-1, x=0; x< 3;x++, search_x++)
             {
-                if (grid [search_x][search_y][search_z] != 0){       
+                if (grid [search_z][search_y][search_x] != 0){       
                     ++cont_rule;                
-                    cont_species_death[grid[search_x][search_y][search_z]-1]++;
+                    cont_species_death[grid[search_z][search_y][search_x]-1]++;
                 }
                 
                 if (cont_rule >10){
@@ -402,14 +402,14 @@ int life_rule (char *** grid, long aux_x, long aux_y, long aux_z){
     int x,y,z;
     
     // corre vizinhos e em caso de extremo verifica o extremo oposto
-    for(search_x= aux_x-1, x=0; x < 3; x++, search_x++) 
+    for(search_z= aux_z-1, z=0; z < 3; z++, search_z++) 
     {
         for(search_y= aux_y-1, y=0; y < 3; y++, search_y++)
         {
-            for(search_z= aux_z-1, z=0; z< 3;z++, search_z++)
+            for(search_x= aux_x-1, x=0; x< 3; x++, search_x++)
             {
                 //verifica se o vizinho está vivo
-                if (grid [search_x][search_y][search_z] != 0){       
+                if (grid [search_z][search_y][search_x] != 0){       
                     ++cont_rule;
                 }
                 // (OTIMIZACAO) se já tem vizinhos suficientes para permanecer morta sai da funcao
@@ -424,7 +424,7 @@ int life_rule (char *** grid, long aux_x, long aux_y, long aux_z){
         return 0;
     }else{  
         // revive a celula	
-        return grid[aux_x][aux_y][aux_z];
+        return grid[aux_z][aux_y][aux_x];
     }
 }
 
@@ -441,22 +441,22 @@ void rules(int sub_x ,int sub_y, int sub_z , char ***grid_new, char ***grid_old)
     //{
         //#pragma omp for schedule (dynamic)
         
-        for(aux_x=1; aux_x< sub_x; aux_x ++)
+        for(aux_z=1; aux_z< sub_z; aux_z ++)
         {
             for(aux_y=1; aux_y< sub_y; aux_y++)
             {
-                for(aux_z=1; aux_z< sub_z; aux_z++)
+                for(aux_x=1; aux_x< sub_x; aux_x++)
                 {
-                    if(grid_old[aux_x][aux_y][aux_z]==0) // morto 
+                    if(grid_old[aux_z][aux_y][aux_x]==0) // morto 
                     { 
-                        grid_new[aux_x][aux_y][aux_z]= death_rule(grid_old, aux_x, aux_y, aux_z);
+                        grid_new[aux_z][aux_y][aux_x]= death_rule(grid_old, aux_x, aux_y, aux_z);
                     }
                     else
                     {  
-                        grid_new[aux_x][aux_y][aux_z]= life_rule(grid_old, aux_x, aux_y, aux_z);     
+                        grid_new[aux_z][aux_y][aux_x]= life_rule(grid_old, aux_x, aux_y, aux_z);     
                     }
                     // se a celula esta viva nesta geracao, aumentamos o numero no array contador 
-                    count_species_local[grid_new[aux_x][aux_y][aux_z]]++;
+                    count_species_local[grid_new[aux_z][aux_y][aux_x]]++;
                 }
             }
         }
@@ -520,7 +520,7 @@ int main(int argc, char *argv[]) {
     for (int gen_number = 1; gen_number< number_of_gens; ++ gen_number){
        
         for (int auxi = 0; auxi < 10; ++auxi){
-            count_species[auxi]=0;  
+            count_species_local[auxi]=0;  
         }
 
         if (gen_number % 2 == 1){
