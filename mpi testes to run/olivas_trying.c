@@ -402,18 +402,15 @@ MPI_Barrier(cart_comm);
         MPI_Sendrecv(&data_send[aux_z+1][1][sub_x], 1, MPI_INT, dir_tras_rank, 0, &data_send[aux_z+1][sub_y+1][0], 1, MPI_INT, esq_frente_rank, 0, cart_comm, MPI_STATUS_IGNORE); // AR esq baixo
         MPI_Sendrecv(&data_send[aux_z+1][sub_y][sub_x], 1, MPI_INT, dir_frente_rank, 0, &data_send[aux_z+1][0][0], 1, MPI_INT, esq_tras_rank, 0, cart_comm, MPI_STATUS_IGNORE); // AR esq baixo
 
-    }
-
-    for( aux_z=0; aux_z < sub_z; aux_z++)
-    {
-
+        
         for (aux_y=0; aux_y<sub_y; aux_y++)
         {
              if (rank==0)  printf("SAO ESTES: %d %d %d\n", aux_z, aux_y, aux_z);
             //FACE DIREITA 
-            MPI_Sendrecv(&data_send[aux_z+1][aux_y+1][1], 1, MPI_INT, esq_rank, 0, &data_send[aux_z+1][aux_y+1][sub_x+1], 1, MPI_INT, dir_rank, 0, cart_comm, &status); // face dir
-            
-            //FACE ESQUERDA
+            //MPI_Sendrecv(&data_send[aux_z+1][aux_y+1][1], 1, MPI_INT, esq_rank, 0, &data_send[aux_z+1][aux_y+1][sub_x+1], 1, MPI_INT, dir_rank, 0, cart_comm, &status); // face dir
+            MPI_Send(&data_send[aux_z+1][aux_y+1][1], 1, MPI_INT, esq_rank, 0, cart_comm);
+            MPI_Recv(&data_send[aux_z+1][aux_y+1][sub_x+1], 1, MPI_INT, dir_rank, 0, cart_comm, MPI_STATUS_IGNORE);
+            //FACE ESQUERDA 
             MPI_Sendrecv(&data_send[aux_z+1][aux_y+1][sub_x], 1, MPI_INT, dir_rank, 0, &data_send[aux_z+1][aux_y+1][0], 1, MPI_INT, esq_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir
 
         }
