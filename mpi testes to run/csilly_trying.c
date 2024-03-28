@@ -613,7 +613,7 @@ int main(int argc, char *argv[]) {
     if (rank == 0){
         for(int auxi=1; auxi < 10; auxi++)
         {
-          printf("%d %ld %d \n", auxi, max_count[auxi], max_gen[auxi-1]);
+          printf("%d %ld %d \n", auxi, max_count[auxi], max_gen[auxi]);
         }
     }
 
