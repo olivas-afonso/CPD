@@ -165,6 +165,7 @@ void divide_em_tres (int *a_final, int *b_final, int *c_final, int size){
 }
 
 void aloca_matrizes (int sub_x, int sub_y, int sub_z){
+    
     grid_even = (char ***)malloc((sub_z+2) * sizeof(char **));
     grid_odd = (char ***)malloc((sub_z+2) * sizeof(char **));
     for (int i = 0; i < (sub_z+2); ++i) {
@@ -440,7 +441,7 @@ void rules(int sub_x ,int sub_y, int sub_z , char ***grid_new, char ***grid_old)
     //{
         //#pragma omp for schedule (dynamic)
         
-        for(aux_x=1; aux_x<  sub_x; aux_x ++)
+        for(aux_x=1; aux_x< sub_x; aux_x ++)
         {
             for(aux_y=1; aux_y< sub_y; aux_y++)
             {
@@ -513,6 +514,7 @@ int main(int argc, char *argv[]) {
 
     cria_primeira_grid (NUM_LINHAS);
     comunica_entre_processos (grid_even, sub_x, sub_y, sub_z, cart_comm);
+    verifica_max (gen_number);
     
     
     for (int gen_number = 1; gen_number< number_of_gens; ++ gen_number){
