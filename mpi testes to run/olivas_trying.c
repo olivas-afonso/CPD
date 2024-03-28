@@ -498,11 +498,11 @@ if(rank == 0)
     
 
    
-    freeMatrix((sub_y+2), (sub_z+2), data_send);
+    //freeMatrix((sub_y+2), (sub_z+2), data_send);
 
-    free(sub_divz_x);
-    free(sub_divz_y);
-    free(sub_divz_z);
+    //free(sub_divz_x);
+    //free(sub_divz_y);
+    //free(sub_divz_z);
 
    
     
