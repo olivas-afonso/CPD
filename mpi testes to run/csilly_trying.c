@@ -392,7 +392,7 @@ int main(int argc, char *argv[]) {
             {
                 for(aux_x=0;aux_x<(sub_x); aux_x++)
                 {
-                     printf("%d ",grid_even[aux_z+1][aux_y+1][aux_x+1]);
+                    // printf("%d ",grid_even[aux_z+1][aux_y+1][aux_x+1]);
                 }
                 printf("\n");       
             }
