@@ -183,8 +183,6 @@ int main(int argc, char *argv[]) {
     density = atof (argv[3]);
     seed = atoi (argv[4]);
 
-
-
     int varrimento_x = 1;
     int varrimento_y = 1;
     int varrimento_z = 1;
@@ -239,7 +237,7 @@ int main(int argc, char *argv[]) {
     limites_x ();
     limites_y ();
     limites_z();
-    
+
     for (int init_x=0; init_x < NUM_LINHAS; init_x++){
     if (init_x >= limite_inf_z && init_x<limite_sup_z){
         flag_x = 1;
