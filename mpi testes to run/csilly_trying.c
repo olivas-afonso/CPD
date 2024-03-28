@@ -525,8 +525,8 @@ int main(int argc, char *argv[]) {
     cria_primeira_grid (NUM_LINHAS);
     comunica_entre_processos (grid_even, sub_x, sub_y, sub_z, cart_comm);
     
-    if (rank == 0 && gen_number == 0){
-        printf ("Gen = %d\n", gen_number);
+    if (rank == 0){
+        printf ("Gen = 0\n");
         for(int auxi=1; auxi < 10; auxi++)
         {
          printf("%d %ld %d \n", auxi, max_count[auxi], max_gen[auxi]);
