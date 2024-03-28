@@ -531,8 +531,8 @@ int main(int argc, char *argv[]) {
     density = atof (argv[3]);
     seed = atoi (argv[4]);
 
-    int contagem_ger[N_SPECIES][number_of_gens] = {0}
-    int sporting_para_o_olivas_falar =0;
+    int contagem_ger[N_SPECIES][number_of_gens] = {0};
+    int sporting_para_o_olivas_falar = 0;
 
     for(int cont1=0; cont1 < N_SPECIES; cont1++){
         for(int cont2=0; cont2 < number_of_gens; cont2++){
