@@ -193,11 +193,11 @@ void verifica_max (int *max_gen, int gen_number){
     }*/
 
     if (rank == 0){
-        for(int x=0; x < 9; x++)
+        for(int x=1; x < 10; x++)
         {
-            if(count_species[x+1] > max_count[x+1])
+            if(count_species[x] > max_count[x])
             {   
-                max_count[x+1] = count_species[x+1];
+                max_count[x] = count_species[x];
                 max_gen[x]=gen_number;
             }
         }    
@@ -478,7 +478,7 @@ void rules(int sub_x ,int sub_y, int sub_z , char ***grid_new, char ***grid_old)
 int main(int argc, char *argv[]) {
 
     int number_of_gens;
-    int max_gen[9]={0,0,0,0,0,0,0,0,0};
+    int max_gen[10]={0,0,0,0,0,0,0,0,0,0};
 
     number_of_gens = atoi (argv[1]);
     NUM_LINHAS = atoi (argv[2]);
