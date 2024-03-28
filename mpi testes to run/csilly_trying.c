@@ -361,7 +361,7 @@ int death_rule(char *** grid, long aux_x, long aux_y, long aux_z)
             {
                 if (grid [search_z][search_y][search_x] != 0){       
                     ++cont_rule;                
-                    cont_species_death[grid[search_z][search_y][search_x]]++;
+                    //cont_species_death[grid[search_z][search_y][search_x]]++;
                 }
                 
                 if (cont_rule >10){
@@ -371,7 +371,7 @@ int death_rule(char *** grid, long aux_x, long aux_y, long aux_z)
         }
     } 
     
-    /* if ( cont_rule >= 7 && cont_rule <= 10 )
+     if ( cont_rule >= 7 && cont_rule <= 10 )
     {
         max=0;
         
@@ -387,7 +387,7 @@ int death_rule(char *** grid, long aux_x, long aux_y, long aux_z)
 
         return max_pos;
     }
-    else */return 0; 
+    else return 0; 
 }
 
 /************************************************************************************************
@@ -532,7 +532,7 @@ int main(int argc, char *argv[]) {
             rules (sub_x, sub_y, sub_z, grid_even, grid_odd);
         }
         
-        MPI_Barrier(cart_comm);
+        //MPI_Barrier(cart_comm);
         verifica_max (gen_number);  
         comunica_entre_processos (grid_even, sub_x, sub_y, sub_z, cart_comm);
 
