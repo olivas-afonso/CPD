@@ -425,7 +425,7 @@ MPI_Barrier(cart_comm);
             */
             //FACE ESQUERDA 
             MPI_Sendrecv(&data_send[aux_z+1][aux_y+1][sub_x], 1, MPI_INT, dir_rank, 0, &data_send[aux_z+1][aux_y+1][0], 1, MPI_INT, esq_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir
-*/
+
         }
         /*
         for(aux_x=0; aux_x<sub_x; aux_x++)
