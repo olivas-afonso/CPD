@@ -22,6 +22,7 @@ char ***grid_odd;
 
 long count_species_local[10]={0,0,0,0,0,0,0,0,0,0};
 long count_species[10]={0,0,0,0,0,0,0,0,0,0};
+long max_count[10]={0,0,0,0,0,0,0,0,0,0};
 
 
 void init_r4uni(int input_seed)
@@ -182,7 +183,7 @@ void aloca_matrizes (int sub_x, int sub_y, int sub_z){
     }
 }
 
-void verifica_max (long *max_count, int *max_gen, int gen_number){
+void verifica_max (int *max_gen, int gen_number){
     MPI_Barrier(MPI_COMM_WORLD);
     MPI_Reduce(count_species_local, count_species, sizeof (count_species), MPI_INT, MPI_SUM, 0, MPI_COMM_WORLD);
     MPI_Barrier(MPI_COMM_WORLD);
@@ -477,7 +478,6 @@ int main(int argc, char *argv[]) {
 
     int number_of_gens;
     int max_gen[10]={0,0,0,0,0,0,0,0,0,0};
-    long max_count[10]={0,0,0,0,0,0,0,0,0,0};
 
     number_of_gens = atoi (argv[1]);
     NUM_LINHAS = atoi (argv[2]);
@@ -524,7 +524,7 @@ int main(int argc, char *argv[]) {
     limites_z();
 
     cria_primeira_grid (NUM_LINHAS);
-    verifica_max (max_count, max_gen, 0);
+    verifica_max (max_gen, 0);
     comunica_entre_processos (grid_even, sub_x, sub_y, sub_z, cart_comm);
 
     /*if (rank == 0){
@@ -590,7 +590,7 @@ int main(int argc, char *argv[]) {
             comunica_entre_processos (grid_even, sub_x, sub_y, sub_z, cart_comm);
         }
                
-        verifica_max (max_count, max_gen ,gen_number);  
+        verifica_max (max_gen ,gen_number);  
     }
 
 
