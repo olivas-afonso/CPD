@@ -197,7 +197,7 @@ void verifica_max (int *max_gen, int gen_number){
             if(count_species[x] > max_count[x])
             {   
                 max_count[x] = count_species[x];
-                printf("maximos iniciais: %d\n", max_count);
+                printf("maximos iniciais: %d\n", max_count[x]);
                 max_gen[x]=gen_number;
             }
         }    
