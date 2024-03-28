@@ -337,11 +337,7 @@ int main(int argc, char *argv[]) {
     
     varrimento_y = 1;
 }
-
-MPI_Barrier(MPI_COMM_WORLD);
-MPI_Barrier(cart_comm);
-/*
- if(rank == 2)
+if(rank == 2)
  {
     for (int auxz=0; auxz < (sub_z+2); auxz++)
     {
@@ -354,8 +350,27 @@ MPI_Barrier(cart_comm);
             printf("\n");
         }
     }
- }
-*/
+ } 
+
+
+MPI_Barrier(MPI_COMM_WORLD);
+MPI_Barrier(cart_comm);
+
+if(rank == 2)
+ {
+    for (int auxz=0; auxz < (sub_z+2); auxz++)
+    {
+        for (int auxy=0; auxy < (sub_y+2); auxy++)
+        {
+            for (int auxx=0; auxx < (sub_x+2); auxx++)
+            {
+                printf("%d ", data_send[auxz][auxy][auxx]);
+            }
+            printf("\n");
+        }
+    }
+ } 
+
     
 
     int vert_esq_cima_frente, vert_dir_baixo_tras, vert_dir_cima_frente, vert_esq_baixo_tras;
