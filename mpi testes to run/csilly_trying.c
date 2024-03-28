@@ -532,7 +532,7 @@ int main(int argc, char *argv[]) {
             rules (sub_x, sub_y, sub_z, grid_even, grid_odd);
         }
         
-        MPI_Barrier(MPI_COMM_WORLD);
+        MPI_Barrier(cart_comm);
         verifica_max (gen_number);  
         comunica_entre_processos (grid_even, sub_x, sub_y, sub_z, cart_comm);
 
