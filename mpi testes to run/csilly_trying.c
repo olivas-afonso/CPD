@@ -21,6 +21,8 @@ char ***grid_even;
 char ***grid_odd;
 
 long count_species_local[10]={0,0,0,0,0,0,0,0,0,0};
+long count_species[10]={0,0,0,0,0,0,0,0,0,0};
+
 
 void init_r4uni(int input_seed)
 {
@@ -181,8 +183,6 @@ void aloca_matrizes (int sub_x, int sub_y, int sub_z){
 }
 
 void verifica_max (long *max_count, int *max_gen, int gen_number){
-    long count_species[10]={0,0,0,0,0,0,0,0,0,0};
-
     MPI_Barrier(MPI_COMM_WORLD);
     MPI_Reduce(count_species_local, count_species, sizeof (count_species), MPI_INT, MPI_SUM, 0, MPI_COMM_WORLD);
     MPI_Barrier(MPI_COMM_WORLD);
