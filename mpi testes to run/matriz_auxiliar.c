@@ -542,8 +542,8 @@ int main(int argc, char *argv[]) {
     }
 
 
-    for(int cont3 = 0; cont3 < N_SPECIES; cont3++){
-        for(int cont4 =0; cont4 < number_of_gens; cont4++){
+    for(int cont4 = 0; cont4 < N_SPECIES; cont4++){
+        for(int cont3 =0; cont3 < number_of_gens; cont3++){
             printf(" %d ",contagem_ger[cont3][cont4]);
         }
         printf("\n");
