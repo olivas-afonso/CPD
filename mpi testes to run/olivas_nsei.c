@@ -531,24 +531,6 @@ int main(int argc, char *argv[]) {
     density = atof (argv[3]);
     seed = atoi (argv[4]);
 
-    int contagem_ger[N_SPECIES][number_of_gens] = {0}
-    int sporting_para_o_olivas_falar =0;
-
-    for(int cont1=0; cont1 < N_SPECIES; cont1++){
-        for(int cont2=0; cont2 < number_of_gens; cont2++){
-            contagem_ger[cont1][cont2] = sporting_para_o_olivas_falar;
-            sporting_para_o_olivas_falar++;
-        }
-    }
-
-
-    for(cont1=0; cont1 < N_SPECIES; cont1++){
-        for(cont2=0; cont2 < number_of_gens; cont2++){
-            ptintf(" %d ",contagem_ger[cont1][cont2]);
-        }
-        ptintf("\n");
-    }
-
     init_r4uni(seed);
 
 	
