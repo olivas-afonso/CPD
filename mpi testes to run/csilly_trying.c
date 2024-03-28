@@ -492,7 +492,6 @@ void freeMatrix(int sub_y, int sub_z) {
 
 int main(int argc, char *argv[]) {
 
-    int number_of_gens;
     int max_gen[10]={0,0,0,0,0,0,0,0,0,0};
 
     number_of_gens = atoi (argv[1]);
