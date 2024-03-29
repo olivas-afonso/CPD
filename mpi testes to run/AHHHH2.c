@@ -451,8 +451,8 @@ int main(int argc, char *argv[]) {
  
     MPI_Sendrecv(&(face_dir_s[0][0]), sub_z*sub_y, MPI_INT, esq_rank, 0, &(face_dir_r[0][0]), sub_z*sub_y, MPI_INT, dir_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir
     MPI_Sendrecv(&(face_esq_s[0][0]), sub_z*sub_y, MPI_INT, dir_rank, 0, &(face_esq_r[0][0]), sub_z*sub_y, MPI_INT, esq_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir
-    MPI_Sendrecv(&(face_cima_s[0][0]), sub_y*sub_x, MPI_INT, cima_rank, 0,&(face_cima_r[0][0]), sub_y*sub_x, MPI_INT, baixo_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir
-    MPI_Sendrecv(&(face_baixo_s[0][0]), sub_y*sub_x, MPI_INT, baixo_rank, 0, &(face_baixo_r[0][0]), sub_y*sub_x, MPI_INT, cima_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir
+    MPI_Sendrecv(&(face_cima_s[0][0]), sub_y*sub_x, MPI_INT, baixo_rank, 0,&(face_cima_r[0][0]), sub_y*sub_x, MPI_INT, cima_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir
+    MPI_Sendrecv(&(face_baixo_s[0][0]), sub_y*sub_x, MPI_INT, cima_rank, 0, &(face_baixo_r[0][0]), sub_y*sub_x, MPI_INT, baixo_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir
     MPI_Sendrecv(&(face_frente_s[0][0]), sub_z*sub_x, MPI_INT, frente_rank, 0, &(face_frente_r[0][0]), sub_z*sub_x, MPI_INT, tras_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir
     MPI_Sendrecv(&(face_tras_s[0][0]), sub_z*sub_x, MPI_INT, tras_rank, 0, &(face_tras_r[0][0]), sub_z*sub_x, MPI_INT, frente_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir
 
