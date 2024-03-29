@@ -440,7 +440,7 @@ void rules(int sub_x ,int sub_y, int sub_z , char ***grid_new, char ***grid_old)
 
     #pragma omp parallel private (aux_y, aux_x)
     {
-        #pragma omp for reduction(+ : count_species_loca) schedule (dynamic)
+        #pragma omp for reduction(+ : count_species_local) schedule (dynamic)
         
         for(aux_z=1; aux_z<= sub_z; aux_z ++)
         {   
