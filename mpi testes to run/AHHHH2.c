@@ -332,6 +332,7 @@ int main(int argc, char *argv[]) {
         for(int i=0; i<sub_y; i++)
         {
             send_x[k][i]=data_send[k+1][i+1][1];
+            if (rank==0) printf("SEND %d\n", send_x[k][i]);
         }
         
     }
