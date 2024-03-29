@@ -308,6 +308,7 @@ int main(int argc, char *argv[]) {
     int **face_frente_s, **face_frente_r, **face_tras_s, **face_tras_r;
     int *diag_esq_tras_s, *diag_esq_tras_r, *diag_dir_tras_s, *diag_dir_tras_r, *diag_esq_frente_s, *diag_esq_frente_r, *diag_dir_frente_s, *diag_dir_frente_r;
     int *diag_esq_cima_s, *diag_esq_cima_r, *diag_dir_cima_s, *diag_dir_cima_r, *diag_esq_baixo_s, *diag_esq_baixo_r, *diag_dir_baixo_s, *diag_dir_baixo_r;
+    int *diag_frente_baixo_s, *diag_frente_baixo_r, *diag_frente_cima_s, *diag_frente_cima_r, *diag_tras_baixo_s, *diag_tras_baixo_r, *diag_tras_cima_s, *diag_tras_cima_r;
     
     face_dir_s=alloc_2d_int(2,2);
     face_dir_r=alloc_2d_int(2,2);
@@ -340,6 +341,15 @@ int main(int argc, char *argv[]) {
     diag_esq_baixo_s = (int *)malloc(sub_z*sizeof(int));
     diag_dir_baixo_r = (int *)malloc(sub_z*sizeof(int));
     diag_dir_baixo_s = (int *)malloc(sub_z*sizeof(int));
+
+    diag_frente_cima_r = (int *)malloc(sub_z*sizeof(int));
+    diag_frente_cima_s = (int *)malloc(sub_z*sizeof(int));
+    diag_frente_cima_r = (int *)malloc(sub_z*sizeof(int));
+    diag_frente_cima_s = (int *)malloc(sub_z*sizeof(int));
+    diag_tras_baixo_r = (int *)malloc(sub_z*sizeof(int));
+    diag_tras_baixo_s = (int *)malloc(sub_z*sizeof(int));
+    diag_tras_baixo_r = (int *)malloc(sub_z*sizeof(int));
+    diag_tras_baixo_s = (int *)malloc(sub_z*sizeof(int));
 
     int aux_x, aux_y, aux_z; 
     int cima_rank, baixo_rank, esq_rank, dir_rank, frente_rank, tras_rank;
@@ -412,6 +422,16 @@ int main(int argc, char *argv[]) {
 
     }
 
+    for(int j=0;j<sub_x;j++)
+    {
+        diag_frente_baixo_s[j]=data_send[sub_z][1][j+1];
+        diag_frente_cima_s[j]=data_send[1][1][j+1];
+
+        diag_tras_baixo_s[j]=data_send[sub_z][sub_y][j+1];
+        diag_tras_cima_s[j]=data_send[1][sub_y][j+1];
+
+    }
+
     MPI_Sendrecv(&(diag_dir_frente_s[0]), sub_z, MPI_INT, esq_tras_rank, 0, &(diag_dir_frente_r[0]), sub_z, MPI_INT, dir_frente_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir
     MPI_Sendrecv(&(diag_dir_tras_s[0]), sub_z, MPI_INT, esq_frente_rank, 0, &(diag_dir_tras_r[0]), sub_z, MPI_INT, dir_tras_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir
     MPI_Sendrecv(&(diag_esq_frente_s[0]), sub_z, MPI_INT, dir_tras_rank, 0, &(diag_esq_frente_r[0]), sub_z, MPI_INT, esq_frente_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir
@@ -421,6 +441,11 @@ int main(int argc, char *argv[]) {
     MPI_Sendrecv(&(diag_dir_cima_s[0]), sub_y, MPI_INT, esq_baixo_rank, 0, &(diag_dir_cima_r[0]), sub_y, MPI_INT, dir_cima_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir
     MPI_Sendrecv(&(diag_esq_baixo_s[0]), sub_y, MPI_INT, dir_cima_rank, 0, &(diag_esq_baixo_r[0]), sub_y, MPI_INT, esq_baixo_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir
     MPI_Sendrecv(&(diag_dir_baixo_s[0]), sub_y, MPI_INT, esq_cima_rank, 0, &(diag_dir_baixo_r[0]), sub_y, MPI_INT, dir_baixo_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir
+    
+    MPI_Sendrecv(&(diag_frente_baixo_s[0]), sub_x, MPI_INT, esq_frente_rank, 0, &(diag_frente_baixo_r[0]), sub_x, MPI_INT, frente_baixo_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir
+    MPI_Sendrecv(&(diag_frente_cima_s[0]), sub_x, MPI_INT, esq_baixo_rank, 0, &(diag_frente_cima_r[0]), sub_x, MPI_INT, frente_cima_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir
+    MPI_Sendrecv(&(diag_tras_baixo_s[0]), sub_x, MPI_INT, frente_cima_rank, 0, &(diag_tras_baixo_r[0]), sub_x, MPI_INT, tras_baixo_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir
+    MPI_Sendrecv(&(diag_tras_cima_s[0]), sub_x, MPI_INT, frente_baixo_rank, 0, &(diag_tras_cima_r[0]), sub_x, MPI_INT, tras_cima_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir
  
     MPI_Sendrecv(&(face_dir_s[0][0]), sub_z*sub_y, MPI_INT, esq_rank, 0, &(face_dir_r[0][0]), sub_z*sub_y, MPI_INT, dir_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir
     MPI_Sendrecv(&(face_esq_s[0][0]), sub_z*sub_y, MPI_INT, dir_rank, 0, &(face_esq_r[0][0]), sub_z*sub_y, MPI_INT, esq_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir
@@ -464,6 +489,16 @@ int main(int argc, char *argv[]) {
             data_send[sub_z+1][i+1][j+1]=face_cima_r[i][j];
             data_send[0][i+1][j+1]=face_baixo_r[i][j];
         }
+
+    }
+
+    for(int j=0;j<sub_x;j++)
+    {
+
+        data_send[0][sub_y+1][j+1]=diag_frente_baixo_r[j];
+        data_send[sub_z+1][sub_y+1][j+1]=diag_frente_cima_r[j];
+        data_send[0][0][j+1]=diag_tras_baixo_r[j];
+        data_send[sub_z+1][0][j+1]=diag_tras_cima_r[j];
 
     }
     
