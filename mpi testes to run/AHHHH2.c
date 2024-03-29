@@ -304,10 +304,11 @@ int main(int argc, char *argv[]) {
     
  
     int test[2][2];
-    int **data_s, **data_r;
+    int **face_dir_s, **face_dir_r, **face_esq_s, **face_esq_r, **face_cima_s, **face_cima_r, **face_baixo_s, **face_baixo_r;
+    int **face_frente_s, **face_frente_r, **face_baixo_s, **face_baixo_r;
 
-    data_s=alloc_2d_int(2,2);
-    data_r=alloc_2d_int(2,2);
+    face_dir_s=alloc_2d_int(2,2);
+    face_dir_s=alloc_2d_int(2,2);
 
     int aux_x, aux_y, aux_z; 
     int cima_rank, baixo_rank, esq_rank, dir_rank, frente_rank, tras_rank;
@@ -346,22 +347,61 @@ int main(int argc, char *argv[]) {
     {
         for(int i=0; i<sub_y; i++)
         {
-            data_s[k][i]=data_send[k+1][i+1][1];
-            if (rank==1) printf("SEND %d\n", data_s[k][i]);
+            face_dir_s[k][i]=data_send[k+1][i+1][1];
+            face_esq_s[k][i]=data_send[k+1][i+1][sub_x];
+            //if (rank==1) printf("SEND %d\n", data_s[k][i]);
+        }
+        for(int j=0;j<sub_x;j++)
+        {
+            face_frente_s[k][j]=data_send[k+1][1][j+1];
+            face_tras_s[k][j]=data_send[k+1][1][j+1];
         }
         
     }
 
-    MPI_Sendrecv(&(data_s[0][0]), 2*2, MPI_INT, esq_rank, 0, &(data_r[0][0]), 2*2, MPI_INT, dir_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir
+    for(int i=0; i<sub_y; i++)
+    {
+        for(int j=0;j<sub_x;j++)
+        {
+            face_cima_s[i][j]=data_send[1][i+1][j+1];
+            face_baixo_s[i][j]=data_send[sub_z][i+1][j+1];
+        }
+
+    }
+
+
+
+    MPI_Sendrecv(&(face_dir_s[0][0]), 2*2, MPI_INT, esq_rank, 0, &(face_dir_r[0][0]), 2*2, MPI_INT, dir_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir
+    MPI_Sendrecv(&(face_esq_s[0][0]), 2*2, MPI_INT, dir_rank, 0, &(face_esq_r[0][0]), 2*2, MPI_INT, esq_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir
+    MPI_Sendrecv(&(face_cima_s[0][0]), 2*2, MPI_INT, cima_rank, 0,&(face_cima_r[0][0]), 2*2, MPI_INT, baixo_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir
+    MPI_Sendrecv(&(face_baixo_s[0][0]), 2*2, MPI_INT, baixo_rank, 0, &(face_baixo_r[0][0]), 2*2, MPI_INT, cima_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir
+    MPI_Sendrecv(&(face_frente_s[0][0]), 2*2, MPI_INT, frente_rank, 0, &(face_frente_r[0][0]), 2*2, MPI_INT, tras_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir
+    MPI_Sendrecv(&(face_tras_s[0][0]), 2*2, MPI_INT, tras_rank, 0, &(face_tras_r[0][0]), 2*2, MPI_INT, frente_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir
 
     for(int k =0; k<sub_z;k++)
     {
         for(int i=0; i<sub_y; i++)
         {
-            if(rank==0) printf("RCV %d\n", data_r[k][i]);
-            //data_send[k+1][i+1][sub_x+1]=rcv_x[k][i];
+            data_send[k+1][i+1][sub_x+1]=face_dir_r[k][i];
+            data_send[k+1][i+1][0]=face_esq_r[k][i];
+            //if (rank==1) printf("SEND %d\n", data_s[k][i]);
+        }
+        for(int j=0;j<sub_x;j++)
+        {
+            data_send[k+1][sub_y+1][j+1]=face_frente_r[k][j];
+            data_send[k+1][0][j+1]=face_tras_r[k][j];
         }
         
+    }
+
+    for(int i=0; i<sub_y; i++)
+    {
+        for(int j=0;j<sub_x;j++)
+        {
+            data_send[sub_z+1][i+1][j+1]=face_cima_r[i][j];
+            data_send[0][i+1][j+1]=face_baixo_s[i][j];
+        }
+
     }
     
     for( aux_z=0; aux_z < sub_z; aux_z++)
@@ -391,7 +431,7 @@ int main(int argc, char *argv[]) {
             MPI_Sendrecv(&data_send[aux_z+1][1][aux_x+1], 1, MPI_INT, tras_rank, 0, &data_send[aux_z+1][sub_y+1][aux_x+1], 1, MPI_INT, frente_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir   
             
             //FACE TRAS
-            MPI_Sendrecv(&data_send[aux_z+1][sub_y][aux_x+1], 1, MPI_INT, frente_rank, 0, &data_send[aux_z+1][0][aux_x+1], 1, MPI_INT, tras_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir   
+            MPI_Sendrecv(&data_send[aux_z+1][1][aux_x+1], 1, MPI_INT, frente_rank, 0, &data_send[aux_z+1][0][aux_x+1], 1, MPI_INT, tras_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir   
             */
         }
         
@@ -436,14 +476,14 @@ int main(int argc, char *argv[]) {
             //MPI_Cart_coords(cart_comm, rank, 3, my_coords);
         for(aux_z=0;aux_z<(sub_z+2);aux_z++)
         {
-            //printf("CAMADA %d\n", aux_z);
+            printf("CAMADA %d\n", aux_z);
             for(aux_y=0;aux_y<(sub_y+2);aux_y++)
             {
                 for(aux_x=0;aux_x<(sub_x+2); aux_x++)
                 {
-              //       printf("%d ",data_send[aux_z][aux_y][aux_x]);
+                     printf("%d ",data_send[aux_z][aux_y][aux_x]);
                 }
-                //printf("\n");       
+                printf("\n");       
             }
 
         }
