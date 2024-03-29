@@ -752,6 +752,11 @@ int main(int argc, char *argv[]) {
         }
                
         MPI_Barrier(MPI_COMM_WORLD);
+        for(int i=0; i<10;i++)
+        {
+             printf("PROCESS: %d HAS LOCAL:%d", rank, count_species_local[i]);
+        }
+        MPI_Barrier(MPI_COMM_WORLD);
         MPI_Allreduce(count_species_local, count_species, 10, MPI_LONG, MPI_SUM, MPI_COMM_WORLD);
         MPI_Barrier(MPI_COMM_WORLD);
 
