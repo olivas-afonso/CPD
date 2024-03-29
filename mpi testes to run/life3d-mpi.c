@@ -26,9 +26,6 @@ int *max_gen;
 long *count_species;
 long *count_species_new;
 
-//long max_count[10]={0,0,0,0,0,0,0,0,0,0};
-
-
 void init_r4uni(int input_seed)
 {
     seed = input_seed + 987654321;
@@ -105,7 +102,6 @@ void divide_number_parts(int number, int divide, int * sub_div) {
     for (i = 0; i < divide; i++) {
         end_index = start_index + part_size + (i < remainder ? 1 : 0);
 
-        //printf("Part %d: ", i + 1);
         sub_div[i]=end_index-start_index;
         start_index = end_index;
     }
@@ -137,7 +133,6 @@ void divide_em_tres (int *a_final, int *b_final, int *c_final, int size){
             for (b = a; b <= x / a; b++) {
                 if (x % (a * b) == 0) {
                     c = x / (a * b);
-                    //printf("%d * %d * %d\n", a, b, c);
 					
 					if(maior_linha < a){
 						maior_linha = a;
@@ -151,10 +146,8 @@ void divide_em_tres (int *a_final, int *b_final, int *c_final, int size){
 						maior_linha = c;
 					}
 					
-					//printf("maior_linha: %d\n", maior_linha);
                     // Atualizar os menores números encontrados até agora
                     if (maior_linha < maior_linha_prev) {
-                      //  printf("entrou\n");
 						*a_final = a;
                         *b_final = b;
                         *c_final = c;
@@ -185,28 +178,6 @@ void aloca_matrizes (int sub_x, int sub_y, int sub_z){
             }
         }
     }
-}
-
-void verifica_max (int *max_gen, int gen_number){
-    MPI_Barrier(MPI_COMM_WORLD);
-    //MPI_Reduce(count_species_local, count_species, 10, MPI_INT, MPI_SUM, 0, MPI_COMM_WORLD);
-    
-    /*for (int x=1; x< 10; ++x){
-        printf ("X=%d Cnt=%d\n", x, count_species[x]);
-    }*/
-
-/*
-    if (rank == 0){
-        for(int x=1; x < 10; x++)
-        {
-            if(count_species[x] > max_count[x])
-            {   
-                max_count[x] = count_species[x];
-                max_gen[x]=gen_number;
-            }
-        }    
-    }
-    */
 }
 
 void cria_primeira_grid (int NUM_LINHAS){
@@ -246,7 +217,6 @@ void cria_primeira_grid (int NUM_LINHAS){
                     ++varrimento_x;
                 }
             }
-            //printf ("RANK :%d   Varrimento = %d\n",rank, varrimento_z);
             varrimento_x = 1;
         }
         varrimento_y = 1;
@@ -255,28 +225,16 @@ void cria_primeira_grid (int NUM_LINHAS){
     MPI_Barrier(MPI_COMM_WORLD);
     MPI_Reduce(count_species_local, count_species, 10, MPI_LONG, MPI_SUM, 0, MPI_COMM_WORLD);
     
-/*for (int x=1; x< 10; ++x){
-    printf ("X=%d Cnt=%d\n", x, count_species[x]);
-}*/
 if(rank==0)
-{
-    /*
-    for(int x=0; x<10; x++)
+{   
+    for(int auxiii=0; auxiii < 10; auxiii++)
     {
-        max_count[x]=0;
-    }
-*/
-    
-        for(int auxiii=0; auxiii < 10; auxiii++)
-        {
-            //printf("COUNT_YA : %d\n",count_species[auxiii] );
-            if(count_species[auxiii] > count_species_new[auxiii])
-            {   
-                //if(auxiii == 7) printf("GEN: %d COUNT_SPECIES:%ld  MAX COUNT:%ld\n",0,count_species[auxiii], count_species_new[auxiii] );
-                count_species_new[auxiii] = count_species[auxiii];
-                max_gen[auxiii]=0;
-            }
-        }    
+        if(count_species[auxiii] > count_species_new[auxiii])
+        {   
+            count_species_new[auxiii] = count_species[auxiii];
+            max_gen[auxiii]=0;
+        }
+    }    
 }  
 
 
@@ -360,7 +318,7 @@ void comunica_entre_processos (char ***data_send, int sub_x, int sub_y, int sub_
         {
             //FACE CIMA
             MPI_Sendrecv(&data_send[1][aux_y+1][aux_x+1], 1, MPI_CHAR, baixo_rank, 0, &data_send[sub_z+1][aux_y+1][aux_x+1], 1, MPI_CHAR, cima_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir  
-            //if(rank==4) printf("DATA SEND %d\n", data_send[1][aux_y+1][aux_x+1]);
+
             //FACE BAIXO
             MPI_Sendrecv(&data_send[sub_z][aux_y+1][aux_x+1], 1, MPI_CHAR, cima_rank, 0, &data_send[0][aux_y+1][aux_x+1], 1, MPI_CHAR, baixo_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir                      
         }
@@ -483,8 +441,6 @@ void rules(int sub_x ,int sub_y, int sub_z , char ***grid_new, char ***grid_old)
         
         for(aux_z=1; aux_z<= sub_z; aux_z ++)
         {   
-            //if (rank == 0)
-                //printf ("ENTREI EM Z\n");
             for(aux_y=1; aux_y<= sub_y; aux_y++)
             {
                 for(aux_x=1; aux_x<= sub_x; aux_x++)
@@ -497,15 +453,12 @@ void rules(int sub_x ,int sub_y, int sub_z , char ***grid_new, char ***grid_old)
                     {  
                         grid_new[aux_z][aux_y][aux_x]= life_rule(grid_old, aux_x, aux_y, aux_z);     
                     }
-                    //if (rank == 1)
-                    //printf ("Grid New = %d posx = %d posy = %d posz = %d\n", grid_new[aux_z][aux_y][aux_x], aux_x, aux_y, aux_z);
-
                     // se a celula esta viva nesta geracao, aumentamos o numero no array contador 
                     count_species_local[grid_new[aux_z][aux_y][aux_x]]++;
                 }
             }
         }
-    }
+   }
 }
 
 void freeMatrix(int sub_y, int sub_z) {
@@ -522,6 +475,12 @@ void freeMatrix(int sub_y, int sub_z) {
 
     free(grid_even);
     free(grid_odd);
+    free (max_gen);
+    free (count_species);
+    free (sub_divz_x);
+    free (sub_divz_y);
+    free (sub_divz_z);
+    free (count_species_new);    
 }
 
 
@@ -532,7 +491,7 @@ int main(int argc, char *argv[]) {
     MPI_Comm_size(MPI_COMM_WORLD, &size);
 
 
-     double exec_time;
+    double exec_time;
 
     max_gen = (int *)malloc( 10 * sizeof(int)); 
     count_species= (long *)malloc( 10 * sizeof(long)); 
@@ -554,10 +513,6 @@ int main(int argc, char *argv[]) {
 
     init_r4uni(seed);
 
-    
-
-	
-
     int a_final, b_final, c_final;
     divide_em_tres (&a_final, &b_final, &c_final, size);
 
@@ -565,15 +520,11 @@ int main(int argc, char *argv[]) {
     sub_divz_y= (int *)malloc( b_final * sizeof(int)); 
     sub_divz_x= (int *)malloc( c_final* sizeof(int)); 
 
-    
-
-
     divide_number_parts(NUM_LINHAS,  a_final, sub_divz_z);
     divide_number_parts(NUM_LINHAS,  b_final, sub_divz_y);
     divide_number_parts(NUM_LINHAS,  c_final, sub_divz_x);
 
   
-    //printf("SIZE %d\n", size);
     int count=0;
     //Cartesiano : 
     int dims[3] = { a_final, b_final, c_final};  // ISTO TEM DE VIR DOS INTEIROS QUE MULTIPLICAM O Nº PROCESSO
@@ -597,61 +548,24 @@ int main(int argc, char *argv[]) {
     cria_primeira_grid (NUM_LINHAS);
     if (rank==0)exec_time = -omp_get_wtime();
 
-    //verifica_max (max_gen, 0);
     comunica_entre_processos (grid_even, sub_x, sub_y, sub_z, cart_comm);
-
-    /*if (rank == 0){
-        //printf ("Gen = 0\n");
-        for(int auxi=1; auxi < 10; auxi++)
-        {
-         //printf("%d %ld %d \n", auxi, max_count[auxi], max_gen[auxi]);
-        }
-    }
-
-    if(rank==1)
-            {
-                for(int auxi_x=1; auxi_x<3; auxi_x++)
-                {
-                    printf("CAMADA ODD\n");
-                    for(int auxi_y=1; auxi_y<3; auxi_y++)
-                    {
-                        for(int auxi_z=1; auxi_z<3; auxi_z++)
-                        {
-                            printf("%d ", grid_even[auxi_x][auxi_y][auxi_z]);
-                        }
-                        printf("\n");
-                    } 
-                }
-            }
-
-    */
 
     for (int gen_number = 1; gen_number<= number_of_gens; ++ gen_number){
 
-        
-       
         for (int auxi = 0; auxi < 10; ++auxi){
             count_species_local[auxi]=0;  
-
         }
         
-
-        if (gen_number % 2 == 1){
-            
+        if (gen_number % 2 == 1){  
             rules (sub_x, sub_y, sub_z, grid_odd, grid_even);
             comunica_entre_processos (grid_odd, sub_x, sub_y, sub_z, cart_comm);
-            
-
         }   
         else{
             rules (sub_x, sub_y, sub_z, grid_even, grid_odd);
             comunica_entre_processos (grid_even, sub_x, sub_y, sub_z, cart_comm);
         }
                
-        MPI_Barrier(MPI_COMM_WORLD);
         MPI_Reduce(count_species_local, count_species, 10, MPI_LONG, MPI_SUM, 0, MPI_COMM_WORLD);
-        
-
 
         if(rank==0)
         {
@@ -659,7 +573,6 @@ int main(int argc, char *argv[]) {
             {
                 if(count_species[auxiii] > count_species_new[auxiii])
                 {   
-                    //if(auxiii == 7) printf("GEN: %d COUNT_SPECIES:%ld  MAX COUNT:%ld\n",gen_number,count_species[auxiii], count_species_new[auxiii] );
                     count_species_new[auxiii] = count_species[auxiii];
                     max_gen[auxiii]=gen_number;
                 }
@@ -667,8 +580,10 @@ int main(int argc, char *argv[]) {
         }
     }
 
-    if (rank==0) exec_time += omp_get_wtime();
-    if(rank==0) fprintf(stderr, "%.3fs\n", exec_time);
+    if (rank==0){
+        exec_time += omp_get_wtime();
+        fprintf(stderr, "%.1fs\n", exec_time);
+    } 
 
     if (rank == 0){
         for(int auxi=1; auxi < 10; auxi++)
@@ -676,8 +591,6 @@ int main(int argc, char *argv[]) {
           printf("%d %ld %d \n", auxi, count_species_new[auxi], max_gen[auxi]);
         }
     }
-
-   
 
     freeMatrix (sub_y, sub_z);
     
