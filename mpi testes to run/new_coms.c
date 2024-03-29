@@ -393,9 +393,6 @@ void comunica_entre_processos (char ***data_send, int sub_x, int sub_y, int sub_
 
         diag_tras_baixo_s[j]=data_send[sub_z][sub_y][j+1];
         diag_tras_cima_s[j]=data_send[1][sub_y][j+1];
-
-        
-
     }
 
     MPI_Sendrecv(&(diag_dir_frente_s[0]), sub_z, MPI_CHAR, esq_tras_rank, 0, &(diag_dir_frente_r[0]), sub_z, MPI_CHAR, dir_frente_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir
@@ -755,7 +752,7 @@ int main(int argc, char *argv[]) {
         }
                
         MPI_Barrier(MPI_COMM_WORLD);
-        MPI_Reduce(count_species_local, count_species, 10, MPI_LONG, MPI_SUM, 0, MPI_COMM_WORLD);
+        MPI_Allreduce(count_species_local, count_species, 10, MPI_LONG, MPI_SUM, MPI_COMM_WORLD);
         MPI_Barrier(MPI_COMM_WORLD);
 
         if(rank==0)
