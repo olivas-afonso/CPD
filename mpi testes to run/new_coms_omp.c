@@ -164,10 +164,13 @@ void divide_em_tres (int *a_final, int *b_final, int *c_final, int size){
 }
 
 char **alloc_2d_int(int rows, int cols) {
+    /*
     char *data = (char *)malloc(rows*cols*sizeof(char));
     char **array= (char **)malloc(rows*sizeof(char*));
     for (int i=0; i<rows; i++)
         array[i] = &(data[cols*i]);
+        */
+    int (*array)[cols]=malloc(sizeof *array * rows);
 
     return array;
 }
@@ -466,11 +469,7 @@ void comunica_entre_processos (char ***data_send, int sub_x, int sub_y, int sub_
     }
 
 
-    
-    for(int i=0;i<sub_z;i++)
-    {
-        free (face_dir_s[i]);
-    }
+    free (face_dir_s[0]);
     free (face_dir_s);
     free (face_dir_r[0]);
     free (face_dir_r);
