@@ -410,12 +410,12 @@ void comunica_entre_processos (char ***data_send, int sub_x, int sub_y, int sub_
     MPI_Sendrecv(&(diag_tras_baixo_s[0]), sub_x, MPI_CHAR, frente_cima_rank, 0, &(diag_tras_baixo_r[0]), sub_x, MPI_CHAR, tras_baixo_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir
     MPI_Sendrecv(&(diag_tras_cima_s[0]), sub_x, MPI_CHAR, frente_baixo_rank, 0, &(diag_tras_cima_r[0]), sub_x, MPI_CHAR, tras_cima_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir
  
-    MPI_Sendrecv(&(face_dir_s[0][0]), sub_z*sub_y, MPI_INT, esq_rank, 0, &(face_dir_r[0][0]), sub_z*sub_y, MPI_INT, dir_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir
-    MPI_Sendrecv(&(face_esq_s[0][0]), sub_z*sub_y, MPI_INT, dir_rank, 0, &(face_esq_r[0][0]), sub_z*sub_y, MPI_INT, esq_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir
-    MPI_Sendrecv(&(face_cima_s[0][0]), sub_y*sub_x, MPI_INT, baixo_rank, 0,&(face_cima_r[0][0]), sub_y*sub_x, MPI_INT, cima_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir
-    MPI_Sendrecv(&(face_baixo_s[0][0]), sub_y*sub_x, MPI_INT, cima_rank, 0, &(face_baixo_r[0][0]), sub_y*sub_x, MPI_INT, baixo_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir
-    MPI_Sendrecv(&(face_frente_s[0][0]), sub_z*sub_x, MPI_INT, frente_rank, 0, &(face_frente_r[0][0]), sub_z*sub_x, MPI_INT, tras_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir
-    MPI_Sendrecv(&(face_tras_s[0][0]), sub_z*sub_x, MPI_INT, tras_rank, 0, &(face_tras_r[0][0]), sub_z*sub_x, MPI_INT, frente_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir
+    MPI_Sendrecv(&(face_dir_s[0][0]), sub_z*sub_y, MPI_CHAR, esq_rank, 0, &(face_dir_r[0][0]), sub_z*sub_y, MPI_CHAR, dir_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir
+    MPI_Sendrecv(&(face_esq_s[0][0]), sub_z*sub_y, MPI_CHAR, dir_rank, 0, &(face_esq_r[0][0]), sub_z*sub_y, MPI_CHAR, esq_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir
+    MPI_Sendrecv(&(face_cima_s[0][0]), sub_y*sub_x, MPI_CHAR, baixo_rank, 0,&(face_cima_r[0][0]), sub_y*sub_x, MPI_CHAR, cima_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir
+    MPI_Sendrecv(&(face_baixo_s[0][0]), sub_y*sub_x, MPI_CHAR, cima_rank, 0, &(face_baixo_r[0][0]), sub_y*sub_x, MPI_CHAR, baixo_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir
+    MPI_Sendrecv(&(face_frente_s[0][0]), sub_z*sub_x, MPI_CHAR, frente_rank, 0, &(face_frente_r[0][0]), sub_z*sub_x, MPI_CHAR, tras_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir
+    MPI_Sendrecv(&(face_tras_s[0][0]), sub_z*sub_x, MPI_CHAR, tras_rank, 0, &(face_tras_r[0][0]), sub_z*sub_x, MPI_CHAR, frente_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir
 
     for(int k =0; k<sub_z;k++)
     {
@@ -749,7 +749,7 @@ int main(int argc, char *argv[]) {
     cria_primeira_grid (NUM_LINHAS);
     if (rank==0)exec_time = -omp_get_wtime();
 
-    comunica_entre_processos (grid_even, sub_x, sub_y, sub_z, c_final, b_final,a_final,  cart_comm);
+    comunica_entre_processos (grid_even, sub_x, sub_y, sub_z, c_final, b_final, a_final, cart_comm);
 
     for (int gen_number = 1; gen_number<= number_of_gens; ++gen_number){
 
