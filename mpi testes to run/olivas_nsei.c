@@ -550,6 +550,13 @@ int main(int argc, char *argv[]) {
     max_gen = (int *)malloc( 10 * sizeof(int)); 
     count_species= (long *)malloc( 10 * sizeof(long)); 
     count_species_new= (long *)malloc( 10 * sizeof(long)); 
+    
+    for(int x=0; x<10; x++)
+    {
+        max_gen[x]=0;
+        count_species[x]=0;
+        count_species_new[x]=0;
+    }
 
 
     divide_number_parts(NUM_LINHAS,  a_final, sub_divz_z);
