@@ -273,6 +273,48 @@ void comunica_entre_processos (char ***data_send, int sub_x, int sub_y, int sub_
     char *diag_esq_cima_s, *diag_esq_cima_r, *diag_dir_cima_s, *diag_dir_cima_r, *diag_esq_baixo_s, *diag_esq_baixo_r, *diag_dir_baixo_s, *diag_dir_baixo_r;
     char *diag_frente_baixo_s, *diag_frente_baixo_r, *diag_frente_cima_s, *diag_frente_cima_r, *diag_tras_baixo_s, *diag_tras_baixo_r, *diag_tras_cima_s, *diag_tras_cima_r;
 
+    face_dir_s=alloc_2d_int(sub_z,sub_y);
+    face_dir_r=alloc_2d_int(sub_z,sub_y);
+    face_esq_s=alloc_2d_int(sub_z,sub_y);
+    face_esq_r=alloc_2d_int(sub_z,sub_y);
+    face_cima_s=alloc_2d_int(sub_y,sub_x);
+    face_cima_r=alloc_2d_int(sub_y,sub_x);
+    face_baixo_s=alloc_2d_int(sub_y,sub_x);
+    face_baixo_r=alloc_2d_int(sub_y,sub_x);
+    face_frente_s=alloc_2d_int(sub_z,sub_x);
+    face_frente_r=alloc_2d_int(sub_z,sub_x);
+    face_tras_s=alloc_2d_int(sub_z,sub_x);
+    face_tras_r=alloc_2d_int(sub_z,sub_x);
+
+
+    diag_esq_tras_r = (char *)malloc(sub_z*sizeof(char));
+    diag_esq_tras_s = (char *)malloc(sub_z*sizeof(char));
+    diag_dir_tras_r = (char *)malloc(sub_z*sizeof(char));
+    diag_dir_tras_s = (char *)malloc(sub_z*sizeof(char));
+    diag_esq_frente_r = (char *)malloc(sub_z*sizeof(char));
+    diag_esq_frente_s = (char *)malloc(sub_z*sizeof(char));
+    diag_dir_frente_r = (char *)malloc(sub_z*sizeof(char));
+    diag_dir_frente_s = (char *)malloc(sub_z*sizeof(char));
+
+    diag_esq_cima_r = (char *)malloc(sub_y*sizeof(char));
+    diag_esq_cima_s = (char *)malloc(sub_y*sizeof(char));
+    diag_dir_cima_r = (char *)malloc(sub_y*sizeof(char));
+    diag_dir_cima_s = (char *)malloc(sub_y*sizeof(char));
+    diag_esq_baixo_r = (char *)malloc(sub_y*sizeof(char));
+    diag_esq_baixo_s = (char *)malloc(sub_y*sizeof(char));
+    diag_dir_baixo_r = (char *)malloc(sub_y*sizeof(char));
+    diag_dir_baixo_s = (char *)malloc(sub_y*sizeof(char));
+
+    diag_frente_cima_r = (char *)malloc(sub_x*sizeof(char));
+    diag_frente_cima_s = (char *)malloc(sub_x*sizeof(char));
+    diag_tras_cima_r = (char *)malloc(sub_x*sizeof(char));
+    diag_tras_cima_s = (char *)malloc(sub_x*sizeof(char));
+    diag_tras_baixo_r = (char *)malloc(sub_x*sizeof(char));
+    diag_tras_baixo_s = (char *)malloc(sub_x*sizeof(char));
+    diag_frente_baixo_r = (char *)malloc(sub_x*sizeof(char));
+    diag_frente_baixo_s = (char *)malloc(sub_x*sizeof(char));
+    
+
     int aux_x, aux_y, aux_z; 
     int cima_rank, baixo_rank, esq_rank, dir_rank, frente_rank, tras_rank;
     int dir_cima_rank, esq_baixo_rank,dir_baixo_rank, esq_cima_rank, frente_cima_rank, tras_baixo_rank;
