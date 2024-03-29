@@ -670,6 +670,13 @@ int main(int argc, char *argv[]) {
     if (rank==0) exec_time += omp_get_wtime();
     if(rank==0) fprintf(stderr, "%.3fs\n", exec_time);
 
+    if (rank == 0){
+        for(int auxi=1; auxi < 10; auxi++)
+        {
+          printf("%d %ld %d \n", auxi, count_species_new[auxi], max_gen[auxi]);
+        }
+    }
+
    
 
     freeMatrix (sub_y, sub_z);
