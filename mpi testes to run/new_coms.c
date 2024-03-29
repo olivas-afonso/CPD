@@ -258,9 +258,7 @@ void freeMatrix2d(char ** matrix, int sub_y) {
 
     for (i = 0; i < sub_y; i++) {
         free(matrix[i]);
-        free(matrix[i]);
     }
-
     free (matrix);
 
 }
@@ -468,7 +466,7 @@ void comunica_entre_processos (char ***data_send, int sub_x, int sub_y, int sub_
 
     }
 
-    //freeMatrix2d(face_dir_s, sub_z);
+    freeMatrix2d(face_dir_s, sub_z);
     //freeMatrix2d(face_dir_r, sub_z);
     //freeMatrix2d(face_esq_s, sub_z);
     //freeMatrix2d(face_esq_r, sub_z);
