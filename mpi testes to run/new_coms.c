@@ -465,21 +465,6 @@ void comunica_entre_processos (char ***data_send, int sub_x, int sub_y, int sub_
 
     }
 
-    if(rank==0)
-    {
-        for(int i=0; i<(sub_z+2);i++)
-        {
-            printf("CAMADA %d\n", i);
-            for(int j=0; j<(sub_y+2);j++)
-            {
-                for(int k=0; k<(sub_x+2);k++)
-                {
-                    printf("%d ", data_send[i][j][k]);
-                }
-                printf("\n");
-            }
-        }
-    }
 
     
     free (face_dir_s);
@@ -712,15 +697,6 @@ int main(int argc, char *argv[]) {
     divide_number_parts(NUM_LINHAS,  a_final, sub_divz_z);
     divide_number_parts(NUM_LINHAS,  b_final, sub_divz_y);
     divide_number_parts(NUM_LINHAS,  c_final, sub_divz_x);
-
-    if(rank==0)
-    {
-        for(int i=0; i<b_final;i++)
-        {
-            printf("DIVZ Z:%d   ", sub_divz_y[i]);
-        }
-        printf("\n");
-    }
 
     
 
