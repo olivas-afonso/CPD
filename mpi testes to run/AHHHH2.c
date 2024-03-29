@@ -409,7 +409,7 @@ int main(int argc, char *argv[]) {
         for(int j=0;j<sub_x;j++)
         {
             data_send[sub_z+1][i+1][j+1]=face_cima_r[i][j];
-            data_send[0][i+1][j+1]=face_baixo_s[i][j];
+            data_send[0][i+1][j+1]=face_baixo_r[i][j];
         }
 
     }
