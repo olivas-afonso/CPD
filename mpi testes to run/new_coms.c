@@ -265,7 +265,7 @@ void freeMatrix2d(char ** matrix, int sub_y) {
 
 void comunica_entre_processos (char ***data_send, int sub_x, int sub_y, int sub_z, MPI_Comm cart_comm){
     
-    printf("SUB_X:%d    SUB_Y:%d    SUB_Z:%d\n", sub_x, sub_y, sub_z);
+    //printf("SUB_X:%d    SUB_Y:%d    SUB_Z:%d\n", sub_x, sub_y, sub_z);
 
     char **face_dir_s, **face_dir_r, **face_esq_s, **face_esq_r, **face_cima_s, **face_cima_r, **face_baixo_s, **face_baixo_r;
     char **face_frente_s, **face_frente_r, **face_tras_s, **face_tras_r;
