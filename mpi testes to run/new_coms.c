@@ -264,6 +264,8 @@ void freeMatrix2d(char ** matrix, int sub_y) {
 }
 
 void comunica_entre_processos (char ***data_send, int sub_x, int sub_y, int sub_z, MPI_Comm cart_comm){
+    
+    printf("SUB_X:%d    SUB_Y:%d    SUB_Z:%d\n", sub_x, sub_y, sub_z);
 
     char **face_dir_s, **face_dir_r, **face_esq_s, **face_esq_r, **face_cima_s, **face_cima_r, **face_baixo_s, **face_baixo_r;
     char **face_frente_s, **face_frente_r, **face_tras_s, **face_tras_r;
@@ -466,7 +468,6 @@ void comunica_entre_processos (char ***data_send, int sub_x, int sub_y, int sub_
 
     }
 
-    //freeMatrix2d(face_dir_s, sub_z);
 
     
     free (face_dir_s);
@@ -481,22 +482,7 @@ void comunica_entre_processos (char ***data_send, int sub_x, int sub_y, int sub_
     free (face_frente_r);
     free (face_tras_s);
     free (face_tras_r);
-    /*
-    freeMatrix2d(face_dir_r, sub_z);
-    freeMatrix2d(face_esq_s, sub_z);
-    freeMatrix2d(face_esq_r, sub_z);
 
-    freeMatrix2d(face_cima_s, sub_y);
-    freeMatrix2d(face_cima_r, sub_y);
-    freeMatrix2d(face_baixo_s, sub_y);
-    freeMatrix2d(face_baixo_r, sub_y);
-
-    freeMatrix2d(face_frente_s, sub_z);
-    freeMatrix2d(face_frente_r, sub_z);
-    freeMatrix2d(face_tras_s, sub_z);
-    freeMatrix2d(face_tras_r, sub_z);
-    */
-    
     free(diag_esq_tras_r);
     free(diag_esq_tras_s);
     free(diag_dir_tras_r);
