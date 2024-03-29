@@ -336,13 +336,13 @@ int main(int argc, char *argv[]) {
         
     }
 
-    MPI_Sendrecv(send_x, 4, MPI_INT, esq_rank, 0, rcv_x, 4, MPI_INT, dir_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir
+    MPI_Sendrecv(send_x, sub_z*sub_y, MPI_INT, esq_rank, 0, rcv_x, sub_z*sub_y, MPI_INT, dir_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir
 
     for(int k =0; k<sub_z;k++)
     {
         for(int i=0; i<sub_y; i++)
         {
-            data_send[k+1][i+1][sub_x+1]=rcv_x[k+1][i+1];
+            data_send[k+1][i+1][sub_x+1]=rcv_x[k][i];
         }
         
     }
