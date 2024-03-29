@@ -471,7 +471,7 @@ void comunica_entre_processos (char ***data_send, int sub_x, int sub_y, int sub_
     for (int i = 0; i < sub_y; i++) {
         free(face_dir_r[i]);
     }
-    free (face_dir_r);
+    //free (face_dir_r);
     /*
     freeMatrix2d(face_dir_r, sub_z);
     freeMatrix2d(face_esq_s, sub_z);
