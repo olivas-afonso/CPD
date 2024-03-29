@@ -21,6 +21,9 @@ char ***grid_even;
 char ***grid_odd;
 
 long count_species_local[10]={0,0,0,0,0,0,0,0,0,0};
+int max_gen[10]={0,0,0,0,0,0,0,0,0,0};
+    long count_species[10]={0,0,0,0,0,0,0,0,0,0};
+    long count_species_new[10]={0,0,0,0,0,0,0,0,0,0};
 
 //long max_count[10]={0,0,0,0,0,0,0,0,0,0};
 
@@ -185,12 +188,13 @@ void aloca_matrizes (int sub_x, int sub_y, int sub_z){
 
 void verifica_max (int *max_gen, int gen_number){
     MPI_Barrier(MPI_COMM_WORLD);
-    MPI_Reduce(count_species_local, count_species, 10, MPI_INT, MPI_SUM, 0, MPI_COMM_WORLD);
+    //MPI_Reduce(count_species_local, count_species, 10, MPI_INT, MPI_SUM, 0, MPI_COMM_WORLD);
     
     /*for (int x=1; x< 10; ++x){
         printf ("X=%d Cnt=%d\n", x, count_species[x]);
     }*/
 
+/*
     if (rank == 0){
         for(int x=1; x < 10; x++)
         {
@@ -201,9 +205,10 @@ void verifica_max (int *max_gen, int gen_number){
             }
         }    
     }
+    */
 }
 
-void cria_primeira_grid (int NUM_LINHAS,int * count_species, int* count_species_new){
+void cria_primeira_grid (int NUM_LINHAS){
     int varrimento_x = 1;
     int varrimento_y = 1;
     int varrimento_z = 1;
@@ -265,7 +270,7 @@ if(rank==0)
         {
             if(count_species[auxiii] > count_species_new[auxiii])
             {   
-                if(auxiii == 7) printf("COUNT_SPECIES:%d  MAX COUNT:%d\n",count_species[auxiii], max_count[auxiii] );
+                if(auxiii == 7) printf("COUNT_SPECIES:%d  MAX COUNT:%d\n",count_species[auxiii], count_species_new[auxiii] );
                 count_species_new[auxiii] = count_species[auxiii];
                 max_gen[auxiii]=0;
             }
@@ -525,9 +530,6 @@ int main(int argc, char *argv[]) {
     MPI_Comm_size(MPI_COMM_WORLD, &size);
 
     int number_of_gens = 0;
-    int max_gen[10]={0,0,0,0,0,0,0,0,0,0};
-    long count_species[10]={0,0,0,0,0,0,0,0,0,0};
-    long count_species_new[10]={0,0,0,0,0,0,0,0,0,0};
 
     number_of_gens = atoi (argv[1]);
     NUM_LINHAS = atoi (argv[2]);
@@ -571,7 +573,7 @@ int main(int argc, char *argv[]) {
     limites_y ();
     limites_z();
 
-    cria_primeira_grid (NUM_LINHAS, max_gen);
+    cria_primeira_grid (NUM_LINHAS);
     //verifica_max (max_gen, 0);
     comunica_entre_processos (grid_even, sub_x, sub_y, sub_z, cart_comm);
 
@@ -651,7 +653,7 @@ int main(int argc, char *argv[]) {
             {
                 if(count_species[auxiii] > count_species_new[auxiii])
                 {   
-                    if(auxiii == 7) printf("COUNT_SPECIES:%d  MAX COUNT:%d\n",count_species[auxiii], max_count[auxiii] );
+                    if(auxiii == 7) printf("COUNT_SPECIES:%d  MAX COUNT:%d\n",count_species[auxiii], count_species_new[auxiii] );
                     count_species_new[auxiii] = count_species[auxiii];
                     max_gen[auxiii]=gen_number;
                 }
@@ -663,7 +665,7 @@ int main(int argc, char *argv[]) {
     if (rank == 0){
         for(int auxi=1; auxi < 10; auxi++)
         {
-          printf("%d %ld %d \n", auxi, max_count[auxi], max_gen[auxi]);
+          printf("%d %ld %d \n", auxi, count_species_new[auxi], max_gen[auxi]);
         }
     }
 
