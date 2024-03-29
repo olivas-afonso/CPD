@@ -106,6 +106,7 @@ void divide_number_parts(int number, int divide, int * sub_div) {
         end_index = start_index + part_size + (i < remainder ? 1 : 0);
 
         sub_div[i]=end_index-start_index;
+        if (rank==18) printf("SUB_DIV:%d\n", end_index-start_index);
         start_index = end_index;
     }
 }
@@ -264,7 +265,7 @@ void freeMatrix2d(char ** matrix, int sub_y) {
 }
 
 void comunica_entre_processos (char ***data_send, int sub_x, int sub_y, int sub_z, MPI_Comm cart_comm){
-
+    
     printf("SUB_X:%d    SUB_Y:%d    SUB_Z:%d\n", sub_x, sub_y, sub_z);
 
     char **face_dir_s, **face_dir_r, **face_esq_s, **face_esq_r, **face_cima_s, **face_cima_r, **face_baixo_s, **face_baixo_r;
@@ -691,7 +692,7 @@ int main(int argc, char *argv[]) {
 
     int a_final, b_final, c_final;
     divide_em_tres (&a_final, &b_final, &c_final, size);
-   
+    printf("a :%d   b:%d    c:%d\n", a_final, b_final, c_final);
 
     sub_divz_z= (int *)malloc( a_final * sizeof(int)); 
     sub_divz_y= (int *)malloc( b_final * sizeof(int)); 
