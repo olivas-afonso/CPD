@@ -124,6 +124,15 @@ void My_MPI_Cart_Shift(MPI_Comm cart_comm, int pos_x, int pos_y,int pos_z, int d
     MPI_Cart_rank(cart_comm, my_coords, source);
 }
 
+int **alloc_2d_int(int rows, int cols) {
+    int *data = (int *)malloc(rows*cols*sizeof(int));
+    int **array= (int **)malloc(rows*sizeof(int*));
+    for (int i=0; i<rows; i++)
+        array[i] = &(data[cols*i]);
+
+    return array;
+}
+
 int main(int argc, char *argv[]) {
 
     int NUM_LINHAS;
@@ -280,15 +289,7 @@ int main(int argc, char *argv[]) {
         }
     }
 
-    int *data = (int *)malloc(sub_z*sub_y*sizeof(int));
-    int **array= (int **)malloc(sub_z*sizeof(int*));
-    for (int i=0; i<sub_z; i++)
-        array[i] = &(data[sub_y*i]);
-
-    int *data_r = (int *)malloc(sub_z*sub_y*sizeof(int));
-    int **array_r= (int **)malloc(sub_z*sizeof(int*));
-    for (int i=0; i<sub_z; i++)
-        array_r[i] = &(data_r[sub_y*i]);
+    
     
     int **rcv_x = (int **) malloc ((sub_z) * sizeof (int*));
     for(int i=0;i<sub_z;i++)
@@ -303,6 +304,10 @@ int main(int argc, char *argv[]) {
     
  
     int test[2][2];
+    int **data_s, **data_r;
+
+    data_s=alloc_2d_int(2,2);
+    data_r=alloc_2d_int(2,2);
 
     int aux_x, aux_y, aux_z; 
     int cima_rank, baixo_rank, esq_rank, dir_rank, frente_rank, tras_rank;
@@ -341,13 +346,13 @@ int main(int argc, char *argv[]) {
     {
         for(int i=0; i<sub_y; i++)
         {
-            data[k][i]=data_send[k+1][i+1][1];
+            data_s[k][i]=data_send[k+1][i+1][1];
             if (rank==1) printf("SEND %d\n", data[k][i]);
         }
         
     }
 
-    MPI_Sendrecv(&(data[0][0]), 2*2, MPI_INT, esq_rank, 0, &(data_r[0][0]), 2*2, MPI_INT, dir_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir
+    MPI_Sendrecv(&(data_s[0][0]), 2*2, MPI_INT, esq_rank, 0, &(data_r[0][0]), 2*2, MPI_INT, dir_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir
 
     for(int k =0; k<sub_z;k++)
     {
