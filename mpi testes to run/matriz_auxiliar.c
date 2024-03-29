@@ -264,7 +264,7 @@ if(rank==0)
         {
             if(count_species[auxiii] > max_count[auxiii])
             {   
-                if(auxiii == 7) printf("COUNT_SPECIES:%d  MAX COUNT:%d\n",count_species[auxiii], max_count[auxiii] );
+                if(auxiii == 7) printf("COUNT_SPECIES1:%d  MAX COUNT1:%d\n",count_species[auxiii], max_count[auxiii] );
                 max_count[auxiii] = count_species[auxiii];
                 max_gen[auxiii]=0;
             }
@@ -531,8 +531,10 @@ int main(int argc, char *argv[]) {
     density = atof (argv[3]);
     seed = atoi (argv[4]);
 
+/*
     int contagem_ger[N_SPECIES][number_of_gens];
     int sporting_para_o_olivas_falar = 0;
+
 
     for(int cont1=0; cont1 < N_SPECIES; cont1++){
         for(int cont2=0; cont2 < number_of_gens; cont2++){
@@ -549,6 +551,8 @@ if(rank == 0){
         printf("\n");
     }
 }
+ */
+
     init_r4uni(seed);
 
 	
