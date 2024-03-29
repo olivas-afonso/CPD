@@ -364,7 +364,7 @@ int main(int argc, char *argv[]) {
         for(int j=0;j<sub_x;j++)
         {
             face_frente_s[k][j]=data_send[k+1][1][j+1];
-            face_tras_s[k][j]=data_send[k+1][1][j+1];
+            face_tras_s[k][j]=data_send[k+1][sub_y][j+1];
         }
         
     }
@@ -441,7 +441,7 @@ int main(int argc, char *argv[]) {
             MPI_Sendrecv(&data_send[aux_z+1][1][aux_x+1], 1, MPI_INT, tras_rank, 0, &data_send[aux_z+1][sub_y+1][aux_x+1], 1, MPI_INT, frente_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir   
             
             //FACE TRAS
-            MPI_Sendrecv(&data_send[aux_z+1][1][aux_x+1], 1, MPI_INT, frente_rank, 0, &data_send[aux_z+1][0][aux_x+1], 1, MPI_INT, tras_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir   
+            MPI_Sendrecv(&data_send[aux_z+1][sub_y][aux_x+1], 1, MPI_INT, frente_rank, 0, &data_send[aux_z+1][0][aux_x+1], 1, MPI_INT, tras_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir   
             */
         }
         
