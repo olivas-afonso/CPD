@@ -271,7 +271,7 @@ if(rank==0)
             printf("COUNT_YA : %d\n",count_species[auxiii] );
             if(count_species[auxiii] > count_species_new[auxiii])
             {   
-                if(auxiii == 7) printf("GEN: %d COUNT_SPECIES:%d  MAX COUNT:%d\n",0,count_species[auxiii], count_species_new[auxiii] );
+                if(auxiii == 7) printf("GEN: %d COUNT_SPECIES:%ld  MAX COUNT:%ld\n",0,count_species[auxiii], count_species_new[auxiii] );
                 count_species_new[auxiii] = count_species[auxiii];
                 max_gen[auxiii]=0;
             }
@@ -656,7 +656,7 @@ int main(int argc, char *argv[]) {
         }
                
         MPI_Barrier(MPI_COMM_WORLD);
-        MPI_Reduce(count_species_local, count_species, sizeof (count_species), MPI_INT, MPI_SUM, 0, MPI_COMM_WORLD);
+        MPI_Reduce(count_species_local, count_species, sizeof (count_species), MPI_LONG, MPI_SUM, 0, MPI_COMM_WORLD);
         MPI_Barrier(MPI_COMM_WORLD);
     /*for (int x=1; x< 10; ++x){
         printf ("X=%d Cnt=%d\n", x, count_species[x]);
@@ -668,7 +668,7 @@ int main(int argc, char *argv[]) {
             {
                 if(count_species[auxiii] > count_species_new[auxiii])
                 {   
-                    if(auxiii == 7) printf("GEN: %d COUNT_SPECIES:%d  MAX COUNT:%d\n",gen_number,count_species[auxiii], count_species_new[auxiii] );
+                    if(auxiii == 7) printf("GEN: %d COUNT_SPECIES:%ld  MAX COUNT:%ld\n",gen_number,count_species[auxiii], count_species_new[auxiii] );
                     count_species_new[auxiii] = count_species[auxiii];
                     max_gen[auxiii]=gen_number;
                 }
