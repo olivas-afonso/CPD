@@ -386,7 +386,7 @@ int main(int argc, char *argv[]) {
     }
 
 
-    MPI_Sendrecv(&(diag_esq_tras_s[0]), sub_z, MPI_INT, esq_rank, 0, &(diag_esq_tras_r[0]), 2*2, MPI_INT, dir_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir
+    MPI_Sendrecv(&(diag_esq_tras_s[0]), sub_z, MPI_INT, dir_frente_rank, 0, &(diag_esq_tras_r[0]), 2*2, MPI_INT, esq_tras_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir
     
     MPI_Sendrecv(&(face_dir_s[0][0]), sub_z*sub_y, MPI_INT, esq_rank, 0, &(face_dir_r[0][0]), 2*2, MPI_INT, dir_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir
     MPI_Sendrecv(&(face_esq_s[0][0]), sub_z*sub_y, MPI_INT, dir_rank, 0, &(face_esq_r[0][0]), 2*2, MPI_INT, esq_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir
