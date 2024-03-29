@@ -313,7 +313,7 @@ void comunica_entre_processos (char ***data_send, int sub_x, int sub_y, int sub_
     diag_tras_baixo_s = (char *)malloc(sub_x*sizeof(char));
     diag_frente_baixo_r = (char *)malloc(sub_x*sizeof(char));
     diag_frente_baixo_s = (char *)malloc(sub_x*sizeof(char));
-    
+
 
     int aux_x, aux_y, aux_z; 
     int cima_rank, baixo_rank, esq_rank, dir_rank, frente_rank, tras_rank;
@@ -468,20 +468,20 @@ void comunica_entre_processos (char ***data_send, int sub_x, int sub_y, int sub_
 
     }
 
-    freeMatrix2d(face_dir_s, sub_z);
-    freeMatrix2d(face_dir_r, sub_z);
-    freeMatrix2d(face_esq_s, sub_z);
-    freeMatrix2d(face_esq_r, sub_z);
+    //freeMatrix2d(face_dir_s, sub_z);
+    //freeMatrix2d(face_dir_r, sub_z);
+    //freeMatrix2d(face_esq_s, sub_z);
+    //freeMatrix2d(face_esq_r, sub_z);
 
-    freeMatrix2d(face_cima_s, sub_y);
-    freeMatrix2d(face_cima_r, sub_y);
-    freeMatrix2d(face_baixo_s, sub_y);
-    freeMatrix2d(face_baixo_r, sub_y);
+    //freeMatrix2d(face_cima_s, sub_y);
+    //freeMatrix2d(face_cima_r, sub_y);
+    //freeMatrix2d(face_baixo_s, sub_y);
+    //freeMatrix2d(face_baixo_r, sub_y);
 
-    freeMatrix2d(face_frente_s, sub_z);
-    freeMatrix2d(face_frente_r, sub_z);
-    freeMatrix2d(face_tras_s, sub_z);
-    freeMatrix2d(face_tras_r, sub_z);
+    //freeMatrix2d(face_frente_s, sub_z);
+    //freeMatrix2d(face_frente_r, sub_z);
+    //freeMatrix2d(face_tras_s, sub_z);
+    //freeMatrix2d(face_tras_r, sub_z);
     
     free(diag_esq_tras_r);
     free(diag_esq_tras_s);
