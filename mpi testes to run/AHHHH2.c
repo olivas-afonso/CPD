@@ -306,6 +306,7 @@ int main(int argc, char *argv[]) {
     int test[2][2];
     int **face_dir_s, **face_dir_r, **face_esq_s, **face_esq_r, **face_cima_s, **face_cima_r, **face_baixo_s, **face_baixo_r;
     int **face_frente_s, **face_frente_r, **face_tras_s, **face_tras_r;
+    int *diag_esq_tras_s, diag_esq_tras_r;
 
     face_dir_s=alloc_2d_int(2,2);
     face_dir_r=alloc_2d_int(2,2);
@@ -319,6 +320,10 @@ int main(int argc, char *argv[]) {
     face_frente_r=alloc_2d_int(2,2);
     face_tras_s=alloc_2d_int(2,2);
     face_tras_r=alloc_2d_int(2,2);
+
+
+    diag_esq_tras_r = (int *)malloc(sub_z*sizeof(int));
+    diag_esq_tras_s = (int *)malloc(sub_z*sizeof(int));
 
     int aux_x, aux_y, aux_z; 
     int cima_rank, baixo_rank, esq_rank, dir_rank, frente_rank, tras_rank;
@@ -355,6 +360,7 @@ int main(int argc, char *argv[]) {
 
     for(int k =0; k<sub_z;k++)
     {
+        diag_esq_tras_s[k]=data_send[k+1][1][1];
         for(int i=0; i<sub_y; i++)
         {
             face_dir_s[k][i]=data_send[k+1][i+1][1];
@@ -380,16 +386,18 @@ int main(int argc, char *argv[]) {
     }
 
 
-
-    MPI_Sendrecv(&(face_dir_s[0][0]), 2*2, MPI_INT, esq_rank, 0, &(face_dir_r[0][0]), 2*2, MPI_INT, dir_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir
-    MPI_Sendrecv(&(face_esq_s[0][0]), 2*2, MPI_INT, dir_rank, 0, &(face_esq_r[0][0]), 2*2, MPI_INT, esq_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir
-    MPI_Sendrecv(&(face_cima_s[0][0]), 2*2, MPI_INT, cima_rank, 0,&(face_cima_r[0][0]), 2*2, MPI_INT, baixo_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir
-    MPI_Sendrecv(&(face_baixo_s[0][0]), 2*2, MPI_INT, baixo_rank, 0, &(face_baixo_r[0][0]), 2*2, MPI_INT, cima_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir
-    MPI_Sendrecv(&(face_frente_s[0][0]), 2*2, MPI_INT, frente_rank, 0, &(face_frente_r[0][0]), 2*2, MPI_INT, tras_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir
-    MPI_Sendrecv(&(face_tras_s[0][0]), 2*2, MPI_INT, tras_rank, 0, &(face_tras_r[0][0]), 2*2, MPI_INT, frente_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir
+    MPI_Sendrecv(&(diag_esq_tras_s[0]), sub_z, MPI_INT, esq_rank, 0, &(diag_esq_tras_r[0]), 2*2, MPI_INT, dir_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir
+    
+    MPI_Sendrecv(&(face_dir_s[0][0]), sub_z*sub_y, MPI_INT, esq_rank, 0, &(face_dir_r[0][0]), 2*2, MPI_INT, dir_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir
+    MPI_Sendrecv(&(face_esq_s[0][0]), sub_z*sub_y, MPI_INT, dir_rank, 0, &(face_esq_r[0][0]), 2*2, MPI_INT, esq_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir
+    MPI_Sendrecv(&(face_cima_s[0][0]), sub_y*sub_x, MPI_INT, cima_rank, 0,&(face_cima_r[0][0]), 2*2, MPI_INT, baixo_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir
+    MPI_Sendrecv(&(face_baixo_s[0][0]), sub_y*sub_x, MPI_INT, baixo_rank, 0, &(face_baixo_r[0][0]), 2*2, MPI_INT, cima_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir
+    MPI_Sendrecv(&(face_frente_s[0][0]), sub_z*sub_x, MPI_INT, frente_rank, 0, &(face_frente_r[0][0]), 2*2, MPI_INT, tras_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir
+    MPI_Sendrecv(&(face_tras_s[0][0]), sub_z*sub_x, MPI_INT, tras_rank, 0, &(face_tras_r[0][0]), 2*2, MPI_INT, frente_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir
 
     for(int k =0; k<sub_z;k++)
     {
+        data_send[k+1][sub_y+1][sub_x+1] = diag_esq_tras_r[k];
         for(int i=0; i<sub_y; i++)
         {
             data_send[k+1][i+1][sub_x+1]=face_dir_r[k][i];
