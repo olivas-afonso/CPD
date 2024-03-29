@@ -310,18 +310,18 @@ int main(int argc, char *argv[]) {
     int *diag_esq_cima_s, *diag_esq_cima_r, *diag_dir_cima_s, *diag_dir_cima_r, *diag_esq_baixo_s, *diag_esq_baixo_r, *diag_dir_baixo_s, *diag_dir_baixo_r;
     int *diag_frente_baixo_s, *diag_frente_baixo_r, *diag_frente_cima_s, *diag_frente_cima_r, *diag_tras_baixo_s, *diag_tras_baixo_r, *diag_tras_cima_s, *diag_tras_cima_r;
     
-    face_dir_s=alloc_2d_int(2,2);
-    face_dir_r=alloc_2d_int(2,2);
-    face_esq_s=alloc_2d_int(2,2);
-    face_esq_r=alloc_2d_int(2,2);
-    face_cima_s=alloc_2d_int(2,2);
-    face_cima_r=alloc_2d_int(2,2);
-    face_baixo_s=alloc_2d_int(2,2);
-    face_baixo_r=alloc_2d_int(2,2);
-    face_frente_s=alloc_2d_int(2,2);
-    face_frente_r=alloc_2d_int(2,2);
-    face_tras_s=alloc_2d_int(2,2);
-    face_tras_r=alloc_2d_int(2,2);
+    face_dir_s=alloc_2d_int(sub_z,sub_y);
+    face_dir_r=alloc_2d_int(sub_z,sub_y);
+    face_esq_s=alloc_2d_int(sub_z,sub_y);
+    face_esq_r=alloc_2d_int(sub_z,sub_y);
+    face_cima_s=alloc_2d_int(sub_y,sub_x);
+    face_cima_r=alloc_2d_int(sub_y,sub_x);
+    face_baixo_s=alloc_2d_int(sub_y,sub_x);
+    face_baixo_r=alloc_2d_int(sub_y,sub_x);
+    face_frente_s=alloc_2d_int(sub_z,sub_x);
+    face_frente_r=alloc_2d_int(sub_z,sub_x);
+    face_tras_s=alloc_2d_int(sub_z,sub_x);
+    face_tras_r=alloc_2d_int(sub_z,sub_x);
 
 
     diag_esq_tras_r = (int *)malloc(sub_z*sizeof(int));
@@ -359,11 +359,11 @@ int main(int argc, char *argv[]) {
     int esq_cima_tras_rank, dir_baixo_frente_rank, dir_cima_tras_rank, esq_baixo_frente_rank;
 
     My_MPI_Cart_Shift(cart_comm, 2, 1, 0, 1, 0, 1, &esq_baixo_rank, &dir_cima_rank); // DIAG DIR CIMA/ ESQ BAIXO
-    My_MPI_Cart_Shift(cart_comm, 2, 1, 0, 1, 1, 0, &esq_tras_rank, &dir_frente_rank); // DIAG DIR CIMA/ ESQ BAIXO
-    My_MPI_Cart_Shift(cart_comm, 2, 1, 0, 1, -1, 0, &esq_frente_rank, &dir_tras_rank); // DIAG DIR CIMA/ ESQ BAIXO
+    My_MPI_Cart_Shift(cart_comm, 2, 1, 0, 1, -1, 0, &esq_tras_rank, &dir_frente_rank); // DIAG DIR CIMA/ ESQ BAIXO
+    My_MPI_Cart_Shift(cart_comm, 2, 1, 0, 1, 1, 0, &esq_frente_rank, &dir_tras_rank); // DIAG DIR CIMA/ ESQ BAIXO
     My_MPI_Cart_Shift(cart_comm, 2, 1, 0, 1, 0, -1, &esq_cima_rank, &dir_baixo_rank); // DIAG DIR BAIXO/ ESQ CIMA
-    My_MPI_Cart_Shift(cart_comm, 2, 1, 0, 0, -(NUM_LINHAS-1), 1, &tras_baixo_rank, &frente_cima_rank); // DIAG FRENTE CIMA / TRAS BAIXO
-    My_MPI_Cart_Shift(cart_comm, 2, 1, 0, 0, -(NUM_LINHAS-1), -1, &tras_cima_rank, &frente_baixo_rank); // DIAG FRENTE CIMA / TRAS BAIXO
+    My_MPI_Cart_Shift(cart_comm, 2, 1, 0, 0, (NUM_LINHAS-1), 1, &tras_baixo_rank, &frente_cima_rank); // DIAG FRENTE CIMA / TRAS BAIXO
+    My_MPI_Cart_Shift(cart_comm, 2, 1, 0, 0, (NUM_LINHAS-1), -1, &tras_cima_rank, &frente_baixo_rank); // DIAG FRENTE CIMA / TRAS BAIXO
     My_MPI_Cart_Shift(cart_comm, 2, 1, 0, 1, 0, 0, &esq_rank, &dir_rank); // FACE DIR/ESQ
     My_MPI_Cart_Shift(cart_comm, 2, 1, 0, 0, 0, 1, &baixo_rank, &cima_rank); // FACE CIMA/BAIXO
     My_MPI_Cart_Shift(cart_comm, 2, 1, 0, 0, -1, 0, &frente_rank, &tras_rank); // FACE TRAS/CIMA
