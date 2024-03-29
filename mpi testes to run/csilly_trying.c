@@ -21,6 +21,8 @@ char ***grid_even;
 char ***grid_odd;
 long **count_species;
 
+long max_count[10]={0,0,0,0,0,0,0,0,0,0};
+long max_gen [10]={0,0,0,0,0,0,0,0,0,0};
 long count_species_local[10]={0,0,0,0,0,0,0,0,0,0};
 
 void init_r4uni(int input_seed)
@@ -559,7 +561,7 @@ int main(int argc, char *argv[]) {
         for (int y = 1; y< 10; ++x){
             if (count_species [x][y] > max){
                 max_count [y] = count_species [x][y];
-                max_count [y] = x;
+                max_gen [y] = x;
             }
         }
         max = 0;
