@@ -273,7 +273,7 @@ int main(int argc, char *argv[]) {
     int **send_x = (int **) malloc ((sub_z) * sizeof (int*));
     for(int i=0;i<sub_z;i++)
     {
-        send_x[i] = (int *) malloc ((sub_y) * sizeof (inty));
+        send_x[i] = (int *) malloc ((sub_y) * sizeof (int));
         for(int k =0; k<sub_y;k++)
         {
             send_x[i][k]=0;
@@ -283,7 +283,7 @@ int main(int argc, char *argv[]) {
     int **rcv_x = (int **) malloc ((sub_z) * sizeof (int*));
     for(int i=0;i<sub_z;i++)
     {
-        rcv_x[i] = (int *) malloc ((sub_y) * sizeof (inty));
+        rcv_x[i] = (int *) malloc ((sub_y) * sizeof (int));
         for(int k =0; k<sub_y;k++)
         {
             rcv_x[i][k]=0;
