@@ -661,7 +661,7 @@ if(rank == 0){
         }
                
         MPI_Barrier(MPI_COMM_WORLD);
-        MPI_Reduce(count_species_local, count_species, sizeof (count_species), MPI_INT, MPI_SUM, 0, MPI_COMM_WORLD);
+        MPI_Reduce(count_species_local, count_species, sizeof (count_species), MPI_LONG, MPI_SUM, 0, MPI_COMM_WORLD);
         MPI_Barrier(MPI_COMM_WORLD);
     /*for (int x=1; x< 10; ++x){
         printf ("X=%d Cnt=%d\n", x, count_species[x]);
