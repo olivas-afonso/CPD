@@ -584,7 +584,7 @@ int main(int argc, char *argv[]) {
         }
     }
 
-    freeMatrix (sub_y, sub_z);
+    //freeMatrix (sub_y, sub_z);
     
     MPI_Finalize();
     return 0; 
