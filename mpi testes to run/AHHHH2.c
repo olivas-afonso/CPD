@@ -398,11 +398,11 @@ int main(int argc, char *argv[]) {
 
     for(int i=0; i<sub_y; i++)
     {
-        diag_esq_cima_s[k]=data_send[1][i+1][sub_x];
-        diag_dir_cima_s[k]=data_send[1][i+1][1];
+        diag_esq_cima_s[i]=data_send[1][i+1][sub_x];
+        diag_dir_cima_s[i]=data_send[1][i+1][1];
 
-        diag_esq_baixo_s[k]=data_send[sub_z][i+1][sub_x];
-        diag_dir_baixo_s[k]=data_send[sub_z][i+1][1];
+        diag_esq_baixo_s[i]=data_send[sub_z][i+1][sub_x];
+        diag_dir_baixo_s[i]=data_send[sub_z][i+1][1];
 
         for(int j=0;j<sub_x;j++)
         {
