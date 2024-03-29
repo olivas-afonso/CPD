@@ -292,7 +292,7 @@ int main(int argc, char *argv[]) {
 
     
  
-    
+    int **test;
 
     int aux_x, aux_y, aux_z; 
     int cima_rank, baixo_rank, esq_rank, dir_rank, frente_rank, tras_rank;
@@ -337,13 +337,13 @@ int main(int argc, char *argv[]) {
         
     }
 
-    MPI_Sendrecv(send_x, 3, MPI_INT, esq_rank, 0, rcv_x, 3, MPI_INT, dir_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir
+    MPI_Sendrecv(send_x, 3, MPI_INT, esq_rank, 0, test, 3, MPI_INT, dir_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir
 
     for(int k =0; k<sub_z;k++)
     {
         for(int i=0; i<sub_y; i++)
         {
-            if(rank==0) printf("RCV %d\n", rcv_x[k][i]);
+            if(rank==0) printf("RCV %d\n", test[k][i]);
             //data_send[k+1][i+1][sub_x+1]=rcv_x[k][i];
         }
         
