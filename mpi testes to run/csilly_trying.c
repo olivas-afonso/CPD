@@ -19,11 +19,9 @@ int *sub_divz_x;
 
 char ***grid_even;
 char ***grid_odd;
+int **count_species;
 
 long count_species_local[10]={0,0,0,0,0,0,0,0,0,0};
-long count_species[10]={0,0,0,0,0,0,0,0,0,0};
-long max_count[10]={0,0,0,0,0,0,0,0,0,0};
-
 
 void init_r4uni(int input_seed)
 {
@@ -164,7 +162,7 @@ void divide_em_tres (int *a_final, int *b_final, int *c_final, int size){
 
 }
 
-void aloca_matrizes (int sub_x, int sub_y, int sub_z){
+void aloca_matrizes (int sub_x, int sub_y, int sub_z, int num_gens){
 
     grid_even = (char ***)malloc((sub_z+2) * sizeof(char **));
     grid_odd = (char ***)malloc((sub_z+2) * sizeof(char **));
@@ -181,26 +179,21 @@ void aloca_matrizes (int sub_x, int sub_y, int sub_z){
             }
         }
     }
+
+    count_species = (int **)malloc (num_gens * sizeof (int *));
+    for (int j = 0; i < num_gens){
+        count_species [j] = (int *) malloc (10 * sizeof (int));
+    }
+    
 }
 
 void verifica_max (int *max_gen, int gen_number){
     MPI_Barrier(MPI_COMM_WORLD);
-    MPI_Reduce(count_species_local, count_species, sizeof (count_species), MPI_INT, MPI_SUM, 0, MPI_COMM_WORLD);
+    MPI_Reduce(count_species_local, count_species [gen_number], sizeof (count_species), MPI_INT, MPI_SUM, 0, MPI_COMM_WORLD);
     MPI_Barrier(MPI_COMM_WORLD);
     /*for (int x=1; x< 10; ++x){
         printf ("X=%d Cnt=%d\n", x, count_species[x]);
     }*/
-
-    if (rank == 0){
-        for(int x=1; x < 10; x++)
-        {
-            if(count_species[x] > max_count[x])
-            {   
-                max_count[x] = count_species[x];
-                max_gen[x]=gen_number;
-            }
-        }    
-    }
 }
 
 void cria_primeira_grid (int NUM_LINHAS){
@@ -448,8 +441,6 @@ void rules(int sub_x ,int sub_y, int sub_z , char ***grid_new, char ***grid_old)
         
         for(aux_z=1; aux_z<= sub_z; aux_z ++)
         {   
-            //if (rank == 0)
-                //printf ("ENTREI EM Z\n");
             for(aux_y=1; aux_y<= sub_y; aux_y++)
             {
                 for(aux_x=1; aux_x<= sub_x; aux_x++)
@@ -462,8 +453,6 @@ void rules(int sub_x ,int sub_y, int sub_z , char ***grid_new, char ***grid_old)
                     {  
                         grid_new[aux_z][aux_y][aux_x]= life_rule(grid_old, aux_x, aux_y, aux_z);     
                     }
-                    //if (rank == 1)
-                    //printf ("Grid New = %d posx = %d posy = %d posz = %d\n", grid_new[aux_z][aux_y][aux_x], aux_x, aux_y, aux_z);
 
                     // se a celula esta viva nesta geracao, aumentamos o numero no array contador 
                     count_species_local[grid_new[aux_z][aux_y][aux_x]]++;
@@ -492,8 +481,14 @@ void freeMatrix(int sub_y, int sub_z) {
 
 int main(int argc, char *argv[]) {
 
+    
+	MPI_Init(&argc, &argv);
+    MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+    MPI_Comm_size(MPI_COMM_WORLD, &size);
+
     int number_of_gens = 0;
     int max_gen[10]={0,0,0,0,0,0,0,0,0,0};
+    long max_count[10]={0,0,0,0,0,0,0,0,0,0};
 
     number_of_gens = atoi (argv[1]);
     NUM_LINHAS = atoi (argv[2]);
@@ -501,10 +496,6 @@ int main(int argc, char *argv[]) {
     seed = atoi (argv[4]);
 
     init_r4uni(seed);
-
-	MPI_Init(&argc, &argv);
-    MPI_Comm_rank(MPI_COMM_WORLD, &rank);
-    MPI_Comm_size(MPI_COMM_WORLD, &size);
 
     int a_final, b_final, c_final;
     divide_em_tres (&a_final, &b_final, &c_final, size);
@@ -517,8 +508,6 @@ int main(int argc, char *argv[]) {
     divide_number_parts(NUM_LINHAS,  b_final, sub_divz_y);
     divide_number_parts(NUM_LINHAS,  c_final, sub_divz_x);
 
-  
-    //printf("SIZE %d\n", size);
     int count=0;
     //Cartesiano : 
     int dims[3] = { a_final, b_final, c_final};  // ISTO TEM DE VIR DOS INTEIROS QUE MULTIPLICAM O Nº PROCESSO
@@ -533,7 +522,7 @@ int main(int argc, char *argv[]) {
     int sub_y = sub_divz_y[my_coords[1]];
     int sub_x = sub_divz_x[my_coords[2]];
 
-    aloca_matrizes (sub_x, sub_y, sub_z);
+    aloca_matrizes (sub_x, sub_y, sub_z, number_of_gens);
 
     limites_x ();
     limites_y ();
@@ -542,32 +531,6 @@ int main(int argc, char *argv[]) {
     cria_primeira_grid (NUM_LINHAS);
     verifica_max (max_gen, 0);
     comunica_entre_processos (grid_even, sub_x, sub_y, sub_z, cart_comm);
-
-    /*if (rank == 0){
-        //printf ("Gen = 0\n");
-        for(int auxi=1; auxi < 10; auxi++)
-        {
-         //printf("%d %ld %d \n", auxi, max_count[auxi], max_gen[auxi]);
-        }
-    }
-
-    if(rank==1)
-            {
-                for(int auxi_x=1; auxi_x<3; auxi_x++)
-                {
-                    printf("CAMADA ODD\n");
-                    for(int auxi_y=1; auxi_y<3; auxi_y++)
-                    {
-                        for(int auxi_z=1; auxi_z<3; auxi_z++)
-                        {
-                            printf("%d ", grid_even[auxi_x][auxi_y][auxi_z]);
-                        }
-                        printf("\n");
-                    } 
-                }
-            }
-
-    */
 
     for (int gen_number = 1; gen_number<= number_of_gens; ++ gen_number){
 
@@ -584,22 +547,6 @@ int main(int argc, char *argv[]) {
             rules (sub_x, sub_y, sub_z, grid_odd, grid_even);
             comunica_entre_processos (grid_odd, sub_x, sub_y, sub_z, cart_comm);
             
-            /*if(rank==1)
-            {
-                for(int auxi_x=1; auxi_x<3; auxi_x++)
-                {
-                    printf("CAMADA ODD\n");
-                    for(int auxi_y=1; auxi_y<3; auxi_y++)
-                    {
-                        for(int auxi_z=1; auxi_z<3; auxi_z++)
-                        {
-                            printf("%d ", grid_odd[auxi_x][auxi_y][auxi_z]);
-                        }
-                        printf("\n");
-                    } 
-                }
-            }*/
-
         }   
         else{
             rules (sub_x, sub_y, sub_z, grid_even, grid_odd);
@@ -609,6 +556,16 @@ int main(int argc, char *argv[]) {
         verifica_max (max_gen ,gen_number);  
     }
 
+    int max = 0;
+    for (int x = 1; x<number_of_gens; ++x){
+        for (int y = 1; y< 10; ++x){
+            if (count_species [x][y] > max){
+                max_count [y] = count_species [x][y];
+                max_count [y] = x;
+            }
+        }
+        max = 0;
+    }
 
     if (rank == 0){
         for(int auxi=1; auxi < 10; auxi++)
