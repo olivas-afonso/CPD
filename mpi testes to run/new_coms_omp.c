@@ -750,7 +750,7 @@ int main(int argc, char *argv[]) {
         }
  
         MPI_Barrier(MPI_COMM_WORLD);
-        MPI_Allreduce(count_species_local, count_species, 10, MPI_LONG, MPI_SUM, MPI_COMM_WORLD);
+        MPI_Reduce(count_species_local, count_species, 10, MPI_LONG, MPI_SUM,0, MPI_COMM_WORLD);
         MPI_Barrier(MPI_COMM_WORLD);
 
         if(rank==0)
