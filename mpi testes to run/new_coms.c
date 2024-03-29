@@ -465,6 +465,21 @@ void comunica_entre_processos (char ***data_send, int sub_x, int sub_y, int sub_
 
     }
 
+    if(rank==0)
+    {
+        for(int i=0; i<(sub_z+2);i++)
+        {
+            printf("CAMADA %d\n", i);
+            for(int j=0; j<(sub_y+2);j++)
+            {
+                for(int k=0; k<(sub_x+2);k++)
+                {
+                    printf("%d ", data_send[i][j][k]);
+                }
+                printf("\n");
+            }
+        }
+    }
 
     
     free (face_dir_s);
@@ -755,7 +770,7 @@ int main(int argc, char *argv[]) {
         
         for(int i=0; i<10;i++)
         {
-             printf("GEN:%d PROCESS: %d HAS LOCAL SPECIES %d with:%d\n", gen_number, rank,i, count_species_local[i]);
+             //printf("GEN:%d PROCESS: %d HAS LOCAL SPECIES %d with:%d\n", gen_number, rank,i, count_species_local[i]);
         }
  
         MPI_Barrier(MPI_COMM_WORLD);
@@ -764,10 +779,10 @@ int main(int argc, char *argv[]) {
 
         if(rank==0)
         {
-            printf("GEN NUMBER:%d   \n", gen_number);
+            //printf("GEN NUMBER:%d   \n", gen_number);
             for(int auxiii=1; auxiii < 10; auxiii++)
             {
-                printf("COUNT_SPECIES%d is %d    \n",auxiii, count_species[auxiii]);
+                //printf("COUNT_SPECIES%d is %d    \n",auxiii, count_species[auxiii]);
                 if(count_species[auxiii] > count_species_new[auxiii])
                 {   
                     count_species_new[auxiii] = count_species[auxiii];
