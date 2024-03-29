@@ -23,6 +23,7 @@ char ***grid_odd;
 long count_species_local[10]={0,0,0,0,0,0,0,0,0,0};
 long count_species[10]={0,0,0,0,0,0,0,0,0,0};
 long max_count[10]={0,0,0,0,0,0,0,0,0,0};
+int merda = 0;
 
 
 void init_r4uni(int input_seed)
@@ -185,7 +186,7 @@ void aloca_matrizes (int sub_x, int sub_y, int sub_z){
 
 void verifica_max (int *max_gen, int gen_number){
     MPI_Barrier(MPI_COMM_WORLD);
-    MPI_Reduce(count_species_local, count_species, 10, MPI_INT, MPI_SUM, 0, MPI_COMM_WORLD);
+    MPI_Reduce(count_species_local, count_species, 10, MPI_LONG, MPI_SUM, 0, MPI_COMM_WORLD);
     
     /*for (int x=1; x< 10; ++x){
         printf ("X=%d Cnt=%d\n", x, count_species[x]);
@@ -266,7 +267,7 @@ if(rank==0)
         {
             if(count_species[auxiii] > max_count[auxiii])
             {   
-                if(auxiii == 7) printf("COUNT_SPECIES1:%d  MAX COUNT1:%d AUXI: %d\n",count_species[auxiii], max_count[auxiii],auxiii );
+                if(auxiii == 7) printf("COUNT_SPECIES1:%ld  MAX COUNT1:%d AUXI: %d\n",count_species[auxiii], max_count[auxiii],auxiii );
                 max_count[auxiii] = count_species[auxiii];
                 max_gen[auxiii]=0;
             }
@@ -660,7 +661,7 @@ if(rank == 0){
         }
                
         MPI_Barrier(MPI_COMM_WORLD);
-        MPI_Reduce(count_species_local, count_species, sizeof (count_species), MPI_INT, MPI_SUM, 0, MPI_COMM_WORLD);
+        MPI_Reduce(count_species_local, count_species, sizeof (count_species), MPI_LONG, MPI_SUM, 0, MPI_COMM_WORLD);
         MPI_Barrier(MPI_COMM_WORLD);
     /*for (int x=1; x< 10; ++x){
         printf ("X=%d Cnt=%d\n", x, count_species[x]);
@@ -672,7 +673,7 @@ if(rank == 0){
             {
                 if(count_species[auxiii] > max_count[auxiii])
                 {   
-                    printf("COUNT_SPECIES:%d  MAX COUNT:%d %d\n",count_species[auxiii], max_count[auxiii], auxiii );
+                    if(auxiii == 7) printf("COUNT_SPECIES1:%ld  MAX COUNT1:%d AUXI: %d\n",count_species[auxiii], max_count[auxiii],auxiii );
                     max_count[auxiii] = count_species[auxiii];
                     max_gen[auxiii]=gen_number;
                 }
