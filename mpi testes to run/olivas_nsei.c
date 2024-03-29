@@ -268,6 +268,7 @@ if(rank==0)
     
         for(int auxiii=1; auxiii < 10; auxiii++)
         {
+            printf("COUNT_YA : %d\n",count_species[auxiii] );
             if(count_species[auxiii] > count_species_new[auxiii])
             {   
                 if(auxiii == 7) printf("GEN: %d COUNT_SPECIES:%d  MAX COUNT:%d\n",0,count_species[auxiii], count_species_new[auxiii] );
@@ -529,6 +530,17 @@ int main(int argc, char *argv[]) {
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
     MPI_Comm_size(MPI_COMM_WORLD, &size);
 
+    max_gen = (int *)malloc( 10 * sizeof(int)); 
+    count_species= (long *)malloc( 10 * sizeof(long)); 
+    count_species_new= (long *)malloc( 10 * sizeof(long)); 
+    
+    for(int x=0; x<10; x++)
+    {
+        max_gen[x]=0;
+        count_species[x]=0;
+        count_species_new[x]=0;
+    }
+
     int number_of_gens = 0;
 
     number_of_gens = atoi (argv[1]);
@@ -547,9 +559,7 @@ int main(int argc, char *argv[]) {
     sub_divz_y= (int *)malloc( b_final * sizeof(int)); 
     sub_divz_x= (int *)malloc( c_final* sizeof(int)); 
 
-    max_gen = (int *)malloc( 10 * sizeof(int)); 
-    count_species= (long *)malloc( 10 * sizeof(long)); 
-    count_species_new= (long *)malloc( 10 * sizeof(long)); 
+    
 
 
     divide_number_parts(NUM_LINHAS,  a_final, sub_divz_z);
