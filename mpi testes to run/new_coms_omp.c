@@ -466,7 +466,11 @@ void comunica_entre_processos (char ***data_send, int sub_x, int sub_y, int sub_
     }
 
 
-    free (face_dir_s[0]);
+    
+    for(int i=0;i<sub_z;i++)
+    {
+        free (face_dir_s[i]);
+    }
     free (face_dir_s);
     free (face_dir_r[0]);
     free (face_dir_r);
