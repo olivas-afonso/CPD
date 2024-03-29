@@ -738,7 +738,7 @@ int main(int argc, char *argv[]) {
 
     comunica_entre_processos (grid_even, sub_x, sub_y, sub_z, cart_comm);
 
-    for (int gen_number = 1; gen_number<= number_of_gens; ++ gen_number){
+    for (int gen_number = 1; gen_number<= number_of_gens; ++gen_number){
 
         for (int auxi = 0; auxi < 10; ++auxi){
             count_species_local[auxi]=0;  
@@ -759,9 +759,10 @@ int main(int argc, char *argv[]) {
 
         if(rank==0)
         {
+            printf("COUNT_SPECIES:%d    \n", count_species[auxiii]);
             for(int auxiii=1; auxiii < 10; auxiii++)
             {
-                printf("COUNT_SPECIES:%d    \n", count_species[auxiii]);
+                //printf("COUNT_SPECIES:%d    \n", count_species[auxiii]);
                 if(count_species[auxiii] > count_species_new[auxiii])
                 {   
                     count_species_new[auxiii] = count_species[auxiii];
@@ -769,6 +770,7 @@ int main(int argc, char *argv[]) {
                 }
             }  
         }
+        
     }
 
     if (rank==0){
