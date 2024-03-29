@@ -707,6 +707,7 @@ int main(int argc, char *argv[]) {
         {
             printf("DIVZ Z:%d   ", sub_divz_y[i]);
         }
+        printf("\n");
     }
 
     
