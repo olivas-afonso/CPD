@@ -274,7 +274,7 @@ int main(int argc, char *argv[]) {
  
     
 
-    iint aux_x, aux_y, aux_z; 
+    int aux_x, aux_y, aux_z; 
     int cima_rank, baixo_rank, esq_rank, dir_rank, frente_rank, tras_rank;
     int dir_cima_rank, esq_baixo_rank,dir_baixo_rank, esq_cima_rank, frente_cima_rank, tras_baixo_rank;
     int frente_baixo_rank, tras_cima_rank, dir_frente_rank, esq_tras_rank, dir_tras_rank, esq_frente_rank;
@@ -367,7 +367,7 @@ int main(int argc, char *argv[]) {
         MPI_Sendrecv(&data_send[sub_z][sub_y][aux_x+1], 1, MPI_CHAR, frente_cima_rank, 0, &data_send[0][0][aux_x+1], 1, MPI_CHAR, tras_baixo_rank, 0, cart_comm, MPI_STATUS_IGNORE); // AR esq baixo
         MPI_Sendrecv(&data_send[1][sub_y][aux_x+1], 1, MPI_CHAR, frente_baixo_rank, 0, &data_send[sub_z+1][0][aux_x+1], 1, MPI_CHAR, tras_cima_rank, 0, cart_comm, MPI_STATUS_IGNORE); // AR dir cima
     }
-}
+
     //--------------------------------------DEBUG-----------------------------------------------
     if(rank==5)
     {
