@@ -479,7 +479,7 @@ void freeMatrix(int sub_y, int sub_z) {
     free (sub_divz_x);
     free (sub_divz_y);
     free (sub_divz_x);
-    free (count_species_new);    
+    //free (count_species_new);    
 }
 
 
