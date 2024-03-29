@@ -209,6 +209,8 @@ void cria_primeira_grid (int NUM_LINHAS,int * max_gen){
     int varrimento_z = 1;
     int valor_aux=0;
 
+    printf("cria_gen\n");
+
     int flag_y=0,flag_z=0;
 
     for (int init_z=0; init_z < NUM_LINHAS; init_z++){
