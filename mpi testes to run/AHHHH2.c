@@ -306,7 +306,7 @@ int main(int argc, char *argv[]) {
     int test[2][2];
     int **face_dir_s, **face_dir_r, **face_esq_s, **face_esq_r, **face_cima_s, **face_cima_r, **face_baixo_s, **face_baixo_r;
     int **face_frente_s, **face_frente_r, **face_tras_s, **face_tras_r;
-    int *diag_esq_tras_s, diag_esq_tras_r;
+    int *diag_esq_tras_s, *diag_esq_tras_r;
 
     face_dir_s=alloc_2d_int(2,2);
     face_dir_r=alloc_2d_int(2,2);
