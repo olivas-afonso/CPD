@@ -476,8 +476,8 @@ void freeMatrix(int sub_y, int sub_z) {
     free(grid_odd);
     free (max_gen);
     free (count_species);
-  /*free (sub_divz_x);
-    free (sub_divz_y);
+    free (sub_divz_x);
+  /*  free (sub_divz_y);
     free (sub_divz_x);
     free (count_species_new);    */
 }
