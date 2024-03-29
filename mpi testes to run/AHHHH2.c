@@ -292,7 +292,7 @@ int main(int argc, char *argv[]) {
 
     
  
-    int **test;
+    int test[2][2];
 
     int aux_x, aux_y, aux_z; 
     int cima_rank, baixo_rank, esq_rank, dir_rank, frente_rank, tras_rank;
