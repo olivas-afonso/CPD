@@ -161,8 +161,6 @@ void divide_em_tres (int *a_final, int *b_final, int *c_final, int size){
             }
         }
     }
-    printf("a :%d   b:%d    c:%d\n", a_final, b_final, c_final);
-
 }
 
 char **alloc_2d_int(int rows, int cols) {
@@ -636,6 +634,7 @@ int main(int argc, char *argv[]) {
 
     int a_final, b_final, c_final;
     divide_em_tres (&a_final, &b_final, &c_final, size);
+    printf("a :%d   b:%d    c:%d\n", a_final, b_final, c_final);
 
     sub_divz_z= (int *)malloc( a_final * sizeof(int)); 
     sub_divz_y= (int *)malloc( b_final * sizeof(int)); 
@@ -644,6 +643,9 @@ int main(int argc, char *argv[]) {
     divide_number_parts(NUM_LINHAS,  a_final, sub_divz_z);
     divide_number_parts(NUM_LINHAS,  b_final, sub_divz_y);
     divide_number_parts(NUM_LINHAS,  c_final, sub_divz_x);
+
+    
+
 
   
     int count=0;
