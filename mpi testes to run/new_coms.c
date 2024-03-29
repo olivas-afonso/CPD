@@ -771,6 +771,10 @@ int main(int argc, char *argv[]) {
                 }
             }  
         }
+
+        for (int auxi = 0; auxi < 10; ++auxi){
+            count_species_local[auxi]=0;  
+        }
         
     }
 
