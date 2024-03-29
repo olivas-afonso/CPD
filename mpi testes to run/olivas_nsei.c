@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <mpi.h>
+#include <omp.h>
 
 int rank, size;
 int my_coords[3];
@@ -530,6 +531,9 @@ int main(int argc, char *argv[]) {
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
     MPI_Comm_size(MPI_COMM_WORLD, &size);
 
+
+     double exec_time;
+
     max_gen = (int *)malloc( 10 * sizeof(int)); 
     count_species= (long *)malloc( 10 * sizeof(long)); 
     count_species_new= (long *)malloc( 10 * sizeof(long)); 
@@ -549,6 +553,8 @@ int main(int argc, char *argv[]) {
     seed = atoi (argv[4]);
 
     init_r4uni(seed);
+
+    
 
 	
 
@@ -589,6 +595,8 @@ int main(int argc, char *argv[]) {
     limites_z();
 
     cria_primeira_grid (NUM_LINHAS);
+    if (rank==0)exec_time = -omp_get_wtime();
+
     //verifica_max (max_gen, 0);
     comunica_entre_processos (grid_even, sub_x, sub_y, sub_z, cart_comm);
 
@@ -676,6 +684,8 @@ int main(int argc, char *argv[]) {
         }
     }
 
+    if (rank==0) exec_time += omp_get_wtime();
+    fprintf(stderr, "%.1fs\n", exec_time);
 
     if (rank == 0){
         for(int auxi=1; auxi < 10; auxi++)
