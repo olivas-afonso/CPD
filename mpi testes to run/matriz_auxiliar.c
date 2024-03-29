@@ -266,7 +266,7 @@ if(rank==0)
         {
             if(count_species[auxiii] > max_count[auxiii])
             {   
-                if(auxiii == 7) printf("COUNT_SPECIES1:%d  MAX COUNT1:%d\n",count_species[auxiii], max_count[auxiii] );
+                if(auxiii == 7) printf("COUNT_SPECIES1:%d  MAX COUNT1:%d AUXI: %d\n",count_species[auxiii], max_count[auxiii],auxiii );
                 max_count[auxiii] = count_species[auxiii];
                 max_gen[auxiii]=0;
             }
@@ -672,7 +672,7 @@ if(rank == 0){
             {
                 if(count_species[auxiii] > max_count[auxiii])
                 {   
-                    if(auxiii == 7) printf("COUNT_SPECIES:%d  MAX COUNT:%d\n",count_species[auxiii], max_count[auxiii] );
+                    if(auxiii == 7) printf("COUNT_SPECIES:%d  MAX COUNT:%d %d\n",count_species[auxiii], max_count[auxiii], auxiii );
                     max_count[auxiii] = count_species[auxiii];
                     max_gen[auxiii]=gen_number;
                 }
