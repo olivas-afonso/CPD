@@ -236,7 +236,6 @@ void cria_primeira_grid (int NUM_LINHAS){
 
     MPI_Barrier(MPI_COMM_WORLD);
     MPI_Reduce(count_species_local, count_species, 10, MPI_LONG, MPI_SUM, 0, MPI_COMM_WORLD);
-    MPI_Barrier(MPI_COMM_WORLD);
     
 if(rank==0)
 {   
@@ -742,16 +741,11 @@ int main(int argc, char *argv[]) {
             comunica_entre_processos (grid_even, sub_x, sub_y, sub_z, c_final, b_final,a_final,  cart_comm);
         }
                
-        MPI_Barrier(MPI_COMM_WORLD);
-        
-        for(int i=0; i<10;i++)
-        {
-             //printf("GEN:%d PROCESS: %d HAS LOCAL SPECIES %d with:%d\n", gen_number, rank,i, count_species_local[i]);
-        }
+      
  
         MPI_Barrier(MPI_COMM_WORLD);
         MPI_Reduce(count_species_local, count_species, 10, MPI_LONG, MPI_SUM,0, MPI_COMM_WORLD);
-        MPI_Barrier(MPI_COMM_WORLD);
+      
 
         if(rank==0)
         {
