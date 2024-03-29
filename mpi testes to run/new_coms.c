@@ -691,7 +691,7 @@ int main(int argc, char *argv[]) {
 
     int a_final, b_final, c_final;
     divide_em_tres (&a_final, &b_final, &c_final, size);
-    (rank==0) printf("a :%d   b:%d    c:%d\n", a_final, b_final, c_final);
+    //if(rank==0) printf("a :%d   b:%d    c:%d\n", a_final, b_final, c_final);
 
     sub_divz_z= (int *)malloc( a_final * sizeof(int)); 
     sub_divz_y= (int *)malloc( b_final * sizeof(int)); 
