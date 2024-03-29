@@ -438,9 +438,9 @@ void rules(int sub_x ,int sub_y, int sub_z , char ***grid_new, char ***grid_old)
 {
     long aux_x, aux_y, aux_z;
 
-    //#pragma omp parallel private (aux_y, aux_z)
-    //{
-        //#pragma omp for schedule (dynamic)
+    #pragma omp parallel private (aux_y, aux_x)
+    {
+        #pragma omp for reduction(+ : count_species_loca) schedule (dynamic)
         
         for(aux_z=1; aux_z<= sub_z; aux_z ++)
         {   
@@ -461,7 +461,7 @@ void rules(int sub_x ,int sub_y, int sub_z , char ***grid_new, char ***grid_old)
                 }
             }
         }
-   // }
+   }
 }
 
 void freeMatrix(int sub_y, int sub_z) {
@@ -494,7 +494,7 @@ int main(int argc, char *argv[]) {
     MPI_Comm_size(MPI_COMM_WORLD, &size);
 
 
-     double exec_time;
+    double exec_time;
 
     max_gen = (int *)malloc( 10 * sizeof(int)); 
     count_species= (long *)malloc( 10 * sizeof(long)); 
