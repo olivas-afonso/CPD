@@ -266,7 +266,7 @@ if(rank==0)
     }
 */
     
-        for(int auxiii=1; auxiii < 10; auxiii++)
+        for(int auxiii=0; auxiii < 10; auxiii++)
         {
             printf("COUNT_YA : %d\n",count_species[auxiii] );
             if(count_species[auxiii] > count_species_new[auxiii])
