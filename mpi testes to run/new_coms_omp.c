@@ -466,19 +466,31 @@ void comunica_entre_processos (char ***data_send, int sub_x, int sub_y, int sub_
     }
 
 
-    
+    free (face_dir_s[0]);
     free (face_dir_s);
+    free (face_dir_r[0]);
     free (face_dir_r);
+    free (face_esq_s[0]);
     free (face_esq_s);
+    free (face_esq_r[0]);
     free (face_esq_r);
+    free (face_cima_s[0]);
     free (face_cima_s);
+    free (face_cima_r[0]);
     free (face_cima_r);
+    free (face_baixo_s[0]);
     free (face_baixo_s);
+    free (face_baixo_r[0]);
     free (face_baixo_r);
+    free (face_frente_s[0]);
     free (face_frente_s);
+    free (face_frente_r[0]);
     free (face_frente_r);
+    free (face_tras_s[0]);
     free (face_tras_s);
+    free (face_tras_r[0]);
     free (face_tras_r);
+    
 
     free(diag_esq_tras_r);
     free(diag_esq_tras_s);
