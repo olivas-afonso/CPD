@@ -347,7 +347,7 @@ int main(int argc, char *argv[]) {
         for(int i=0; i<sub_y; i++)
         {
             data_s[k][i]=data_send[k+1][i+1][1];
-            if (rank==1) printf("SEND %d\n", data[k][i]);
+            if (rank==1) printf("SEND %d\n", data_s[k][i]);
         }
         
     }
