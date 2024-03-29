@@ -161,7 +161,7 @@ void divide_em_tres (int *a_final, int *b_final, int *c_final, int size){
             }
         }
     }
-    printf("a :%d   b:%d    c:%d\n", &a_final, &b_final, &c_final)
+    printf("a :%d   b:%d    c:%d\n", &a_final, &b_final, &c_final);
 
 }
 
