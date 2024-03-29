@@ -759,10 +759,10 @@ int main(int argc, char *argv[]) {
 
         if(rank==0)
         {
-            printf("COUNT_SPECIES:%d    \n", count_species[auxiii]);
+            printf("GEN NUMBER:%d   \n", gen_number);
             for(int auxiii=1; auxiii < 10; auxiii++)
             {
-                //printf("COUNT_SPECIES:%d    \n", count_species[auxiii]);
+                printf("COUNT_SPECIES%d is %d    \n",auxiii, count_species[auxiii]);
                 if(count_species[auxiii] > count_species_new[auxiii])
                 {   
                     count_species_new[auxiii] = count_species[auxiii];
