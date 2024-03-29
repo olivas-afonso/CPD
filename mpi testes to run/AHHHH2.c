@@ -344,12 +344,12 @@ int main(int argc, char *argv[]) {
 
     diag_frente_cima_r = (int *)malloc(sub_x*sizeof(int));
     diag_frente_cima_s = (int *)malloc(sub_x*sizeof(int));
-    diag_frente_cima_r = (int *)malloc(sub_x*sizeof(int));
-    diag_frente_cima_s = (int *)malloc(sub_x*sizeof(int));
+    diag_tras_cima_r = (int *)malloc(sub_x*sizeof(int));
+    diag_tras_cima_s = (int *)malloc(sub_x*sizeof(int));
     diag_tras_baixo_r = (int *)malloc(sub_x*sizeof(int));
     diag_tras_baixo_s = (int *)malloc(sub_x*sizeof(int));
-    diag_tras_baixo_r = (int *)malloc(sub_x*sizeof(int));
-    diag_tras_baixo_s = (int *)malloc(sub_x*sizeof(int));
+    diag_frente_baixo_r = (int *)malloc(sub_x*sizeof(int));
+    diag_frente_baixo_s = (int *)malloc(sub_x*sizeof(int));
 
     int aux_x, aux_y, aux_z; 
     int cima_rank, baixo_rank, esq_rank, dir_rank, frente_rank, tras_rank;
@@ -429,6 +429,8 @@ int main(int argc, char *argv[]) {
 
         diag_tras_baixo_s[j]=data_send[sub_z][sub_y][j+1];
         diag_tras_cima_s[j]=data_send[1][sub_y][j+1];
+
+        
 
     }
 
