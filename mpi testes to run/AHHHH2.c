@@ -342,7 +342,7 @@ int main(int argc, char *argv[]) {
     {
         for(int i=0; i<sub_y; i++)
         {
-            printf("OLA\n");
+            if(rank==0) printf("OLA\n");
             data_send[k+1][i+1][sub_x+1]=rcv_x[k][i];
         }
         
