@@ -208,7 +208,7 @@ void verifica_max (int *max_gen, int gen_number){
     */
 }
 
-void cria_primeira_grid (int NUM_LINHAS,long * count_species, long* count_species_new, int * max_gen){
+void cria_primeira_grid (int NUM_LINHAS){
     int varrimento_x = 1;
     int varrimento_y = 1;
     int varrimento_z = 1;
@@ -573,7 +573,7 @@ int main(int argc, char *argv[]) {
     limites_y ();
     limites_z();
 
-    cria_primeira_grid (NUM_LINHAS,count_species, count_species_new, max_gen);
+    cria_primeira_grid (NUM_LINHAS);
     //verifica_max (max_gen, 0);
     comunica_entre_processos (grid_even, sub_x, sub_y, sub_z, cart_comm);
 
