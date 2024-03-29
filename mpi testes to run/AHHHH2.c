@@ -305,10 +305,20 @@ int main(int argc, char *argv[]) {
  
     int test[2][2];
     int **face_dir_s, **face_dir_r, **face_esq_s, **face_esq_r, **face_cima_s, **face_cima_r, **face_baixo_s, **face_baixo_r;
-    int **face_frente_s, **face_frente_r, **face_baixo_s, **face_baixo_r;
+    int **face_frente_s, **face_frente_r, **face_tras_s, **face_tras_r;
 
     face_dir_s=alloc_2d_int(2,2);
-    face_dir_s=alloc_2d_int(2,2);
+    face_dir_r=alloc_2d_int(2,2);
+    face_esq_s=alloc_2d_int(2,2);
+    face_esq_r=alloc_2d_int(2,2);
+    face_cima_s=alloc_2d_int(2,2);
+    face_cima_r=alloc_2d_int(2,2);
+    face_baixo_s=alloc_2d_int(2,2);
+    face_baixo_r=alloc_2d_int(2,2);
+    face_frente_s=alloc_2d_int(2,2);
+    face_frente_r=alloc_2d_int(2,2);
+    face_tras_s=alloc_2d_int(2,2);
+    face_tras_r=alloc_2d_int(2,2);
 
     int aux_x, aux_y, aux_z; 
     int cima_rank, baixo_rank, esq_rank, dir_rank, frente_rank, tras_rank;
