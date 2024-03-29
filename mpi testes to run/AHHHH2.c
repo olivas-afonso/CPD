@@ -572,7 +572,8 @@ int main(int argc, char *argv[]) {
     //--------------------------------------DEBUG-----------------------------------------------
     if(rank==5)
     {
-        //printf("RANK: %d    SUB_Z: %d   SUB_Y: %d   SUB_X:  %d\n",rank, sub_z, sub_y, sub_x);
+        
+        printf("RANK: %d    SUB_Z: %d   SUB_Y: %d   SUB_X:  %d\n",rank, sub_z, sub_y, sub_x);
             //MPI_Cart_coords(cart_comm, rank, 3, my_coords);
         for(aux_z=0;aux_z<(sub_z+2);aux_z++)
         {
