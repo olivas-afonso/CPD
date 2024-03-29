@@ -26,6 +26,9 @@ int *max_gen;
 long *count_species;
 long *count_species_new;
 
+//long max_count[10]={0,0,0,0,0,0,0,0,0,0};
+
+
 void init_r4uni(int input_seed)
 {
     seed = input_seed + 987654321;
@@ -101,6 +104,7 @@ void divide_number_parts(int number, int divide, int * sub_div) {
 
     for (i = 0; i < divide; i++) {
         end_index = start_index + part_size + (i < remainder ? 1 : 0);
+
         sub_div[i]=end_index-start_index;
         start_index = end_index;
     }
@@ -222,19 +226,19 @@ void cria_primeira_grid (int NUM_LINHAS){
     }
 
     MPI_Barrier(MPI_COMM_WORLD);
-    MPI_Reduce(count_species_local, count_species, sizeof (count_species), MPI_LONG, MPI_SUM, 0, MPI_COMM_WORLD);
-
-    if(rank==0)
+    MPI_Reduce(count_species_local, count_species, 10, MPI_LONG, MPI_SUM, 0, MPI_COMM_WORLD);
+    
+if(rank==0)
+{   
+    for(int auxiii=0; auxiii < 10; auxiii++)
     {
-        for(int auxiii=0; auxiii < 10; auxiii++)
-        {
-            if(count_species[auxiii] > count_species_new[auxiii])
-            {   
-                count_species_new[auxiii] = count_species[auxiii];
-                max_gen[auxiii]=0;
-            }
-        }    
-    }  
+        if(count_species[auxiii] > count_species_new[auxiii])
+        {   
+            count_species_new[auxiii] = count_species[auxiii];
+            max_gen[auxiii]=0;
+        }
+    }    
+}  
 
 
 }
@@ -317,7 +321,7 @@ void comunica_entre_processos (char ***data_send, int sub_x, int sub_y, int sub_
         {
             //FACE CIMA
             MPI_Sendrecv(&data_send[1][aux_y+1][aux_x+1], 1, MPI_CHAR, baixo_rank, 0, &data_send[sub_z+1][aux_y+1][aux_x+1], 1, MPI_CHAR, cima_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir  
-            
+
             //FACE BAIXO
             MPI_Sendrecv(&data_send[sub_z][aux_y+1][aux_x+1], 1, MPI_CHAR, cima_rank, 0, &data_send[0][aux_y+1][aux_x+1], 1, MPI_CHAR, baixo_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir                      
         }
@@ -434,9 +438,9 @@ void rules(int sub_x ,int sub_y, int sub_z , char ***grid_new, char ***grid_old)
 {
     long aux_x, aux_y, aux_z;
 
-    //#pragma omp parallel private (aux_y, aux_x)
-    //{
-        //#pragma omp for reduction(+ : count_species_local) schedule (dynamic)
+    #pragma omp parallel private (aux_y, aux_x)
+    {
+        #pragma omp for reduction(+ : count_species_loca) schedule (dynamic)
         
         for(aux_z=1; aux_z<= sub_z; aux_z ++)
         {   
@@ -457,7 +461,7 @@ void rules(int sub_x ,int sub_y, int sub_z , char ***grid_new, char ***grid_old)
                 }
             }
         }
-   // }
+   }
 }
 
 void freeMatrix(int sub_y, int sub_z) {
@@ -478,8 +482,8 @@ void freeMatrix(int sub_y, int sub_z) {
     free (count_species);
     free (sub_divz_x);
     free (sub_divz_y);
-    free (sub_divz_x);
-    //free (count_species_new);    
+    free (sub_divz_z);
+    free (count_species_new);    
 }
 
 
@@ -488,6 +492,9 @@ int main(int argc, char *argv[]) {
     MPI_Init(&argc, &argv);
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
     MPI_Comm_size(MPI_COMM_WORLD, &size);
+
+
+    double exec_time;
 
     max_gen = (int *)malloc( 10 * sizeof(int)); 
     count_species= (long *)malloc( 10 * sizeof(long)); 
@@ -520,6 +527,7 @@ int main(int argc, char *argv[]) {
     divide_number_parts(NUM_LINHAS,  b_final, sub_divz_y);
     divide_number_parts(NUM_LINHAS,  c_final, sub_divz_x);
 
+  
     int count=0;
     //Cartesiano : 
     int dims[3] = { a_final, b_final, c_final};  // ISTO TEM DE VIR DOS INTEIROS QUE MULTIPLICAM O Nº PROCESSO
@@ -541,16 +549,17 @@ int main(int argc, char *argv[]) {
     limites_z();
 
     cria_primeira_grid (NUM_LINHAS);
+    if (rank==0)exec_time = -omp_get_wtime();
+
     comunica_entre_processos (grid_even, sub_x, sub_y, sub_z, cart_comm);
 
     for (int gen_number = 1; gen_number<= number_of_gens; ++ gen_number){
 
         for (int auxi = 0; auxi < 10; ++auxi){
             count_species_local[auxi]=0;  
-
         }
         
-        if (gen_number % 2 == 1){    
+        if (gen_number % 2 == 1){  
             rules (sub_x, sub_y, sub_z, grid_odd, grid_even);
             comunica_entre_processos (grid_odd, sub_x, sub_y, sub_z, cart_comm);
         }   
@@ -560,14 +569,15 @@ int main(int argc, char *argv[]) {
         }
                
         MPI_Barrier(MPI_COMM_WORLD);
-        MPI_Reduce(count_species_local, count_species, sizeof (count_species), MPI_LONG, MPI_SUM, 0, MPI_COMM_WORLD);
+        MPI_Reduce(count_species_local, count_species, 10, MPI_LONG, MPI_SUM, 0, MPI_COMM_WORLD);
         MPI_Barrier(MPI_COMM_WORLD);
+
         if(rank==0)
         {
             for(int auxiii=1; auxiii < 10; auxiii++)
             {
                 if(count_species[auxiii] > count_species_new[auxiii])
-                {  
+                {   
                     count_species_new[auxiii] = count_species[auxiii];
                     max_gen[auxiii]=gen_number;
                 }
@@ -575,6 +585,10 @@ int main(int argc, char *argv[]) {
         }
     }
 
+    if (rank==0){
+        exec_time += omp_get_wtime();
+        fprintf(stderr, "%.1fs\n", exec_time);
+    } 
 
     if (rank == 0){
         for(int auxi=1; auxi < 10; auxi++)
