@@ -21,6 +21,9 @@ char ***grid_even;
 char ***grid_odd;
 
 long count_species_local[10]={0,0,0,0,0,0,0,0,0,0};
+int max_gen[10]={0,0,0,0,0,0,0,0,0,0};
+    long count_species[10]={0,0,0,0,0,0,0,0,0,0};
+    long count_species_new[10]={0,0,0,0,0,0,0,0,0,0};
 
 //long max_count[10]={0,0,0,0,0,0,0,0,0,0};
 
@@ -527,9 +530,6 @@ int main(int argc, char *argv[]) {
     MPI_Comm_size(MPI_COMM_WORLD, &size);
 
     int number_of_gens = 0;
-    int max_gen[10]={0,0,0,0,0,0,0,0,0,0};
-    long count_species[10]={0,0,0,0,0,0,0,0,0,0};
-    long count_species_new[10]={0,0,0,0,0,0,0,0,0,0};
 
     number_of_gens = atoi (argv[1]);
     NUM_LINHAS = atoi (argv[2]);
