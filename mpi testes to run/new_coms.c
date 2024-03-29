@@ -106,7 +106,6 @@ void divide_number_parts(int number, int divide, int * sub_div) {
         end_index = start_index + part_size + (i < remainder ? 1 : 0);
 
         sub_div[i]=end_index-start_index;
-        if (rank==18) printf("SUB_DIV:%d\n", end_index-start_index);
         start_index = end_index;
     }
 }
@@ -701,6 +700,14 @@ int main(int argc, char *argv[]) {
     divide_number_parts(NUM_LINHAS,  a_final, sub_divz_z);
     divide_number_parts(NUM_LINHAS,  b_final, sub_divz_y);
     divide_number_parts(NUM_LINHAS,  c_final, sub_divz_x);
+
+    if(rank==0)
+    {
+        for(int i=0; i<a_final;i++)
+        {
+            printf("DIVZ Z:%d   ", sub_divz_z[i]);
+        }
+    }
 
     
 
