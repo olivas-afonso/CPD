@@ -466,20 +466,27 @@ void comunica_entre_processos (char ***data_send, int sub_x, int sub_y, int sub_
 
     }
 
-    freeMatrix2d(face_dir_s, sub_z);
-    //freeMatrix2d(face_dir_r, sub_z);
-    //freeMatrix2d(face_esq_s, sub_z);
-    //freeMatrix2d(face_esq_r, sub_z);
+    //freeMatrix2d(face_dir_s, sub_z);
 
-    //freeMatrix2d(face_cima_s, sub_y);
-    //freeMatrix2d(face_cima_r, sub_y);
-    //freeMatrix2d(face_baixo_s, sub_y);
-    //freeMatrix2d(face_baixo_r, sub_y);
+    for (i = 0; i < sub_y; i++) {
+        free(face_dir_r[i]);
+    }
+    free (face_dir_r);
+    /*
+    freeMatrix2d(face_dir_r, sub_z);
+    freeMatrix2d(face_esq_s, sub_z);
+    freeMatrix2d(face_esq_r, sub_z);
 
-    //freeMatrix2d(face_frente_s, sub_z);
-    //freeMatrix2d(face_frente_r, sub_z);
-    //freeMatrix2d(face_tras_s, sub_z);
-    //freeMatrix2d(face_tras_r, sub_z);
+    freeMatrix2d(face_cima_s, sub_y);
+    freeMatrix2d(face_cima_r, sub_y);
+    freeMatrix2d(face_baixo_s, sub_y);
+    freeMatrix2d(face_baixo_r, sub_y);
+
+    freeMatrix2d(face_frente_s, sub_z);
+    freeMatrix2d(face_frente_r, sub_z);
+    freeMatrix2d(face_tras_s, sub_z);
+    freeMatrix2d(face_tras_r, sub_z);
+    */
     
     free(diag_esq_tras_r);
     free(diag_esq_tras_s);
