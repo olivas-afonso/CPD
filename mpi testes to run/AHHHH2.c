@@ -200,7 +200,7 @@ int main(int argc, char *argv[]) {
         }
     }
 
-    //printf("A combinação com o maior menor número é: %d * %d * %d\n", a_final, b_final, c_final);
+    printf("A combinação com o maior menor número é: %d * %d * %d\n", a_final, b_final, c_final);
 
 	
    
