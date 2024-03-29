@@ -161,7 +161,6 @@ void divide_em_tres (int *a_final, int *b_final, int *c_final, int size){
             }
         }
     }
-
 }
 
 char **alloc_2d_int(int rows, int cols) {
@@ -237,6 +236,7 @@ void cria_primeira_grid (int NUM_LINHAS){
 
     MPI_Barrier(MPI_COMM_WORLD);
     MPI_Reduce(count_species_local, count_species, 10, MPI_LONG, MPI_SUM, 0, MPI_COMM_WORLD);
+    MPI_Barrier(MPI_COMM_WORLD);
     
 if(rank==0)
 {   
@@ -253,14 +253,26 @@ if(rank==0)
 
 }
 
-void comunica_entre_processos (char ***data_send, int sub_x, int sub_y, int sub_z, MPI_Comm cart_comm){
+void freeMatrix2d(char ** matrix, int sub_y) {
+    int i, j;
+
+    for (i = 0; i < sub_y; i++) {
+        free(matrix[i]);
+    }
+    free (matrix);
+
+}
+
+void comunica_entre_processos (char ***data_send, int sub_x, int sub_y, int sub_z,int coord_x, int coord_y, int coord_z, MPI_Comm cart_comm){
+    
+    //printf("SUB_X:%d    SUB_Y:%d    SUB_Z:%d\n", sub_x, sub_y, sub_z);
 
     char **face_dir_s, **face_dir_r, **face_esq_s, **face_esq_r, **face_cima_s, **face_cima_r, **face_baixo_s, **face_baixo_r;
     char **face_frente_s, **face_frente_r, **face_tras_s, **face_tras_r;
     char *diag_esq_tras_s, *diag_esq_tras_r, *diag_dir_tras_s, *diag_dir_tras_r, *diag_esq_frente_s, *diag_esq_frente_r, *diag_dir_frente_s, *diag_dir_frente_r;
     char *diag_esq_cima_s, *diag_esq_cima_r, *diag_dir_cima_s, *diag_dir_cima_r, *diag_esq_baixo_s, *diag_esq_baixo_r, *diag_dir_baixo_s, *diag_dir_baixo_r;
     char *diag_frente_baixo_s, *diag_frente_baixo_r, *diag_frente_cima_s, *diag_frente_cima_r, *diag_tras_baixo_s, *diag_tras_baixo_r, *diag_tras_cima_s, *diag_tras_cima_r;
-    
+
     face_dir_s=alloc_2d_int(sub_z,sub_y);
     face_dir_r=alloc_2d_int(sub_z,sub_y);
     face_esq_s=alloc_2d_int(sub_z,sub_y);
@@ -302,6 +314,7 @@ void comunica_entre_processos (char ***data_send, int sub_x, int sub_y, int sub_
     diag_frente_baixo_r = (char *)malloc(sub_x*sizeof(char));
     diag_frente_baixo_s = (char *)malloc(sub_x*sizeof(char));
 
+
     int aux_x, aux_y, aux_z; 
     int cima_rank, baixo_rank, esq_rank, dir_rank, frente_rank, tras_rank;
     int dir_cima_rank, esq_baixo_rank,dir_baixo_rank, esq_cima_rank, frente_cima_rank, tras_baixo_rank;
@@ -309,19 +322,19 @@ void comunica_entre_processos (char ***data_send, int sub_x, int sub_y, int sub_
     int esq_cima_frente_rank, dir_baixo_tras_rank, dir_cima_frente_rank, esq_baixo_tras_rank;
     int esq_cima_tras_rank, dir_baixo_frente_rank, dir_cima_tras_rank, esq_baixo_frente_rank;
 
-    My_MPI_Cart_Shift(cart_comm, 2, 1, 0, 1, 0, 1, &esq_baixo_rank, &dir_cima_rank); // DIAG DIR CIMA/ ESQ BAIXO
-    My_MPI_Cart_Shift(cart_comm, 2, 1, 0, 1, 1, 0, &esq_tras_rank, &dir_frente_rank); // DIAG DIR CIMA/ ESQ BAIXO
-    My_MPI_Cart_Shift(cart_comm, 2, 1, 0, 1, -1, 0, &esq_frente_rank, &dir_tras_rank); // DIAG DIR CIMA/ ESQ BAIXO
-    My_MPI_Cart_Shift(cart_comm, 2, 1, 0, 1, 0, -1, &esq_cima_rank, &dir_baixo_rank); // DIAG DIR BAIXO/ ESQ CIMA
-    My_MPI_Cart_Shift(cart_comm, 2, 1, 0, 0, -(NUM_LINHAS-1), 1, &tras_baixo_rank, &frente_cima_rank); // DIAG FRENTE CIMA / TRAS BAIXO
-    My_MPI_Cart_Shift(cart_comm, 2, 1, 0, 0, -(NUM_LINHAS-1), -1, &tras_cima_rank, &frente_baixo_rank); // DIAG FRENTE CIMA / TRAS BAIXO
-    My_MPI_Cart_Shift(cart_comm, 2, 1, 0, 1, 0, 0, &esq_rank, &dir_rank); // FACE DIR/ESQ
-    My_MPI_Cart_Shift(cart_comm, 2, 1, 0, 0, 0, 1, &baixo_rank, &cima_rank); // FACE CIMA/BAIXO
-    My_MPI_Cart_Shift(cart_comm, 2, 1, 0, 0, -1, 0, &frente_rank, &tras_rank); // FACE TRAS/CIMA
-    My_MPI_Cart_Shift(cart_comm, 2, 1, 0, -1, 1, 1, &dir_baixo_tras_rank, &esq_cima_frente_rank); // FACE TRAS/CIMA 
-    My_MPI_Cart_Shift(cart_comm, 2, 1, 0, 1, 1, 1, &esq_baixo_tras_rank, &dir_cima_frente_rank); // FACE TRAS/CIMA
-    My_MPI_Cart_Shift(cart_comm, 2, 1, 0, -1, -1, 1, &dir_baixo_frente_rank, &esq_cima_tras_rank); // FACE TRAS/CIMA
-    My_MPI_Cart_Shift(cart_comm, 2, 1, 0, 1, -1, 1, &esq_baixo_frente_rank, &dir_cima_tras_rank); // FACE TRAS/CIMA
+    My_MPI_Cart_Shift(cart_comm, 2, 1, 0, coord_x+1, 0, coord_z+1, &esq_baixo_rank, &dir_cima_rank); // DIAG DIR CIMA/ ESQ BAIXO
+    My_MPI_Cart_Shift(cart_comm, 2, 1, 0, coord_x+1, -(coord_y-1), 0, &esq_tras_rank, &dir_frente_rank); // DIAG DIR CIMA/ ESQ BAIXO
+    My_MPI_Cart_Shift(cart_comm, 2, 1, 0, coord_x+1, -(coord_y+1), 0, &esq_frente_rank, &dir_tras_rank); // DIAG DIR CIMA/ ESQ BAIXO
+    My_MPI_Cart_Shift(cart_comm, 2, 1, 0, coord_x+1, 0, coord_z-1, &esq_cima_rank, &dir_baixo_rank); // DIAG DIR BAIXO/ ESQ CIMA
+    My_MPI_Cart_Shift(cart_comm, 2, 1, 0, 0, -(coord_y-1), coord_z+1, &tras_baixo_rank, &frente_cima_rank); // DIAG FRENTE CIMA / TRAS BAIXO
+    My_MPI_Cart_Shift(cart_comm, 2, 1, 0, 0, -(coord_y-1), coord_z-1, &tras_cima_rank, &frente_baixo_rank); // DIAG FRENTE CIMA / TRAS BAIXO
+    My_MPI_Cart_Shift(cart_comm, 2, 1, 0, coord_x+1, 0, 0, &esq_rank, &dir_rank); // FACE DIR/ESQ
+    My_MPI_Cart_Shift(cart_comm, 2, 1, 0, 0, 0, coord_z+1, &baixo_rank, &cima_rank); // FACE CIMA/BAIXO
+    My_MPI_Cart_Shift(cart_comm, 2, 1, 0, 0, -(coord_y-1), 0, &frente_rank, &tras_rank); // FACE TRAS/CIMA
+    My_MPI_Cart_Shift(cart_comm, 2, 1, 0, coord_x-1, -(coord_y-1), coord_z+1, &dir_baixo_tras_rank, &esq_cima_frente_rank); // FACE TRAS/CIMA 
+    My_MPI_Cart_Shift(cart_comm, 2, 1, 0, coord_x+1, -(coord_y-1), coord_z+1, &esq_baixo_tras_rank, &dir_cima_frente_rank); // FACE TRAS/CIMA
+    My_MPI_Cart_Shift(cart_comm, 2, 1, 0, coord_x-1, -(coord_y+1), coord_z+1, &dir_baixo_frente_rank, &esq_cima_tras_rank); // FACE TRAS/CIMA
+    My_MPI_Cart_Shift(cart_comm, 2, 1, 0, coord_x+1, -(coord_y+1), coord_z+1, &esq_baixo_frente_rank, &dir_cima_tras_rank); // FACE TRAS/CIMA
 
     
     MPI_Sendrecv(&data_send[1][1][sub_x], 1, MPI_CHAR, dir_baixo_tras_rank, 0, &data_send[sub_z+1][sub_y+1][0], 1, MPI_CHAR, esq_cima_frente_rank, 0, cart_comm, MPI_STATUS_IGNORE); // AR dir cima
@@ -380,9 +393,6 @@ void comunica_entre_processos (char ***data_send, int sub_x, int sub_y, int sub_
 
         diag_tras_baixo_s[j]=data_send[sub_z][sub_y][j+1];
         diag_tras_cima_s[j]=data_send[1][sub_y][j+1];
-
-        
-
     }
 
     MPI_Sendrecv(&(diag_dir_frente_s[0]), sub_z, MPI_CHAR, esq_tras_rank, 0, &(diag_dir_frente_r[0]), sub_z, MPI_CHAR, dir_frente_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir
@@ -400,12 +410,12 @@ void comunica_entre_processos (char ***data_send, int sub_x, int sub_y, int sub_
     MPI_Sendrecv(&(diag_tras_baixo_s[0]), sub_x, MPI_CHAR, frente_cima_rank, 0, &(diag_tras_baixo_r[0]), sub_x, MPI_CHAR, tras_baixo_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir
     MPI_Sendrecv(&(diag_tras_cima_s[0]), sub_x, MPI_CHAR, frente_baixo_rank, 0, &(diag_tras_cima_r[0]), sub_x, MPI_CHAR, tras_cima_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir
  
-    MPI_Sendrecv(&(face_dir_s[0][0]), sub_z*sub_y, MPI_CHAR, esq_rank, 0, &(face_dir_r[0][0]), sub_z*sub_y, MPI_CHAR, dir_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir
-    MPI_Sendrecv(&(face_esq_s[0][0]), sub_z*sub_y, MPI_CHAR, dir_rank, 0, &(face_esq_r[0][0]), sub_z*sub_y, MPI_CHAR, esq_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir
-    MPI_Sendrecv(&(face_cima_s[0][0]), sub_y*sub_x, MPI_CHAR, cima_rank, 0,&(face_cima_r[0][0]), sub_y*sub_x, MPI_CHAR, baixo_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir
-    MPI_Sendrecv(&(face_baixo_s[0][0]), sub_y*sub_x, MPI_CHAR, baixo_rank, 0, &(face_baixo_r[0][0]), sub_y*sub_x, MPI_CHAR, cima_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir
-    MPI_Sendrecv(&(face_frente_s[0][0]), sub_z*sub_x, MPI_CHAR, frente_rank, 0, &(face_frente_r[0][0]), sub_z*sub_x, MPI_CHAR, tras_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir
-    MPI_Sendrecv(&(face_tras_s[0][0]), sub_z*sub_x, MPI_CHAR, tras_rank, 0, &(face_tras_r[0][0]), sub_z*sub_x, MPI_CHAR, frente_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir
+    MPI_Sendrecv(&(face_dir_s[0][0]), sub_z*sub_y, MPI_INT, esq_rank, 0, &(face_dir_r[0][0]), sub_z*sub_y, MPI_INT, dir_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir
+    MPI_Sendrecv(&(face_esq_s[0][0]), sub_z*sub_y, MPI_INT, dir_rank, 0, &(face_esq_r[0][0]), sub_z*sub_y, MPI_INT, esq_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir
+    MPI_Sendrecv(&(face_cima_s[0][0]), sub_y*sub_x, MPI_INT, baixo_rank, 0,&(face_cima_r[0][0]), sub_y*sub_x, MPI_INT, cima_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir
+    MPI_Sendrecv(&(face_baixo_s[0][0]), sub_y*sub_x, MPI_INT, cima_rank, 0, &(face_baixo_r[0][0]), sub_y*sub_x, MPI_INT, baixo_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir
+    MPI_Sendrecv(&(face_frente_s[0][0]), sub_z*sub_x, MPI_INT, frente_rank, 0, &(face_frente_r[0][0]), sub_z*sub_x, MPI_INT, tras_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir
+    MPI_Sendrecv(&(face_tras_s[0][0]), sub_z*sub_x, MPI_INT, tras_rank, 0, &(face_tras_r[0][0]), sub_z*sub_x, MPI_INT, frente_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir
 
     for(int k =0; k<sub_z;k++)
     {
@@ -454,6 +464,64 @@ void comunica_entre_processos (char ***data_send, int sub_x, int sub_y, int sub_
         data_send[sub_z+1][0][j+1]=diag_tras_cima_r[j];
 
     }
+
+    if(rank==0)
+    {
+        for(int i=0; i<(sub_z+2);i++)
+        {
+            printf("CAMADA %d\n", i);
+            for(int j=0; j<(sub_y+2);j++)
+            {
+                for(int k=0; k<(sub_x+2);k++)
+                {
+                    printf("%d ", data_send[i][j][k]);
+                }
+                printf("\n");
+            }
+        }
+    }
+
+    
+    free (face_dir_s);
+    free (face_dir_r);
+    free (face_esq_s);
+    free (face_esq_r);
+    free (face_cima_s);
+    free (face_cima_r);
+    free (face_baixo_s);
+    free (face_baixo_r);
+    free (face_frente_s);
+    free (face_frente_r);
+    free (face_tras_s);
+    free (face_tras_r);
+
+    free(diag_esq_tras_r);
+    free(diag_esq_tras_s);
+    free(diag_dir_tras_r);
+    free(diag_dir_tras_s);
+    free(diag_esq_frente_r);
+    free(diag_esq_frente_s);
+    free(diag_dir_frente_r);
+    free(diag_dir_frente_s);
+
+    free(diag_esq_cima_r);
+    free(diag_esq_cima_s);
+    free(diag_dir_cima_r);
+    free(diag_dir_cima_s);
+    free(diag_esq_baixo_r);
+    free(diag_esq_baixo_s);
+    free(diag_dir_baixo_r);
+    free(diag_dir_baixo_s);
+
+    free(diag_frente_cima_r);
+    free(diag_frente_cima_s);
+    free(diag_tras_cima_r);
+    free(diag_tras_cima_s);
+    free(diag_tras_baixo_r);
+    free(diag_tras_baixo_s);
+    free(diag_frente_baixo_r);
+    free(diag_frente_baixo_s);
+    
 }
 
 /************************************************************************************************
@@ -635,6 +703,7 @@ int main(int argc, char *argv[]) {
 
     int a_final, b_final, c_final;
     divide_em_tres (&a_final, &b_final, &c_final, size);
+    //if(rank==0) printf("a :%d   b:%d    c:%d\n", a_final, b_final, c_final);
 
     sub_divz_z= (int *)malloc( a_final * sizeof(int)); 
     sub_divz_y= (int *)malloc( b_final * sizeof(int)); 
@@ -643,6 +712,18 @@ int main(int argc, char *argv[]) {
     divide_number_parts(NUM_LINHAS,  a_final, sub_divz_z);
     divide_number_parts(NUM_LINHAS,  b_final, sub_divz_y);
     divide_number_parts(NUM_LINHAS,  c_final, sub_divz_x);
+
+    if(rank==0)
+    {
+        for(int i=0; i<b_final;i++)
+        {
+            printf("DIVZ Z:%d   ", sub_divz_y[i]);
+        }
+        printf("\n");
+    }
+
+    
+
 
   
     int count=0;
@@ -668,9 +749,9 @@ int main(int argc, char *argv[]) {
     cria_primeira_grid (NUM_LINHAS);
     if (rank==0)exec_time = -omp_get_wtime();
 
-    comunica_entre_processos (grid_even, sub_x, sub_y, sub_z, cart_comm);
+    comunica_entre_processos (grid_even, sub_x, sub_y, sub_z, c_final, b_final,a_final,  cart_comm);
 
-    for (int gen_number = 1; gen_number<= number_of_gens; ++ gen_number){
+    for (int gen_number = 1; gen_number<= number_of_gens; ++gen_number){
 
         for (int auxi = 0; auxi < 10; ++auxi){
             count_species_local[auxi]=0;  
@@ -678,21 +759,30 @@ int main(int argc, char *argv[]) {
         
         if (gen_number % 2 == 1){  
             rules (sub_x, sub_y, sub_z, grid_odd, grid_even);
-            comunica_entre_processos (grid_odd, sub_x, sub_y, sub_z, cart_comm);
+            comunica_entre_processos (grid_odd, sub_x, sub_y, sub_z, c_final, b_final,a_final,  cart_comm);
         }   
         else{
             rules (sub_x, sub_y, sub_z, grid_even, grid_odd);
-            comunica_entre_processos (grid_even, sub_x, sub_y, sub_z, cart_comm);
+            comunica_entre_processos (grid_even, sub_x, sub_y, sub_z, c_final, b_final,a_final,  cart_comm);
         }
                
         MPI_Barrier(MPI_COMM_WORLD);
-        MPI_Reduce(count_species_local, count_species, 10, MPI_LONG, MPI_SUM, 0, MPI_COMM_WORLD);
-       
+        
+        for(int i=0; i<10;i++)
+        {
+             //printf("GEN:%d PROCESS: %d HAS LOCAL SPECIES %d with:%d\n", gen_number, rank,i, count_species_local[i]);
+        }
+ 
+        MPI_Barrier(MPI_COMM_WORLD);
+        MPI_Allreduce(count_species_local, count_species, 10, MPI_LONG, MPI_SUM, MPI_COMM_WORLD);
+        MPI_Barrier(MPI_COMM_WORLD);
 
         if(rank==0)
         {
+            //printf("GEN NUMBER:%d   \n", gen_number);
             for(int auxiii=1; auxiii < 10; auxiii++)
             {
+                //printf("COUNT_SPECIES%d is %d    \n",auxiii, count_species[auxiii]);
                 if(count_species[auxiii] > count_species_new[auxiii])
                 {   
                     count_species_new[auxiii] = count_species[auxiii];
@@ -700,6 +790,11 @@ int main(int argc, char *argv[]) {
                 }
             }  
         }
+
+        for (int auxi = 0; auxi < 10; ++auxi){
+            count_species_local[auxi]=0;  
+        }
+        
     }
 
     if (rank==0){
@@ -715,6 +810,10 @@ int main(int argc, char *argv[]) {
     }
 
     freeMatrix (sub_y, sub_z);
+
+    
+
+    
     
     MPI_Finalize();
     return 0; 
