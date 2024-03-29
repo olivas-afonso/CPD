@@ -329,20 +329,20 @@ int main(int argc, char *argv[]) {
 
     for(int k =0; k<sub_z;k++)
     {
-        for(int i=0; i<sub_divz_y; i++)
+        for(int i=0; i<sub_y; i++)
         {
             send_x[k][i]=data_send[k+1][i+1];
         }
         
     }
 
-    MPI_Sendrecv(sen_x, 4, MPI_INT, esq_rank, 0, rcv_x, 4, MPI_INT, dir_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir
+    MPI_Sendrecv(send_x, 4, MPI_INT, esq_rank, 0, rcv_x, 4, MPI_INT, dir_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir
 
     for(int k =0; k<sub_z;k++)
     {
-        for(int i=0; i<sub_divz_y; i++)
+        for(int i=0; i<sub_y; i++)
         {
-            data_send[k+1][i+1][sub_x+1]=data_send[k+1][i+1];
+            data_send[k+1][i+1][sub_x+1]=rcv_x[k+1][i+1];
         }
         
     }
