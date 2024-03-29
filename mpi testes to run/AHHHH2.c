@@ -270,6 +270,26 @@ int main(int argc, char *argv[]) {
         }
     }
 
+    int **send_x = (int **) malloc ((sub_z) * sizeof (int*));
+    for(int i=0;i<sub_z;i++)
+    {
+        send_x[i] = (int *) malloc ((sub_y) * sizeof (inty));
+        for(int k =0; k<sub_y;k++)
+        {
+            send_x[i][k]=0;
+        }
+    }
+    
+    int **rcv_x = (int **) malloc ((sub_z) * sizeof (int*));
+    for(int i=0;i<sub_z;i++)
+    {
+        rcv_x[i] = (int *) malloc ((sub_y) * sizeof (inty));
+        for(int k =0; k<sub_y;k++)
+        {
+            rcv_x[i][k]=0;
+        }
+    }
+
     
  
     
@@ -307,7 +327,25 @@ int main(int argc, char *argv[]) {
     MPI_Sendrecv(&data_send[1][sub_y][1], 1, MPI_INT, esq_baixo_frente_rank, 0, &data_send[sub_z+1][0][sub_x+1], 1, MPI_INT, dir_cima_tras_rank, 0, cart_comm, MPI_STATUS_IGNORE);
     */
 
-    MPI_Sendrecv(data_send[][][1], 2, MPI_INT, esq_rank, 0, &data_send[][][sub_x+1], 2, MPI_INT, dir_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir
+    for(int k =0; k<sub_z;k++)
+    {
+        for(int i=0; i<sub_divz_y; i++)
+        {
+            send_x[k][i]=data_send[k+1][i+1];
+        }
+        
+    }
+
+    MPI_Sendrecv(sen_x, 4, MPI_INT, esq_rank, 0, rcv_x, 4, MPI_INT, dir_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir
+
+    for(int k =0; k<sub_z;k++)
+    {
+        for(int i=0; i<sub_divz_y; i++)
+        {
+            data_send[k+1][i+1][sub_x+1]=data_send[k+1][i+1];
+        }
+        
+    }
     
     for( aux_z=0; aux_z < sub_z; aux_z++)
     {
