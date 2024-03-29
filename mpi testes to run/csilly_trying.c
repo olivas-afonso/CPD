@@ -182,16 +182,16 @@ void aloca_matrizes (int sub_x, int sub_y, int sub_z, int num_gens){
         }
     }
 
-    count_species = (int **)malloc (num_gens * sizeof (int *));
-    for (int j = 0; i < num_gens){
-        count_species [j] = (int *) malloc (10 * sizeof (int));
+    count_species = (int *)malloc (num_gens * sizeof (int *));
+    for (int j = 0; j < num_gens; ++j){
+        count_species [j] = (int) malloc (10 * sizeof (int));
     }
     
 }
 
-void verifica_max (int *max_gen, int gen_number){
+void verifica_max (int gen_number){
     MPI_Barrier(MPI_COMM_WORLD);
-    MPI_Reduce(count_species_local, count_species [gen_number], sizeof (count_species), MPI_INT, MPI_SUM, 0, MPI_COMM_WORLD);
+    MPI_Reduce(count_species_local, count_species [gen_number], sizeof (count_species), MPI_LONG, MPI_SUM, 0, MPI_COMM_WORLD);
     MPI_Barrier(MPI_COMM_WORLD);
     /*for (int x=1; x< 10; ++x){
         printf ("X=%d Cnt=%d\n", x, count_species[x]);
@@ -529,7 +529,7 @@ int main(int argc, char *argv[]) {
     limites_z();
 
     cria_primeira_grid (NUM_LINHAS);
-    verifica_max (max_gen, 0);
+    verifica_max (0);
     comunica_entre_processos (grid_even, sub_x, sub_y, sub_z, cart_comm);
 
     for (int gen_number = 1; gen_number<= number_of_gens; ++ gen_number){
@@ -553,7 +553,7 @@ int main(int argc, char *argv[]) {
             comunica_entre_processos (grid_even, sub_x, sub_y, sub_z, cart_comm);
         }
                
-        verifica_max (max_gen ,gen_number);  
+        verifica_max (gen_number);  
     }
 
     int max = 0;
