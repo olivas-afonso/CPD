@@ -580,6 +580,7 @@ int main(int argc, char *argv[]) {
         for(int auxi=1; auxi < 10; auxi++)
         {
           printf("%d %ld %d \n", auxi, count_species_new[auxi], max_gen[auxi]);
+          fflush (stdout);
         }
     }
 
