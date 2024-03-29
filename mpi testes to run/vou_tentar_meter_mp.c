@@ -438,9 +438,9 @@ void rules(int sub_x ,int sub_y, int sub_z , char ***grid_new, char ***grid_old)
 {
     long aux_x, aux_y, aux_z;
 
-    #pragma omp parallel private (aux_y, aux_x)
-    {
-        #pragma omp for reduction(+ : count_species_local) schedule (dynamic)
+    //#pragma omp parallel private (aux_y, aux_x)
+    //{
+        //#pragma omp for reduction(+ : count_species_local) schedule (dynamic)
         
         for(aux_z=1; aux_z<= sub_z; aux_z ++)
         {   
@@ -461,7 +461,7 @@ void rules(int sub_x ,int sub_y, int sub_z , char ***grid_new, char ***grid_old)
                 }
             }
         }
-   }
+    //}
 }
 
 void freeMatrix(int sub_y, int sub_z) {
@@ -587,7 +587,7 @@ int main(int argc, char *argv[]) {
 
     if (rank==0){
         exec_time += omp_get_wtime();
-        fprintf(stderr, "%.1fs\n", exec_time);
+        fprintf(stderr, "%.3fs\n", exec_time);
     } 
 
     if (rank == 0){
