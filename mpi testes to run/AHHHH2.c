@@ -333,23 +333,23 @@ int main(int argc, char *argv[]) {
     diag_dir_frente_r = (int *)malloc(sub_z*sizeof(int));
     diag_dir_frente_s = (int *)malloc(sub_z*sizeof(int));
 
-    diag_esq_cima_r = (int *)malloc(sub_z*sizeof(int));
-    diag_esq_cima_s = (int *)malloc(sub_z*sizeof(int));
-    diag_dir_cima_r = (int *)malloc(sub_z*sizeof(int));
-    diag_dir_cima_s = (int *)malloc(sub_z*sizeof(int));
-    diag_esq_baixo_r = (int *)malloc(sub_z*sizeof(int));
-    diag_esq_baixo_s = (int *)malloc(sub_z*sizeof(int));
-    diag_dir_baixo_r = (int *)malloc(sub_z*sizeof(int));
-    diag_dir_baixo_s = (int *)malloc(sub_z*sizeof(int));
+    diag_esq_cima_r = (int *)malloc(sub_y*sizeof(int));
+    diag_esq_cima_s = (int *)malloc(sub_y*sizeof(int));
+    diag_dir_cima_r = (int *)malloc(sub_y*sizeof(int));
+    diag_dir_cima_s = (int *)malloc(sub_y*sizeof(int));
+    diag_esq_baixo_r = (int *)malloc(sub_y*sizeof(int));
+    diag_esq_baixo_s = (int *)malloc(sub_y*sizeof(int));
+    diag_dir_baixo_r = (int *)malloc(sub_y*sizeof(int));
+    diag_dir_baixo_s = (int *)malloc(sub_y*sizeof(int));
 
-    diag_frente_cima_r = (int *)malloc(sub_z*sizeof(int));
-    diag_frente_cima_s = (int *)malloc(sub_z*sizeof(int));
-    diag_frente_cima_r = (int *)malloc(sub_z*sizeof(int));
-    diag_frente_cima_s = (int *)malloc(sub_z*sizeof(int));
-    diag_tras_baixo_r = (int *)malloc(sub_z*sizeof(int));
-    diag_tras_baixo_s = (int *)malloc(sub_z*sizeof(int));
-    diag_tras_baixo_r = (int *)malloc(sub_z*sizeof(int));
-    diag_tras_baixo_s = (int *)malloc(sub_z*sizeof(int));
+    diag_frente_cima_r = (int *)malloc(sub_x*sizeof(int));
+    diag_frente_cima_s = (int *)malloc(sub_x*sizeof(int));
+    diag_frente_cima_r = (int *)malloc(sub_x*sizeof(int));
+    diag_frente_cima_s = (int *)malloc(sub_x*sizeof(int));
+    diag_tras_baixo_r = (int *)malloc(sub_x*sizeof(int));
+    diag_tras_baixo_s = (int *)malloc(sub_x*sizeof(int));
+    diag_tras_baixo_r = (int *)malloc(sub_x*sizeof(int));
+    diag_tras_baixo_s = (int *)malloc(sub_x*sizeof(int));
 
     int aux_x, aux_y, aux_z; 
     int cima_rank, baixo_rank, esq_rank, dir_rank, frente_rank, tras_rank;
@@ -442,8 +442,8 @@ int main(int argc, char *argv[]) {
     MPI_Sendrecv(&(diag_esq_baixo_s[0]), sub_y, MPI_INT, dir_cima_rank, 0, &(diag_esq_baixo_r[0]), sub_y, MPI_INT, esq_baixo_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir
     MPI_Sendrecv(&(diag_dir_baixo_s[0]), sub_y, MPI_INT, esq_cima_rank, 0, &(diag_dir_baixo_r[0]), sub_y, MPI_INT, dir_baixo_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir
     
-    MPI_Sendrecv(&(diag_frente_baixo_s[0]), sub_x, MPI_INT, esq_frente_rank, 0, &(diag_frente_baixo_r[0]), sub_x, MPI_INT, frente_baixo_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir
-    MPI_Sendrecv(&(diag_frente_cima_s[0]), sub_x, MPI_INT, esq_baixo_rank, 0, &(diag_frente_cima_r[0]), sub_x, MPI_INT, frente_cima_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir
+    MPI_Sendrecv(&(diag_frente_baixo_s[0]), sub_x, MPI_INT, tras_cima_rank, 0, &(diag_frente_baixo_r[0]), sub_x, MPI_INT, frente_baixo_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir
+    MPI_Sendrecv(&(diag_frente_cima_s[0]), sub_x, MPI_INT, tras_baixo_rank, 0, &(diag_frente_cima_r[0]), sub_x, MPI_INT, frente_cima_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir
     MPI_Sendrecv(&(diag_tras_baixo_s[0]), sub_x, MPI_INT, frente_cima_rank, 0, &(diag_tras_baixo_r[0]), sub_x, MPI_INT, tras_baixo_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir
     MPI_Sendrecv(&(diag_tras_cima_s[0]), sub_x, MPI_INT, frente_baixo_rank, 0, &(diag_tras_cima_r[0]), sub_x, MPI_INT, tras_cima_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir
  
