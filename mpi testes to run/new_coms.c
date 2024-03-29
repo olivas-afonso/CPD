@@ -691,7 +691,7 @@ int main(int argc, char *argv[]) {
 
     int a_final, b_final, c_final;
     divide_em_tres (&a_final, &b_final, &c_final, size);
-    if(rank==0) printf("a :%d   b:%d    c:%d\n", a_final, b_final, c_final);
+    (rank==0) printf("a :%d   b:%d    c:%d\n", a_final, b_final, c_final);
 
     sub_divz_z= (int *)malloc( a_final * sizeof(int)); 
     sub_divz_y= (int *)malloc( b_final * sizeof(int)); 
@@ -754,13 +754,14 @@ int main(int argc, char *argv[]) {
         }
                
         MPI_Barrier(MPI_COMM_WORLD);
-        MPI_Reduce(count_species_local, count_species, 10, MPI_LONG, MPI_SUM, 0, cart_comm);
+        MPI_Reduce(count_species_local, count_species, 10, MPI_LONG, MPI_SUM, 0, MPI_COMM_WORLD);
         MPI_Barrier(MPI_COMM_WORLD);
 
         if(rank==0)
         {
             for(int auxiii=1; auxiii < 10; auxiii++)
             {
+                printf("COUNT_SPECIES:%d    \n", count_species[auxiii]);
                 if(count_species[auxiii] > count_species_new[auxiii])
                 {   
                     count_species_new[auxiii] = count_species[auxiii];
