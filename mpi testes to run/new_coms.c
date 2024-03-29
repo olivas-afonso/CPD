@@ -253,6 +253,18 @@ if(rank==0)
 
 }
 
+void freeMatrix2d(char ** matrix, int sub_y) {
+    int i, j;
+
+    for (i = 0; i < sub_y; i++) {
+        free(matrix[i]);
+        free(matrix[i]);
+    }
+
+    free (matrix);
+
+}
+
 void comunica_entre_processos (char ***data_send, int sub_x, int sub_y, int sub_z, MPI_Comm cart_comm){
 
     char **face_dir_s, **face_dir_r, **face_esq_s, **face_esq_r, **face_cima_s, **face_cima_r, **face_baixo_s, **face_baixo_r;
@@ -260,47 +272,6 @@ void comunica_entre_processos (char ***data_send, int sub_x, int sub_y, int sub_
     char *diag_esq_tras_s, *diag_esq_tras_r, *diag_dir_tras_s, *diag_dir_tras_r, *diag_esq_frente_s, *diag_esq_frente_r, *diag_dir_frente_s, *diag_dir_frente_r;
     char *diag_esq_cima_s, *diag_esq_cima_r, *diag_dir_cima_s, *diag_dir_cima_r, *diag_esq_baixo_s, *diag_esq_baixo_r, *diag_dir_baixo_s, *diag_dir_baixo_r;
     char *diag_frente_baixo_s, *diag_frente_baixo_r, *diag_frente_cima_s, *diag_frente_cima_r, *diag_tras_baixo_s, *diag_tras_baixo_r, *diag_tras_cima_s, *diag_tras_cima_r;
-    
-    face_dir_s=alloc_2d_int(sub_z,sub_y);
-    face_dir_r=alloc_2d_int(sub_z,sub_y);
-    face_esq_s=alloc_2d_int(sub_z,sub_y);
-    face_esq_r=alloc_2d_int(sub_z,sub_y);
-    face_cima_s=alloc_2d_int(sub_y,sub_x);
-    face_cima_r=alloc_2d_int(sub_y,sub_x);
-    face_baixo_s=alloc_2d_int(sub_y,sub_x);
-    face_baixo_r=alloc_2d_int(sub_y,sub_x);
-    face_frente_s=alloc_2d_int(sub_z,sub_x);
-    face_frente_r=alloc_2d_int(sub_z,sub_x);
-    face_tras_s=alloc_2d_int(sub_z,sub_x);
-    face_tras_r=alloc_2d_int(sub_z,sub_x);
-
-
-    diag_esq_tras_r = (char *)malloc(sub_z*sizeof(char));
-    diag_esq_tras_s = (char *)malloc(sub_z*sizeof(char));
-    diag_dir_tras_r = (char *)malloc(sub_z*sizeof(char));
-    diag_dir_tras_s = (char *)malloc(sub_z*sizeof(char));
-    diag_esq_frente_r = (char *)malloc(sub_z*sizeof(char));
-    diag_esq_frente_s = (char *)malloc(sub_z*sizeof(char));
-    diag_dir_frente_r = (char *)malloc(sub_z*sizeof(char));
-    diag_dir_frente_s = (char *)malloc(sub_z*sizeof(char));
-
-    diag_esq_cima_r = (char *)malloc(sub_y*sizeof(char));
-    diag_esq_cima_s = (char *)malloc(sub_y*sizeof(char));
-    diag_dir_cima_r = (char *)malloc(sub_y*sizeof(char));
-    diag_dir_cima_s = (char *)malloc(sub_y*sizeof(char));
-    diag_esq_baixo_r = (char *)malloc(sub_y*sizeof(char));
-    diag_esq_baixo_s = (char *)malloc(sub_y*sizeof(char));
-    diag_dir_baixo_r = (char *)malloc(sub_y*sizeof(char));
-    diag_dir_baixo_s = (char *)malloc(sub_y*sizeof(char));
-
-    diag_frente_cima_r = (char *)malloc(sub_x*sizeof(char));
-    diag_frente_cima_s = (char *)malloc(sub_x*sizeof(char));
-    diag_tras_cima_r = (char *)malloc(sub_x*sizeof(char));
-    diag_tras_cima_s = (char *)malloc(sub_x*sizeof(char));
-    diag_tras_baixo_r = (char *)malloc(sub_x*sizeof(char));
-    diag_tras_baixo_s = (char *)malloc(sub_x*sizeof(char));
-    diag_frente_baixo_r = (char *)malloc(sub_x*sizeof(char));
-    diag_frente_baixo_s = (char *)malloc(sub_x*sizeof(char));
 
     int aux_x, aux_y, aux_z; 
     int cima_rank, baixo_rank, esq_rank, dir_rank, frente_rank, tras_rank;
@@ -454,6 +425,49 @@ void comunica_entre_processos (char ***data_send, int sub_x, int sub_y, int sub_
         data_send[sub_z+1][0][j+1]=diag_tras_cima_r[j];
 
     }
+
+    freeMatrix2d(face_dir_s, sub_z);
+    freeMatrix2d(face_dir_r, sub_z);
+    freeMatrix2d(face_esq_s, sub_z);
+    freeMatrix2d(face_esq_r, sub_z);
+
+    freeMatrix2d(face_cima_s, sub_y);
+    freeMatrix2d(face_cima_r, sub_y);
+    freeMatrix2d(face_baixo_s, sub_y);
+    freeMatrix2d(face_baixo_r, sub_y);
+
+    freeMatrix2d(face_frente_s, sub_z);
+    freeMatrix2d(face_frente_r, sub_z);
+    freeMatrix2d(face_tras_s, sub_z);
+    freeMatrix2d(face_tras_r, sub_z);
+    
+    free(diag_esq_tras_r);
+    free(diag_esq_tras_s);
+    free(diag_dir_tras_r);
+    free(diag_dir_tras_s);
+    free(diag_esq_frente_r);
+    free(diag_esq_frente_s);
+    free(diag_dir_frente_r);
+    free(diag_dir_frente_s);
+
+    free(diag_esq_cima_r);
+    free(diag_esq_cima_s);
+    free(diag_dir_cima_r);
+    free(diag_dir_cima_s);
+    free(diag_esq_baixo_r);
+    free(diag_esq_baixo_s);
+    free(diag_dir_baixo_r);
+    free(diag_dir_baixo_s);
+
+    free(diag_frente_cima_r);
+    free(diag_frente_cima_s);
+    free(diag_tras_cima_r);
+    free(diag_tras_cima_s);
+    free(diag_tras_baixo_r);
+    free(diag_tras_baixo_s);
+    free(diag_frente_baixo_r);
+    free(diag_frente_baixo_s);
+    
 }
 
 /************************************************************************************************
@@ -719,6 +733,10 @@ int main(int argc, char *argv[]) {
     }
 
     freeMatrix (sub_y, sub_z);
+
+    
+
+    
     
     MPI_Finalize();
     return 0; 
