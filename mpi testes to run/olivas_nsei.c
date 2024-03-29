@@ -21,9 +21,9 @@ char ***grid_even;
 char ***grid_odd;
 
 long count_species_local[10]={0,0,0,0,0,0,0,0,0,0};
-int max_gen[10]={0,0,0,0,0,0,0,0,0,0};
-    long count_species[10]={0,0,0,0,0,0,0,0,0,0};
-    long count_species_new[10]={0,0,0,0,0,0,0,0,0,0};
+int *max_gen;
+long *count_species;
+long *count_species_new;
 
 //long max_count[10]={0,0,0,0,0,0,0,0,0,0};
 
@@ -546,6 +546,11 @@ int main(int argc, char *argv[]) {
     sub_divz_z= (int *)malloc( a_final * sizeof(int)); 
     sub_divz_y= (int *)malloc( b_final * sizeof(int)); 
     sub_divz_x= (int *)malloc( c_final* sizeof(int)); 
+
+    max_gen = (int *)malloc( 10 * sizeof(int)); 
+    count_species= (long *)malloc( 10 * sizeof(long)); 
+    count_species_new= (long *)malloc( 10 * sizeof(long)); 
+
 
     divide_number_parts(NUM_LINHAS,  a_final, sub_divz_z);
     divide_number_parts(NUM_LINHAS,  b_final, sub_divz_y);
