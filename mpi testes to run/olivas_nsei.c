@@ -685,7 +685,7 @@ int main(int argc, char *argv[]) {
     }
 
     if (rank==0) exec_time += omp_get_wtime();
-    fprintf(stderr, "%.1fs\n", exec_time);
+    if(rank==0) fprintf(stderr, "%.3fs\n", exec_time);
 
     if (rank == 0){
         for(int auxi=1; auxi < 10; auxi++)
