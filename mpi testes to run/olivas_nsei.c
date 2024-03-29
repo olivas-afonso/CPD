@@ -269,10 +269,10 @@ if(rank==0)
     
         for(int auxiii=0; auxiii < 10; auxiii++)
         {
-            printf("COUNT_YA : %d\n",count_species[auxiii] );
+            //printf("COUNT_YA : %d\n",count_species[auxiii] );
             if(count_species[auxiii] > count_species_new[auxiii])
             {   
-                if(auxiii == 7) printf("GEN: %d COUNT_SPECIES:%ld  MAX COUNT:%ld\n",0,count_species[auxiii], count_species_new[auxiii] );
+                //if(auxiii == 7) printf("GEN: %d COUNT_SPECIES:%ld  MAX COUNT:%ld\n",0,count_species[auxiii], count_species_new[auxiii] );
                 count_species_new[auxiii] = count_species[auxiii];
                 max_gen[auxiii]=0;
             }
@@ -641,21 +641,6 @@ int main(int argc, char *argv[]) {
             rules (sub_x, sub_y, sub_z, grid_odd, grid_even);
             comunica_entre_processos (grid_odd, sub_x, sub_y, sub_z, cart_comm);
             
-            /*if(rank==1)
-            {
-                for(int auxi_x=1; auxi_x<3; auxi_x++)
-                {
-                    printf("CAMADA ODD\n");
-                    for(int auxi_y=1; auxi_y<3; auxi_y++)
-                    {
-                        for(int auxi_z=1; auxi_z<3; auxi_z++)
-                        {
-                            printf("%d ", grid_odd[auxi_x][auxi_y][auxi_z]);
-                        }
-                        printf("\n");
-                    } 
-                }
-            }*/
 
         }   
         else{
@@ -665,10 +650,8 @@ int main(int argc, char *argv[]) {
                
         MPI_Barrier(MPI_COMM_WORLD);
         MPI_Reduce(count_species_local, count_species, 10, MPI_LONG, MPI_SUM, 0, MPI_COMM_WORLD);
-        MPI_Barrier(MPI_COMM_WORLD);
-    /*for (int x=1; x< 10; ++x){
-        printf ("X=%d Cnt=%d\n", x, count_species[x]);
-    }*/
+        
+
 
         if(rank==0)
         {
@@ -676,7 +659,7 @@ int main(int argc, char *argv[]) {
             {
                 if(count_species[auxiii] > count_species_new[auxiii])
                 {   
-                    if(auxiii == 7) printf("GEN: %d COUNT_SPECIES:%ld  MAX COUNT:%ld\n",gen_number,count_species[auxiii], count_species_new[auxiii] );
+                    //if(auxiii == 7) printf("GEN: %d COUNT_SPECIES:%ld  MAX COUNT:%ld\n",gen_number,count_species[auxiii], count_species_new[auxiii] );
                     count_species_new[auxiii] = count_species[auxiii];
                     max_gen[auxiii]=gen_number;
                 }
@@ -687,12 +670,7 @@ int main(int argc, char *argv[]) {
     if (rank==0) exec_time += omp_get_wtime();
     if(rank==0) fprintf(stderr, "%.3fs\n", exec_time);
 
-    if (rank == 0){
-        for(int auxi=1; auxi < 10; auxi++)
-        {
-          printf("%d %ld %d \n", auxi, count_species_new[auxi], max_gen[auxi]);
-        }
-    }
+   
 
     freeMatrix (sub_y, sub_z);
     
