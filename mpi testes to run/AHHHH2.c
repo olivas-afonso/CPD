@@ -360,7 +360,7 @@ int main(int argc, char *argv[]) {
 
     for(int k =0; k<sub_z;k++)
     {
-        diag_esq_tras_s[k]=data_send[k+1][1][1];
+        diag_esq_tras_s[k]=data_send[k+1][sub_y][sub_x];
         for(int i=0; i<sub_y; i++)
         {
             face_dir_s[k][i]=data_send[k+1][i+1][1];
@@ -397,7 +397,7 @@ int main(int argc, char *argv[]) {
 
     for(int k =0; k<sub_z;k++)
     {
-        data_send[k+1][sub_y+1][sub_x+1] = diag_esq_tras_r[k];
+        data_send[k+1][0][0] = diag_esq_tras_r[k];
         for(int i=0; i<sub_y; i++)
         {
             data_send[k+1][i+1][sub_x+1]=face_dir_r[k][i];
