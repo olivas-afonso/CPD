@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <mpi.h>
+#include <omp.h>
 
 int rank, size;
 int my_coords[3];
@@ -24,9 +25,6 @@ long count_species_local[10]={0,0,0,0,0,0,0,0,0,0};
 int *max_gen;
 long *count_species;
 long *count_species_new;
-
-//long max_count[10]={0,0,0,0,0,0,0,0,0,0};
-
 
 void init_r4uni(int input_seed)
 {
@@ -103,8 +101,6 @@ void divide_number_parts(int number, int divide, int * sub_div) {
 
     for (i = 0; i < divide; i++) {
         end_index = start_index + part_size + (i < remainder ? 1 : 0);
-
-        //printf("Part %d: ", i + 1);
         sub_div[i]=end_index-start_index;
         start_index = end_index;
     }
@@ -136,7 +132,6 @@ void divide_em_tres (int *a_final, int *b_final, int *c_final, int size){
             for (b = a; b <= x / a; b++) {
                 if (x % (a * b) == 0) {
                     c = x / (a * b);
-                    //printf("%d * %d * %d\n", a, b, c);
 					
 					if(maior_linha < a){
 						maior_linha = a;
@@ -150,10 +145,8 @@ void divide_em_tres (int *a_final, int *b_final, int *c_final, int size){
 						maior_linha = c;
 					}
 					
-					//printf("maior_linha: %d\n", maior_linha);
                     // Atualizar os menores números encontrados até agora
                     if (maior_linha < maior_linha_prev) {
-                      //  printf("entrou\n");
 						*a_final = a;
                         *b_final = b;
                         *c_final = c;
@@ -324,7 +317,7 @@ void comunica_entre_processos (char ***data_send, int sub_x, int sub_y, int sub_
         {
             //FACE CIMA
             MPI_Sendrecv(&data_send[1][aux_y+1][aux_x+1], 1, MPI_CHAR, baixo_rank, 0, &data_send[sub_z+1][aux_y+1][aux_x+1], 1, MPI_CHAR, cima_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir  
-            //if(rank==4) printf("DATA SEND %d\n", data_send[1][aux_y+1][aux_x+1]);
+            
             //FACE BAIXO
             MPI_Sendrecv(&data_send[sub_z][aux_y+1][aux_x+1], 1, MPI_CHAR, cima_rank, 0, &data_send[0][aux_y+1][aux_x+1], 1, MPI_CHAR, baixo_rank, 0, cart_comm, MPI_STATUS_IGNORE); // face dir                      
         }
@@ -441,14 +434,12 @@ void rules(int sub_x ,int sub_y, int sub_z , char ***grid_new, char ***grid_old)
 {
     long aux_x, aux_y, aux_z;
 
-    //#pragma omp parallel private (aux_y, aux_z)
+    //#pragma omp parallel private (aux_y, aux_x)
     //{
-        //#pragma omp for schedule (dynamic)
+        //#pragma omp for reduction(+ : count_species_local) schedule (dynamic)
         
         for(aux_z=1; aux_z<= sub_z; aux_z ++)
         {   
-            //if (rank == 0)
-                //printf ("ENTREI EM Z\n");
             for(aux_y=1; aux_y<= sub_y; aux_y++)
             {
                 for(aux_x=1; aux_x<= sub_x; aux_x++)
@@ -461,9 +452,6 @@ void rules(int sub_x ,int sub_y, int sub_z , char ***grid_new, char ***grid_old)
                     {  
                         grid_new[aux_z][aux_y][aux_x]= life_rule(grid_old, aux_x, aux_y, aux_z);     
                     }
-                    //if (rank == 1)
-                    //printf ("Grid New = %d posx = %d posy = %d posz = %d\n", grid_new[aux_z][aux_y][aux_x], aux_x, aux_y, aux_z);
-
                     // se a celula esta viva nesta geracao, aumentamos o numero no array contador 
                     count_species_local[grid_new[aux_z][aux_y][aux_x]]++;
                 }
@@ -486,12 +474,12 @@ void freeMatrix(int sub_y, int sub_z) {
 
     free(grid_even);
     free(grid_odd);
-    free (max_gen);
+   /* free (max_gen);
     free (count_species);
     free (sub_divz_x);
     free (sub_divz_y);
     free (sub_divz_x);
-    free (count_species_new);    
+    free (count_species_new);    */
 }
 
 
