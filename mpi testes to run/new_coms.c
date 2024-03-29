@@ -469,7 +469,18 @@ void comunica_entre_processos (char ***data_send, int sub_x, int sub_y, int sub_
     //freeMatrix2d(face_dir_s, sub_z);
 
     
+    free (face_dir_s);
     free (face_dir_r);
+    free (face_esq_s);
+    free (face_esq_r);
+    free (face_cima_s);
+    free (face_cima_r);
+    free (face_baixo_s);
+    free (face_baixo_r);
+    free (face_frente_s);
+    free (face_frente_r);
+    free (face_tras_s);
+    free (face_tras_r);
     /*
     freeMatrix2d(face_dir_r, sub_z);
     freeMatrix2d(face_esq_s, sub_z);
