@@ -332,7 +332,7 @@ int main(int argc, char *argv[]) {
         for(int i=0; i<sub_y; i++)
         {
             send_x[k][i]=data_send[k+1][i+1][1];
-            if (rank==0) printf("SEND %d\n", send_x[k][i]);
+            if (rank==1) printf("SEND %d\n", send_x[k][i]);
         }
         
     }
@@ -421,14 +421,14 @@ int main(int argc, char *argv[]) {
             //MPI_Cart_coords(cart_comm, rank, 3, my_coords);
         for(aux_z=0;aux_z<(sub_z+2);aux_z++)
         {
-            printf("CAMADA %d\n", aux_z);
+            //printf("CAMADA %d\n", aux_z);
             for(aux_y=0;aux_y<(sub_y+2);aux_y++)
             {
                 for(aux_x=0;aux_x<(sub_x+2); aux_x++)
                 {
-                     printf("%d ",data_send[aux_z][aux_y][aux_x]);
+              //       printf("%d ",data_send[aux_z][aux_y][aux_x]);
                 }
-                printf("\n");       
+                //printf("\n");       
             }
 
         }
