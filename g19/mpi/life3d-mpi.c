@@ -26,9 +26,6 @@ int *max_gen;
 long *count_species;
 long *count_species_new;
 
-//long max_count[10]={0,0,0,0,0,0,0,0,0,0};
-
-
 void init_r4uni(int input_seed)
 {
     seed = input_seed + 987654321;
@@ -45,6 +42,11 @@ float r4_uni()
     return 0.5 + 0.2328306e-09 * (seed_in + (int) seed);
 }
 
+/************************************************************************************************
+* Nome:limites_x
+* funcao: Ve quais os limites do eixo de x para qual o processo tem de armazenar os valores
+*
+************************************************************************************************/
 void limites_x (){
     if (my_coords[2] == 0){
         limite_inf_x = 0; 
@@ -61,6 +63,11 @@ void limites_x (){
     }
 }
 
+/************************************************************************************************
+* Nome:limites_y
+* funcao: Ve quais os limites do eixo de y para qual o processo tem de armazenar os valores
+*
+************************************************************************************************/
 void limites_y (){
     if (my_coords[1] == 0){
         limite_inf_y = 0; 
@@ -77,6 +84,11 @@ void limites_y (){
     }
 }
 
+/************************************************************************************************
+* Nome:limites_z
+* funcao: Ve quais os limites do eixo de z para qual o processo tem de armazenar os valores
+*
+************************************************************************************************/
 void limites_z (){
     if (my_coords[0] == 0)
         limite_inf_z = 0;
@@ -91,6 +103,11 @@ void limites_z (){
     }
 }
 
+/************************************************************************************************
+* Nome:divide_number_parts
+* funcao: Divide um eixo do cubo pelo numero de processos correspondentes
+*
+************************************************************************************************/
 void divide_number_parts(int number, int divide, int * sub_div) {
 
     int part_size, remainder;
@@ -110,6 +127,11 @@ void divide_number_parts(int number, int divide, int * sub_div) {
     }
 }
 
+/************************************************************************************************
+* Nome:My_MPI_Cart_Shift
+* funcao: Transformação de rank a comunicar para coordenada a comunicar
+*
+************************************************************************************************/
 void My_MPI_Cart_Shift(MPI_Comm cart_comm, int pos_x, int pos_y,int pos_z, int dist_x, int dist_y,int dist_z, int *source, int*dest)
 {
     MPI_Comm_rank(cart_comm, &rank);
@@ -127,6 +149,12 @@ void My_MPI_Cart_Shift(MPI_Comm cart_comm, int pos_x, int pos_y,int pos_z, int d
     MPI_Cart_rank(cart_comm, my_coords, source);
 }
 
+
+/************************************************************************************************
+* Nome: divide_em_tres
+* funcao: Divide o numero de processos em 3 minimos multiplos comuns
+*
+************************************************************************************************/
 void divide_em_tres (int *a_final, int *b_final, int *c_final, int size){
     int maior_linha = 0, maior_linha_prev = size;
     int a, b, c;
@@ -163,6 +191,11 @@ void divide_em_tres (int *a_final, int *b_final, int *c_final, int size){
     }
 }
 
+/************************************************************************************************
+* Nome: alloc_2d_int
+* funcao: Aloca uma matriz 2D
+*
+************************************************************************************************/
 char **alloc_2d_int(int rows, int cols) {
     
     char *data = (char *)malloc(rows*cols*sizeof(char));
@@ -174,6 +207,11 @@ char **alloc_2d_int(int rows, int cols) {
 }
 
 
+/************************************************************************************************
+* Nome:cria_primeira_grid
+* funcao: Aloca as matrizes necessárias para cada processo 
+*
+************************************************************************************************/
 void aloca_matrizes (int sub_x, int sub_y, int sub_z){
 
     grid_even = (char ***)malloc((sub_z+2) * sizeof(char **));
@@ -193,6 +231,12 @@ void aloca_matrizes (int sub_x, int sub_y, int sub_z){
     }
 }
 
+/************************************************************************************************
+* Nome:cria_primeira_grid
+* funcao: Usa a matriz alocada de cada processo e coloca os valores iniciais das especies
+* nas células corretas
+*
+************************************************************************************************/
 void cria_primeira_grid (int NUM_LINHAS){
     int varrimento_x = 1;
     int varrimento_y = 1;
@@ -253,6 +297,11 @@ if(rank==0)
 
 }
 
+/************************************************************************************************
+* Nome:freeMatrix2d
+* funcao: Da free de uma matriz 2D
+*
+************************************************************************************************/
 void freeMatrix2d(char ** matrix, int sub_y) {
     int i, j;
 
@@ -263,10 +312,13 @@ void freeMatrix2d(char ** matrix, int sub_y) {
 
 }
 
+/************************************************************************************************
+* Nome:comunica_entre_processos
+* funcao: Efetua a comunicação dos vizinhos para os processos que necessitam deles
+*
+************************************************************************************************/
 void comunica_entre_processos (char ***data_send, int sub_x, int sub_y, int sub_z,int coord_x, int coord_y, int coord_z, MPI_Comm cart_comm){
     
-    //printf("SUB_X:%d    SUB_Y:%d    SUB_Z:%d\n", sub_x, sub_y, sub_z);
-
     char **face_dir_s, **face_dir_r, **face_esq_s, **face_esq_r, **face_cima_s, **face_cima_r, **face_baixo_s, **face_baixo_r;
     char **face_frente_s, **face_frente_r, **face_tras_s, **face_tras_r;
     char *diag_esq_tras_s, *diag_esq_tras_r, *diag_dir_tras_s, *diag_dir_tras_r, *diag_esq_frente_s, *diag_esq_frente_r, *diag_dir_frente_s, *diag_dir_frente_r;
@@ -285,22 +337,6 @@ void comunica_entre_processos (char ***data_send, int sub_x, int sub_y, int sub_
     face_frente_r=alloc_2d_int(sub_z,sub_x);
     face_tras_s=alloc_2d_int(sub_z,sub_x);
     face_tras_r=alloc_2d_int(sub_z,sub_x); 
-
-    /* face_dir_s=(char *)malloc(sub_y*sizeof(char));
-    face_dir_r=(char *)malloc(sub_y*sizeof(char));
-    face_esq_s=(char *)malloc(sub_y*sizeof(char));
-    face_esq_r=(char *)malloc(sub_y*sizeof(char));
-    face_cima_s=(char *)malloc(sub_x*sizeof(char));
-    face_cima_r=(char *)malloc(sub_x*sizeof(char));
-    face_baixo_s=(char *)malloc(sub_x*sizeof(char));
-    face_baixo_r=(char *)malloc(sub_x*sizeof(char));
-    face_frente_s=(char *)malloc(sub_z*sizeof(char));
-    face_frente_r=(char *)malloc(sub_z*sizeof(char));
-    face_tras_s=(char *)malloc(sub_z*sizeof(char));
-    face_tras_r= (char *)malloc(sub_z*sizeof(char)); */
-
-    
-
 
     diag_esq_tras_r = (char *)malloc(sub_z*sizeof(char));
     diag_esq_tras_s = (char *)malloc(sub_z*sizeof(char));
@@ -375,7 +411,6 @@ void comunica_entre_processos (char ***data_send, int sub_x, int sub_y, int sub_
         {
             face_dir_s[k][i]=data_send[k+1][i+1][1];
             face_esq_s[k][i]=data_send[k+1][i+1][sub_x];
-            //if (rank==1) printf("SEND %d\n", data_s[k][i]);
         }
         for(int j=0;j<sub_x;j++)
         {
@@ -444,7 +479,6 @@ void comunica_entre_processos (char ***data_send, int sub_x, int sub_y, int sub_
         {
             data_send[k+1][i+1][sub_x+1]=face_dir_r[k][i];
             data_send[k+1][i+1][0]=face_esq_r[k][i];
-            //if (rank==1) printf("SEND %d\n", data_s[k][i]);
         }
         for(int j=0;j<sub_x;j++)
         {
@@ -472,7 +506,6 @@ void comunica_entre_processos (char ***data_send, int sub_x, int sub_y, int sub_
 
     for(int j=0;j<sub_x;j++)
     {
-
         data_send[0][sub_y+1][j+1]=diag_frente_baixo_r[j];
         data_send[sub_z+1][sub_y+1][j+1]=diag_frente_cima_r[j];
         data_send[0][0][j+1]=diag_tras_baixo_r[j];
@@ -652,8 +685,7 @@ void rules(int sub_x ,int sub_y, int sub_z , char ***grid_new, char ***grid_old)
                     else
                     {  
                         grid_new[aux_z][aux_y][aux_x]= life_rule(grid_old, aux_x, aux_y, aux_z);     
-                    }
-                    // se a celula esta viva nesta geracao, aumentamos o numero no array contador 
+                    } 
                     count_species_local[grid_new[aux_z][aux_y][aux_x]]++;
                 }
             }
@@ -661,6 +693,12 @@ void rules(int sub_x ,int sub_y, int sub_z , char ***grid_new, char ***grid_old)
     }
 }
 
+
+/************************************************************************************************
+* Nome:freeMatrix
+* funcao: Da free a ambas as grids e a outros vetores alocados
+*
+************************************************************************************************/
 void freeMatrix(int sub_y, int sub_z) {
     int i, j;
 
@@ -715,7 +753,6 @@ int main(int argc, char *argv[]) {
 
     int a_final, b_final, c_final;
     divide_em_tres (&a_final, &b_final, &c_final, size);
-    //if(rank==0) printf("a :%d   b:%d    c:%d\n", a_final, b_final, c_final);
 
     sub_divz_z= (int *)malloc( a_final * sizeof(int)); 
     sub_divz_y= (int *)malloc( b_final * sizeof(int)); 
@@ -769,35 +806,22 @@ int main(int argc, char *argv[]) {
             comunica_entre_processos (grid_even, sub_x, sub_y, sub_z, c_final, b_final,a_final,  cart_comm);
         }
                
-        
-        
-        for(int i=0; i<10;i++)
-        {
-             //printf("GEN:%d PROCESS: %d HAS LOCAL SPECIES %d with:%d\n", gen_number, rank,i, count_species_local[i]);
-        }
- 
+         
         MPI_Barrier(MPI_COMM_WORLD);
         MPI_Reduce(count_species_local, count_species, 10, MPI_LONG, MPI_SUM,0, MPI_COMM_WORLD);
        
 
         if(rank==0)
         {
-            //printf("GEN NUMBER:%d   \n", gen_number);
             for(int auxiii=1; auxiii < 10; auxiii++)
             {
-                //printf("COUNT_SPECIES%d is %d    \n",auxiii, count_species[auxiii]);
                 if(count_species[auxiii] > count_species_new[auxiii])
                 {   
                     count_species_new[auxiii] = count_species[auxiii];
                     max_gen[auxiii]=gen_number;
                 }
             }  
-        }
-
-        for (int auxi = 0; auxi < 10; ++auxi){
-            count_species_local[auxi]=0;  
-        }
-        
+        }        
     }
 
     if (rank==0){
@@ -813,10 +837,6 @@ int main(int argc, char *argv[]) {
     }
 
     freeMatrix (sub_y, sub_z);
-
-    
-
-    
     
     MPI_Finalize();
     return 0; 
