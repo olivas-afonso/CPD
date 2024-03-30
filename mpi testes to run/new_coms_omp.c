@@ -266,8 +266,8 @@ void comunica_entre_processos (char ***data_send, int sub_x, int sub_y, int sub_
     
     //printf("SUB_X:%d    SUB_Y:%d    SUB_Z:%d\n", sub_x, sub_y, sub_z);
 
-    char *face_dir_s, *face_dir_r, *face_esq_s, *face_esq_r, *face_cima_s, *face_cima_r, *face_baixo_s, *face_baixo_r;
-    char *face_frente_s, *face_frente_r, *face_tras_s, *face_tras_r;
+    char **face_dir_s, **face_dir_r, **face_esq_s, **face_esq_r, **face_cima_s, **face_cima_r, **face_baixo_s, **face_baixo_r;
+    char **face_frente_s, **face_frente_r, **face_tras_s, **face_tras_r;
     char *diag_esq_tras_s, *diag_esq_tras_r, *diag_dir_tras_s, *diag_dir_tras_r, *diag_esq_frente_s, *diag_esq_frente_r, *diag_dir_frente_s, *diag_dir_frente_r;
     char *diag_esq_cima_s, *diag_esq_cima_r, *diag_dir_cima_s, *diag_dir_cima_r, *diag_esq_baixo_s, *diag_esq_baixo_r, *diag_dir_baixo_s, *diag_dir_baixo_r;
     char *diag_frente_baixo_s, *diag_frente_baixo_r, *diag_frente_cima_s, *diag_frente_cima_r, *diag_tras_baixo_s, *diag_tras_baixo_r, *diag_tras_cima_s, *diag_tras_cima_r;
