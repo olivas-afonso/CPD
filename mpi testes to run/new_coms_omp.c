@@ -165,13 +165,12 @@ void divide_em_tres (int *a_final, int *b_final, int *c_final, int size){
 
 char **alloc_2d_int(int rows, int cols) {
     /*
-    char *data = (char *)malloc(rows*cols*sizeof(char));
+    char *data = (char *)calloc(rows*cols*sizeof(char));
     char **array= (char **)malloc(rows*sizeof(char*));
     for (int i=0; i<rows; i++)
         array[i] = &(data[cols*i]);
-        */
-    char (*array)[cols]=malloc(sizeof *array * rows);
-
+    */
+   char (* array)[cols]= malloc(sizeof((*array) *rows));
     return array;
 }
 
