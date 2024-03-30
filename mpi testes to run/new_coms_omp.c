@@ -164,7 +164,6 @@ void divide_em_tres (int *a_final, int *b_final, int *c_final, int size){
 }
 
 char **alloc_2d_int(int rows, int cols) {
-    
     char *data = (char *)malloc(rows*cols*sizeof(char));
     char **array= (char **)malloc(rows*sizeof(char*));
     for (int i=0; i<rows; i++)
@@ -235,7 +234,8 @@ void cria_primeira_grid (int NUM_LINHAS){
         varrimento_y = 1;
     }
 
-    MPI_Reduce(count_species_local, count_species, 10, MPI_LONG, MPI_SUM, 0, MPI_COMM_WORLD); 
+    MPI_Barrier(MPI_COMM_WORLD);
+    MPI_Reduce(count_species_local, count_species, 10, MPI_LONG, MPI_SUM, 0, MPI_COMM_WORLD);
     
 if(rank==0)
 {   
@@ -283,22 +283,7 @@ void comunica_entre_processos (char ***data_send, int sub_x, int sub_y, int sub_
     face_frente_s=alloc_2d_int(sub_z,sub_x);
     face_frente_r=alloc_2d_int(sub_z,sub_x);
     face_tras_s=alloc_2d_int(sub_z,sub_x);
-    face_tras_r=alloc_2d_int(sub_z,sub_x); 
-
-    /* face_dir_s=(char *)malloc(sub_y*sizeof(char));
-    face_dir_r=(char *)malloc(sub_y*sizeof(char));
-    face_esq_s=(char *)malloc(sub_y*sizeof(char));
-    face_esq_r=(char *)malloc(sub_y*sizeof(char));
-    face_cima_s=(char *)malloc(sub_x*sizeof(char));
-    face_cima_r=(char *)malloc(sub_x*sizeof(char));
-    face_baixo_s=(char *)malloc(sub_x*sizeof(char));
-    face_baixo_r=(char *)malloc(sub_x*sizeof(char));
-    face_frente_s=(char *)malloc(sub_z*sizeof(char));
-    face_frente_r=(char *)malloc(sub_z*sizeof(char));
-    face_tras_s=(char *)malloc(sub_z*sizeof(char));
-    face_tras_r= (char *)malloc(sub_z*sizeof(char)); */
-
-    
+    face_tras_r=alloc_2d_int(sub_z,sub_x);
 
 
     diag_esq_tras_r = (char *)malloc(sub_z*sizeof(char));
@@ -480,31 +465,31 @@ void comunica_entre_processos (char ***data_send, int sub_x, int sub_y, int sub_
     }
 
 
-    free (face_dir_s[0]);
-    free (face_dir_s);
-    free (face_dir_r[0]);
-    free (face_dir_r);
-    free (face_esq_s[0]);
-    free (face_esq_s);
-    free (face_esq_r[0]);
-    free (face_esq_r);
-    free (face_cima_s[0]);
-    free (face_cima_s);
-    free (face_cima_r[0]);
-    free (face_cima_r);
-    free (face_baixo_s[0]);
-    free (face_baixo_s);
-    free (face_baixo_r[0]);
-    free (face_baixo_r);
-    free (face_frente_s[0]);
-    free (face_frente_s);
-    free (face_frente_r[0]);
-    free (face_frente_r);
-    free (face_tras_s[0]);
-    free (face_tras_s);
-    free (face_tras_r[0]);
-    free (face_tras_r);
     
+    free (face_dir_s);
+    free (face_dir_s[0]);
+    free (face_dir_r);
+    free (face_dir_r[0]);
+    free (face_esq_s);
+    free (face_esq_s[0]);
+    free (face_esq_r);
+    free (face_esq_r[0]);
+    free (face_cima_s);
+    free (face_cima_s[0]);
+    free (face_cima_r);
+    free (face_cima_r[0]);
+    free (face_baixo_s);
+    free (face_baixo_s[0]);
+    free (face_baixo_r);
+    free (face_baixo_r[0]);
+    free (face_frente_s);
+    free (face_frente_s[0]);
+    free (face_frente_r);
+    free (face_frente_r[0]);
+    free (face_tras_s);
+    free (face_tras_s[0]);
+    free (face_tras_r);
+    free (face_tras_r[0]);
 
     free(diag_esq_tras_r);
     free(diag_esq_tras_s);
@@ -674,6 +659,7 @@ void freeMatrix(int sub_y, int sub_z) {
 
     free(grid_even);
     free(grid_odd);
+    
     free (max_gen);
     free (count_species);
     free (sub_divz_x);
@@ -768,16 +754,11 @@ int main(int argc, char *argv[]) {
             comunica_entre_processos (grid_even, sub_x, sub_y, sub_z, c_final, b_final,a_final,  cart_comm);
         }
                
-        
-        
-        for(int i=0; i<10;i++)
-        {
-             //printf("GEN:%d PROCESS: %d HAS LOCAL SPECIES %d with:%d\n", gen_number, rank,i, count_species_local[i]);
-        }
+      
  
-        
+        MPI_Barrier(MPI_COMM_WORLD);
         MPI_Reduce(count_species_local, count_species, 10, MPI_LONG, MPI_SUM,0, MPI_COMM_WORLD);
-       
+      
 
         if(rank==0)
         {
