@@ -170,7 +170,7 @@ char **alloc_2d_int(int rows, int cols) {
     for (int i=0; i<rows; i++)
         array[i] = &(data[cols*i]);
     */
-   char (* array)[cols]= malloc(sizeof((*array) *rows));
+   char (* array)[cols]= malloc(sizeof(*array) *rows);
     return array;
 }
 
